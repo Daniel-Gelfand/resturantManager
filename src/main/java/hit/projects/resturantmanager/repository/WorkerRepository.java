@@ -1,8 +1,8 @@
 package hit.projects.resturantmanager.repository;
 
 import hit.projects.resturantmanager.entity.Worker;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface WorkerRepository extends JpaRepository<Worker,Long> {
+public interface WorkerRepository extends MongoRepository<Worker, Long> {
 
 }

@@ -1,8 +1,11 @@
 package hit.projects.resturantmanager.repository;
 
 import hit.projects.resturantmanager.entity.Order;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface OrderRepository extends JpaRepository<Order,Long> {
+public interface OrderRepository extends MongoRepository<Order, Long> {
+
 
 }
+
+

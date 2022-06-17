@@ -1,12 +1,12 @@
 package hit.projects.resturantmanager.entity;
 
 
-import javax.persistence.Entity;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+
+
+@Document("Manager")
 public class Manager extends Worker {
-
-
 
 
 }

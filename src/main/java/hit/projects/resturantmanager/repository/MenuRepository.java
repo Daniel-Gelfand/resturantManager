@@ -1,7 +1,7 @@
 package hit.projects.resturantmanager.repository;
 
 import hit.projects.resturantmanager.entity.Menu;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface MenuRepository extends JpaRepository<Menu,Long> {
+public interface MenuRepository extends MongoRepository<Menu,Long> {
 }
