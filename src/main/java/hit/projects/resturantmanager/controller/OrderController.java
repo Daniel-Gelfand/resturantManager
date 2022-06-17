@@ -35,9 +35,9 @@ public class OrderController {
         return orderService.addOrder(newOrder);
     }
 
-    @PutMapping
-    public Order updateOrder(@RequestBody Order updateOrder){
-        return orderService.updateOrder(updateOrder);
+    @PutMapping("/{orderId}")
+    public Order updateOrder(@PathVariable int orderId,@RequestBody Order updateOrder){
+        return orderService.updateOrder(orderId,updateOrder);
     }
 
     @DeleteMapping("/{orderId}")

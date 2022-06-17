@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public Order updateOrder(Order updateOrder) {
+    public Order updateOrder(int orderId,Order updateOrder) {
         return null;
     }
 

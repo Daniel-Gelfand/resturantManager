@@ -14,7 +14,7 @@ public interface OrderService {
 
     Order addOrder (Order newOrder);
 
-    Order updateOrder(Order updateOrder);
+    Order updateOrder(int orderId,Order updateOrder);
 
     void deleteOrder(int orderId);
 
