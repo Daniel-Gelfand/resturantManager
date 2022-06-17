@@ -12,4 +12,6 @@ public interface WaiterService {
     Waiter updateWaiter(Waiter waiter);
 
     Waiter addNewWaiter(Waiter waiterToAdd);
+
+    Waiter deleteWaiter(String personalId);
 }

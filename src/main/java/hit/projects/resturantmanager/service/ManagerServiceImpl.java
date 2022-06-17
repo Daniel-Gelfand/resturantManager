@@ -1,34 +1,36 @@
 package hit.projects.resturantmanager.service;
 
+import hit.projects.resturantmanager.entity.Manager;
 import hit.projects.resturantmanager.entity.Waiter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class WaiterServiceImpl implements WaiterService {
+public class ManagerServiceImpl implements ManagerService {
+
     @Override
-    public List<Waiter> getAllWaiters() {
+    public List<Manager> getAllManagers() {
         return null;
     }
 
     @Override
-    public Waiter getWaiter(String personalId) {
+    public Manager getManager(String personalId) {
         return null;
     }
 
     @Override
-    public Waiter updateWaiter(Waiter waiter) {
+    public Manager updateManager(Manager waiter) {
         return null;
     }
 
     @Override
-    public Waiter addNewWaiter(Waiter waiterToAdd) {
+    public Manager addNewManager (Manager waiterToAdd) {
         return null;
     }
 
     @Override
-    public Waiter deleteWaiter(String personalId) {
+    public Manager deleteManager(String personalId) {
         return null;
     }
 }

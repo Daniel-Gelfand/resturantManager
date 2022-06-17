@@ -39,5 +39,9 @@ public class WaiterController {
         return waiterService.addNewWaiter(waiterToAdd);
     }
 
+    @DeleteMapping("/{personalId}")
+    public Waiter deleteWaiter(@PathVariable String personalId) {
+        return waiterService.deleteWaiter(personalId);
+    }
 
 }
