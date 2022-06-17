@@ -10,7 +10,7 @@ public interface ManagerService {
 
     Manager getManager(String personalId);
 
-    Manager updateManager(Manager managerToUpdate);
+    Manager updateManager(String personalId, Manager managerToUpdate);
 
     Manager addNewManager(Manager managerToAdd);
 

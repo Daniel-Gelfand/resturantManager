@@ -29,12 +29,12 @@ public class WaiterController {
         return waiterService.getWaiter(personalId);
     }
 
-    @PutMapping("/update")
-    public Waiter updateWaiter(@RequestBody Waiter waiter) {
-        return waiterService.updateWaiter(waiter);
+    @PutMapping("/{personalId}")
+    public Waiter updateWaiter(@PathVariable String personalId ,@RequestBody Waiter waiter) {
+        return waiterService.updateWaiter(personalId, waiter);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public Waiter addNewWaiter(@RequestBody Waiter waiterToAdd) {
         return waiterService.addNewWaiter(waiterToAdd);
     }

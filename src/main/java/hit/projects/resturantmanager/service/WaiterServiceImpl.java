@@ -18,7 +18,7 @@ public class WaiterServiceImpl implements WaiterService {
     }
 
     @Override
-    public Waiter updateWaiter(Waiter waiter) {
+    public Waiter updateWaiter(String personalId, Waiter waiter) {
         return null;
     }
 

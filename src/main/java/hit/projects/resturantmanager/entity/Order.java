@@ -14,7 +14,4 @@ public class Order {
     @ManyToMany
     private List<Table> tableList;
 
-
-
-
 }

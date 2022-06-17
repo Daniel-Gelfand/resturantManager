@@ -1,7 +1,6 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.entity.Manager;
-import hit.projects.resturantmanager.entity.Waiter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public Manager updateManager(Manager waiter) {
+    public Manager updateManager(String personalId, Manager waiter) {
         return null;
     }
 

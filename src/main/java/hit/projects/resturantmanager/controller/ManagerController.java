@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RequestMapping("/manager")
 @RestController
 public class ManagerController {
 
@@ -28,9 +28,9 @@ public class ManagerController {
         return managerService.getManager(personalId);
     }
 
-    @PutMapping()
-    public Manager updateManager(@RequestBody Manager managerToUpdate) {
-        return managerService.updateManager(managerToUpdate);
+    @PutMapping("/{personalId}")
+    public Manager updateManager(@PathVariable String personalId, @RequestBody Manager managerToUpdate) {
+        return managerService.updateManager(personalId, managerToUpdate);
     }
 
     @PostMapping
@@ -38,7 +38,7 @@ public class ManagerController {
         return managerService.addNewManager(managerToAdd);
     }
 
-    @DeleteMapping("/{personalId")
+    @DeleteMapping("/{personalId}")
     public Manager deleteManager(@PathVariable String personalId) {
         return managerService.deleteManager(personalId);
     }

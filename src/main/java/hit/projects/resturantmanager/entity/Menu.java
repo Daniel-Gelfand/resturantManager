@@ -1,13 +1,10 @@
 package hit.projects.resturantmanager.entity;
 
 
+import java.util.List;
 
 public class Menu {
 
     //TODO: change to object -> cost,and more..
-    private String starters;
-    private String mainDishes;
-    private String desserts;
-    private String drinks;
-
+    private List<MenuItem> menuItems;
 }

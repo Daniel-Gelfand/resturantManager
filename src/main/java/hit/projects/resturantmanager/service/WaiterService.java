@@ -9,7 +9,7 @@ public interface WaiterService {
 
     Waiter getWaiter(String personalId);
 
-    Waiter updateWaiter(Waiter waiter);
+    Waiter updateWaiter(String personalId, Waiter waiter);
 
     Waiter addNewWaiter(Waiter waiterToAdd);
 
