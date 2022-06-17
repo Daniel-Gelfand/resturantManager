@@ -1,12 +1,17 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.entity.Order;
+import hit.projects.resturantmanager.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService{
+
+    @Autowired private OrderRepository orderRepository;
 
 
     @Override
@@ -31,6 +36,6 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public void deleteOrder(int orderId) {
-
+        orderRepository.getOrderByBillGreaterThan(30);
     }
 }
