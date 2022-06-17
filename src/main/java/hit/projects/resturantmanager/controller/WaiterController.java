@@ -24,7 +24,7 @@ public class WaiterController {
         return waiterService.getAllWaiters();
     }
 
-    @GetMapping("/{personalId")
+    @GetMapping("/{personalId}")
     public Waiter getWaiter(@PathVariable String personalId) {
         return waiterService.getWaiter(personalId);
     }
