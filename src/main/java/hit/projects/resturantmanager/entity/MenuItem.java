@@ -18,7 +18,7 @@ public class MenuItem {
     @Id
     //@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String id;
-//    @Indexed(unique = true)
+    @Indexed(unique = true)
     private String name;
     private MenuCategories menuCategories;
     private int price;

@@ -1,12 +1,17 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.entity.Manager;
+import hit.projects.resturantmanager.repository.ManagerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
+
+    @Autowired
+    private ManagerRepository managerRepository;
 
     @Override
     public List<Manager> getAllManagers() {
@@ -32,4 +37,6 @@ public class ManagerServiceImpl implements ManagerService {
     public Manager deleteManager(String personalId) {
         return null;
     }
+
+
 }

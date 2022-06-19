@@ -3,6 +3,8 @@ package hit.projects.resturantmanager.controller;
 import hit.projects.resturantmanager.entity.MenuItem;
 import hit.projects.resturantmanager.service.MenuItemService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +15,6 @@ import java.util.List;
 public class MenuItemController {
 
     private final MenuItemService menuItemService;
-
-
 
     @GetMapping()
     public List<MenuItem> getMenu() {
@@ -30,18 +30,19 @@ public class MenuItemController {
 
     @GetMapping("/price/{price}")
     public List<MenuItem> getSingleMenuItemByPrice(@PathVariable int price){
+        System.out.println(price);
         return menuItemService.getSingleMenuItemPrice(price);
     }
 
 
-    @GetMapping("/{id}")
-    public MenuItem getMenuItem(@PathVariable Long id) {
-        return menuItemService.getMenuItem(id);
-    }
-
     @GetMapping("/category/{category}")
     public List<MenuItem> getAllCategory(@PathVariable String category) {
         return menuItemService.getAllCategory(category);
+    }
+
+    @GetMapping("/{id}")
+    public MenuItem getMenuItem(@PathVariable Long id) {
+        return menuItemService.getMenuItem(id);
     }
 
     @PutMapping("/{id}")
@@ -51,9 +52,14 @@ public class MenuItemController {
 
 
 
-    @PostMapping
+    @PostMapping("/new")
     public MenuItem addMenuItem(@RequestBody MenuItem menuItem) {
         return menuItemService.addMenuItem(menuItem);
+    }
+
+    @PostMapping
+    public ResponseEntity<EntityModel<MenuItem>> newMenuItem(@RequestBody MenuItem menuItem) {
+        return menuItemService.newMenuItem(menuItem);
     }
 
 
