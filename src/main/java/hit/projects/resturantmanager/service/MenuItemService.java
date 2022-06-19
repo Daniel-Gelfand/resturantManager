@@ -12,7 +12,9 @@ public interface MenuItemService {
 
     MenuItem getSingleMenuItem(String name);
 
-    MenuItem getAllCategory(String category);
+
+
+    List<MenuItem> getAllCategory(String category);
 
     MenuItem updateMenuItem(Long id, MenuItem menuItem);
 

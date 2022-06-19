@@ -16,19 +16,19 @@ public class MenuItemController {
 
 
 
-    @GetMapping
+    @GetMapping()
     public List<MenuItem> getMenu() {
         return menuItemService.getMenu();
     }
 
 
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public MenuItem getSingleMenuItem(@PathVariable String name){
         return menuItemService.getSingleMenuItem(name);
     }
 
-    @GetMapping("/{price}")
+    @GetMapping("/price/{price}")
     public List<MenuItem> getSingleMenuItemByPrice(@PathVariable int price){
         return menuItemService.getSingleMenuItemPrice(price);
     }
@@ -39,8 +39,8 @@ public class MenuItemController {
         return menuItemService.getMenuItem(id);
     }
 
-    @GetMapping("/{category}")
-    public MenuItem getAllCategory(@PathVariable String category) {
+    @GetMapping("/category/{category}")
+    public List<MenuItem> getAllCategory(@PathVariable String category) {
         return menuItemService.getAllCategory(category);
     }
 
@@ -48,6 +48,8 @@ public class MenuItemController {
     public MenuItem updateMenuItem(@PathVariable Long id, @RequestBody MenuItem menuItem) {
         return menuItemService.updateMenuItem(id, menuItem);
     }
+
+
 
     @PostMapping
     public MenuItem addMenuItem(@RequestBody MenuItem menuItem) {

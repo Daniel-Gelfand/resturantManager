@@ -1,5 +1,6 @@
 package hit.projects.resturantmanager.service;
 
+import hit.projects.resturantmanager.ENUMS.MenuCategories;
 import hit.projects.resturantmanager.entity.MenuItem;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import lombok.AllArgsConstructor;
@@ -29,8 +30,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItem getAllCategory(String category) {
-        return null;
+    public List<MenuItem> getAllCategory(String category) {
+        return menuItemRepository.findAllByMenuCategories(MenuCategories.valueOf(category.toUpperCase()));
     }
 
     @Override
@@ -40,7 +41,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItem addMenuItem(MenuItem menuItem) {
-        return null;
+        return menuItemRepository.insert(menuItem);
     }
 
     @Override

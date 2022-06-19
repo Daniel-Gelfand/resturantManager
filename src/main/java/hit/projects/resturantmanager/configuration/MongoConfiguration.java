@@ -25,6 +25,10 @@ public class MongoConfiguration {
 
             myMenu.deleteAll();
             myMenu.insert(List.of(menuItem1,menuItem2,menuItem3,menuItem4));
+
+            String s = "drinks";
+            System.out.println(MenuCategories.valueOf(s.toUpperCase()));
+            System.out.println(myMenu.findAllByMenuCategories(MenuCategories.valueOf(s.toUpperCase())));
             System.out.println(myMenu.getMenuItemByPrice(69));
 
         };
