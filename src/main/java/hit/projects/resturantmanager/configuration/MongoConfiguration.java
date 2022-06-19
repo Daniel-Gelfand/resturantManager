@@ -1,32 +1,33 @@
 package hit.projects.resturantmanager.configuration;
 
-import hit.projects.resturantmanager.entity.Waiter;
-import hit.projects.resturantmanager.entity.Worker;
-import hit.projects.resturantmanager.repository.WaiterRepository;
-import hit.projects.resturantmanager.repository.WorkerRepository;
+import hit.projects.resturantmanager.ENUMS.MenuCategories;
+import hit.projects.resturantmanager.entity.MenuItem;
+import hit.projects.resturantmanager.repository.MenuItemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import java.util.List;
 
 @Configuration
 @Slf4j
 public class MongoConfiguration {
 
     @Bean
-    CommandLineRunner seedDatabase(WaiterRepository myWaiters) {
+    CommandLineRunner runner(MenuItemRepository myMenu){
         return args -> {
-            log.info("loggin " + myWaiters.save(new Waiter('12313', "Daniel", "Gelfand", 2500.0, 35.0)));
+
+            MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE,69);
+            MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT,25);
+            MenuItem menuItem3 = new MenuItem("Coca-Cola", MenuCategories.DRINKS,12);
+            MenuItem menuItem4 = new MenuItem("Carpaccio", MenuCategories.APPETIZER,33);
+
+            myMenu.deleteAll();
+            myMenu.insert(List.of(menuItem1,menuItem2,menuItem3,menuItem4));
+            System.out.println(myMenu.getMenuItemByPrice(69));
+
         };
     }
-
-//        private Long id;
-//        private Long personalId;
-//        private String firstName;
-//        private String lastName;
-//        private Double salary;
-
-    //@Autowired
 
 }
