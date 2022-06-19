@@ -9,6 +9,7 @@ import java.util.List;
 
 
 @RequestMapping("/order")
+@RestController
 public class OrderController {
 
     private OrderService orderService;

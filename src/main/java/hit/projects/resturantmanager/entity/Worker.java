@@ -18,7 +18,8 @@ public abstract class Worker {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private Long personalId;
+
+    private String personalId;
     private String firstName;
     private String lastName;
     private Double salary;
