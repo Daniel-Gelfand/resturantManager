@@ -45,13 +45,12 @@ public class MongoConfiguration {
 
     private void setWaiterItemBean(WaiterRepository waiterRepository) {
 
-        Waiter waiter1 = new Waiter(318324258, "Matan", "Bar", 3000.0, 0.0);
-        Waiter waiter2 = new Waiter(313324258, "Dani", "Gal", 3000.0, 0.0);
-        Waiter waiter3 = new Waiter(209324258, "Yarin", "Ben", 3000.0, 0.0);
-        Waiter waiter4 = new Waiter(208324258, "Matan", "Kor", 3000.0, 0.0);
+        Waiter waiter1 = new Waiter(318324258, "Matan", "Bar", 3000.0, 0.0, true);
+        Waiter waiter2 = new Waiter(313324258, "Dani", "Gal", 3000.0, 0.0, true);
+        Waiter waiter3 = new Waiter(209324258, "Yarin", "Ben", 3000.0, 0.0, true);
+        Waiter waiter4 = new Waiter(208324258, "Matan", "Kor", 3000.0, 0.0, true);
 
         waiterRepository.deleteAll();
         waiterRepository.insert(List.of(waiter1,waiter2,waiter3,waiter4));
     }
-
 }

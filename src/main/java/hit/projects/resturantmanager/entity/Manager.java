@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 public class Manager extends Worker {
 
-    public Manager(int personalId, String firstName, String lastName, double salary) {
-        super(personalId, firstName, lastName, salary);
+    public Manager(int personalId, String firstName, String lastName, double salary, boolean isOnDuty) {
+        super(personalId, firstName, lastName, salary, isOnDuty);
     }
 }

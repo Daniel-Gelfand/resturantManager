@@ -29,19 +29,24 @@ public class WaiterController {
         return waiterService.getWaiter(personalId);
     }
 
+    @GetMapping("/duty/{isOnDuty}")
+    public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getDutyStatus(@PathVariable boolean isOnDuty) {
+        System.out.println(isOnDuty);
+        return waiterService.getDutyStatus(isOnDuty);
+    }
+
     @PutMapping("/{personalId}")
     public ResponseEntity<EntityModel<Waiter>> updateWaiter(@PathVariable int personalId ,@RequestBody Waiter waiter) {
         return waiterService.updateWaiter(personalId, waiter);
     }
 
     @PostMapping
-    public Waiter addNewWaiter(@RequestBody Waiter waiterToAdd) {
+    public ResponseEntity<EntityModel<Waiter>> addNewWaiter(@RequestBody Waiter waiterToAdd) {
         return waiterService.addNewWaiter(waiterToAdd);
     }
 
     @DeleteMapping("/{personalId}")
-    public Waiter deleteWaiter(@PathVariable String personalId) {
-        return waiterService.deleteWaiter(personalId);
+    public void deleteWaiter(@PathVariable int personalId) {
+       waiterService.deleteWaiter(personalId);
     }
-
 }

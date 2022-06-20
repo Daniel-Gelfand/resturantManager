@@ -14,7 +14,9 @@ public interface WaiterService {
 
     ResponseEntity<EntityModel<Waiter>> updateWaiter(int personalId, Waiter waiter);
 
-    Waiter addNewWaiter(Waiter waiterToAdd);
+    ResponseEntity<EntityModel<Waiter>> addNewWaiter(Waiter waiterToAdd);
 
-    Waiter deleteWaiter(String personalId);
+    void deleteWaiter(int personalId);
+
+    ResponseEntity<CollectionModel<EntityModel<Waiter>>> getDutyStatus(boolean isOnDuty);
 }
