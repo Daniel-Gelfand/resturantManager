@@ -10,9 +10,9 @@ import java.util.List;
 public interface WaiterService {
     ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters();
 
-    Waiter getWaiter(int personalId);
+    ResponseEntity<EntityModel<Waiter>> getWaiter(int personalId);
 
-    Waiter updateWaiter(String personalId, Waiter waiter);
+    ResponseEntity<EntityModel<Waiter>> updateWaiter(int personalId, Waiter waiter);
 
     Waiter addNewWaiter(Waiter waiterToAdd);
 

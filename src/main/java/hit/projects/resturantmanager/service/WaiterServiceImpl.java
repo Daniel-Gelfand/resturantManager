@@ -23,6 +23,10 @@ public class WaiterServiceImpl implements WaiterService {
     private final WaiterRepository waiterRepository;
     private final WaiterAssembler waiterAssembler;
 
+    /**
+     * This method Return all Waiters with links (to him self and to all waiters).
+     * @return
+     */
     @Override
     public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters() {
         List<Waiter> waiters = waiterRepository.findAll();
@@ -30,14 +34,43 @@ public class WaiterServiceImpl implements WaiterService {
         return ResponseEntity.ok(CollectionModel.of(waitersEntityModelList, linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel()));
     }
 
+    /**
+     * This method Return Waiter with self link.
+     * @return
+     */
     @Override
-    public Waiter getWaiter(int personalId) {
-        return null;
+    public ResponseEntity<EntityModel<Waiter>> getWaiter(int personalId) {
+        Waiter waiter = waiterRepository.findByPersonalId(personalId).orElseThrow(() -> new IllegalArgumentException("NOT EXIST!"));
+
+        return ResponseEntity.ok().body(waiterAssembler.toModel(waiter));
     }
 
+    /**
+     * This method update specific waiter
+     * If the waiter personalId doesn't
+     *
+     *
+     * exist we save the new waiter in DB.
+     * @param personalId
+     * @param waiter
+     * @return
+     */
     @Override
-    public Waiter updateWaiter(String personalId, Waiter waiter) {
-        return null;
+    public ResponseEntity<EntityModel<Waiter>> updateWaiter(int personalId, Waiter waiter) {
+        return waiterRepository.findByPersonalId(personalId)
+                .map(waiterToUpdate -> {
+                    waiterToUpdate.setFirstName(waiter.getFirstName());
+                    waiterToUpdate.setLastName(waiter.getLastName());
+                    waiterToUpdate.setSalary(waiter.getSalary());
+                    waiterToUpdate.setTips(waiter.getTips());
+                    waiterRepository.save(waiterToUpdate);
+                    return ResponseEntity.ok().body(waiterAssembler.toModel(waiterToUpdate));
+                })
+                .orElseGet(()-> {
+                    waiter.setPersonalId(personalId);
+                    waiterRepository.save(waiter);
+                    return ResponseEntity.ok().body(waiterAssembler.toModel(waiter));
+                });
     }
 
     @Override

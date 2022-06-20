@@ -25,12 +25,12 @@ public class WaiterController {
     }
 
     @GetMapping("/{personalId}")
-    public Waiter getWaiter(@PathVariable int personalId) {
+    public ResponseEntity<EntityModel<Waiter>> getWaiter(@PathVariable int personalId) {
         return waiterService.getWaiter(personalId);
     }
 
     @PutMapping("/{personalId}")
-    public Waiter updateWaiter(@PathVariable String personalId ,@RequestBody Waiter waiter) {
+    public ResponseEntity<EntityModel<Waiter>> updateWaiter(@PathVariable int personalId ,@RequestBody Waiter waiter) {
         return waiterService.updateWaiter(personalId, waiter);
     }
 
