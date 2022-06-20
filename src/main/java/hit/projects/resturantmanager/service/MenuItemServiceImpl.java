@@ -6,6 +6,7 @@ import hit.projects.resturantmanager.entity.MenuItem;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -42,14 +43,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItem updateMenuItem(Long id, MenuItem menuItem) {
-        return null;
+    public MenuItem updateMenuItem(String name, MenuItem menuItem) {
+
     }
 
-    @Override
-    public MenuItem addMenuItem(MenuItem menuItem) {
-        return menuItemRepository.insert(menuItem);
-    }
 
     @Override
     public List<MenuItem> getSingleMenuItemPrice(int price) {
@@ -58,10 +55,14 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public ResponseEntity<EntityModel<MenuItem>> newMenuItem(MenuItem menuItem) {
-        MenuItem savedMenuItem = menuItemRepository.save(menuItem);
-        return ResponseEntity.created(linkTo(methodOn(MenuItemServiceImpl.class)
-                        .getSingleMenuItem(savedMenuItem.getName()))
-                        .toUri())
-                .body(menuItemAssembler.toModel(menuItem));
+        if (!menuItemRepository.existsByName(menuItem.getName())) {
+            MenuItem savedMenuItem = menuItemRepository.save(menuItem);
+            return ResponseEntity.created(linkTo(methodOn(MenuItemServiceImpl.class)
+                            .getSingleMenuItem(savedMenuItem.getName()))
+                            .toUri())
+                    .body(menuItemAssembler.toModel(menuItem));
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

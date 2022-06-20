@@ -18,9 +18,8 @@ public interface MenuItemService {
 
     List<MenuItem> getAllCategory(String category);
 
-    MenuItem updateMenuItem(Long id, MenuItem menuItem);
+    MenuItem updateMenuItem(String name, MenuItem menuItem);
 
-    MenuItem addMenuItem(MenuItem menuItem);
 
     List<MenuItem> getSingleMenuItemPrice(int price);
 

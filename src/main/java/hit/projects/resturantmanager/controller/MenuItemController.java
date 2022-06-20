@@ -45,18 +45,16 @@ public class MenuItemController {
         return menuItemService.getMenuItem(id);
     }
 
-    @PutMapping("/{id}")
-    public MenuItem updateMenuItem(@PathVariable Long id, @RequestBody MenuItem menuItem) {
-        return menuItemService.updateMenuItem(id, menuItem);
+    @PutMapping("/update/{name}")
+    public MenuItem updateMenuItem(@PathVariable String name, @RequestBody MenuItem menuItem) {
+        return menuItemService.updateMenuItem(name, menuItem);
     }
 
-
-
-    @PostMapping("/new")
-    public MenuItem addMenuItem(@RequestBody MenuItem menuItem) {
-        return menuItemService.addMenuItem(menuItem);
-    }
-
+    /**
+     * Add new menu item to DB.
+     * @param menuItem
+     * @return
+     */
     @PostMapping
     public ResponseEntity<EntityModel<MenuItem>> newMenuItem(@RequestBody MenuItem menuItem) {
         return menuItemService.newMenuItem(menuItem);
