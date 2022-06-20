@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RequestMapping("/menu")
 @RestController
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class MenuItemController {
 
 
     @GetMapping("/name/{name}")
-    public MenuItem getSingleMenuItem(@PathVariable String name){
+    public EntityModel<MenuItem> getSingleMenuItem(@PathVariable String name){
         return menuItemService.getSingleMenuItem(name);
     }
 

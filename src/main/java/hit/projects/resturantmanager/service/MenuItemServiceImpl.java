@@ -1,6 +1,7 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.ENUMS.MenuCategories;
+import hit.projects.resturantmanager.exception.MenuItemException;
 import hit.projects.resturantmanager.repository.MenuItemAssembler;
 import hit.projects.resturantmanager.entity.MenuItem;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
@@ -33,8 +34,9 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItem getSingleMenuItem(String name) {
-        return menuItemRepository.getMenuItemByName(name);
+    public EntityModel<MenuItem> getSingleMenuItem(String name) {
+        MenuItem menuItem = menuItemRepository.getMenuItemByName(name).orElseThrow(()-> new  MenuItemException(name));
+        return menuItemAssembler.toModel(menuItem);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItem updateMenuItem(String name, MenuItem menuItem) {
-
+        return null;
     }
 
 

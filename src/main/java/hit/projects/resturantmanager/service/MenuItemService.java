@@ -12,7 +12,7 @@ public interface MenuItemService {
 
     MenuItem getMenuItem(Long id);
 
-    MenuItem getSingleMenuItem(String name);
+    EntityModel<MenuItem> getSingleMenuItem(String name);
 
 
 
