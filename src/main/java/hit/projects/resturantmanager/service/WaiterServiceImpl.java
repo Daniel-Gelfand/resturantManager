@@ -2,10 +2,10 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.WaiterAssembler;
 import hit.projects.resturantmanager.controller.WaiterController;
-import hit.projects.resturantmanager.entity.Waiter;
+import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.exception.WaiterException;
 import hit.projects.resturantmanager.repository.WaiterRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-@AllArgsConstructor
 public class WaiterServiceImpl implements WaiterService {
 
-    private final WaiterRepository waiterRepository;
-    private final WaiterAssembler waiterAssembler;
+    private WaiterRepository waiterRepository;
+
+    private WaiterAssembler waiterAssembler;
+
     private final int NO_ONE_IN_DUTY = 0;
+
+    @Autowired
+    public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler) {
+        this.waiterRepository = waiterRepository;
+        this.waiterAssembler = waiterAssembler;
+    }
 
     /**
      * This method Return all Waiters with links (to him self and to all waiters).
@@ -32,8 +39,11 @@ public class WaiterServiceImpl implements WaiterService {
     @Override
     public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters() {
         List<Waiter> waiters = waiterRepository.findAll();
-        List<EntityModel<Waiter>> waitersEntityModelList = waiters.stream().map(waiterAssembler::toModel).collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(waitersEntityModelList, linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel()));
+        List<EntityModel<Waiter>> waitersEntityModelList = waiters.stream().
+                map(waiterAssembler::toModel).collect(Collectors.toList());
+
+        return ResponseEntity.ok(CollectionModel.of(waitersEntityModelList,
+                linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel()));
     }
 
     /**
@@ -42,7 +52,9 @@ public class WaiterServiceImpl implements WaiterService {
      */
     @Override
     public ResponseEntity<EntityModel<Waiter>> getWaiter(int personalId) {
-        Waiter waiter = waiterRepository.findByPersonalId(personalId).orElseThrow(() -> new IllegalArgumentException("NOT EXIST!"));
+        Waiter waiter = waiterRepository.findByPersonalId(personalId).
+                orElseThrow(() -> new IllegalArgumentException("NOT EXIST!"));
+        // TODO: מי תופס את האקסיפשן הזה ?
 
         return ResponseEntity.ok().body(waiterAssembler.toModel(waiter));
     }
@@ -90,6 +102,7 @@ public class WaiterServiceImpl implements WaiterService {
     @Override
     public ResponseEntity<EntityModel<Waiter>> addNewWaiter(Waiter waiterToAdd) {
         //TODO: we need to check validation of the body before we save in DB ???
+        // אם אתה רוצה לחייב שדות מסוימים, זה המקום לעשות ולידציה ואז לזרוק אקסישן בהתאם לשדות שאתה רוצה לחייב לקבל
         waiterRepository.insert(waiterToAdd);
 
         return ResponseEntity.ok().body(waiterAssembler.toModel(waiterToAdd));
@@ -101,6 +114,7 @@ public class WaiterServiceImpl implements WaiterService {
      */
     @Override
     public void deleteWaiter(int personalId) {
+        //TODO: להוסיף ולידציה ואז לזרוק אקסיפשן במקרה שהיוזר לא קיים במערכת
         waiterRepository.deleteByPersonalId(personalId);
     }
 

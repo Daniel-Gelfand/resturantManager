@@ -1,9 +1,8 @@
 package hit.projects.resturantmanager.service;
 
-import hit.projects.resturantmanager.entity.Order;
+import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

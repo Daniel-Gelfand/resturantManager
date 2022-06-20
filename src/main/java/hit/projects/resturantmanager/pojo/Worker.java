@@ -1,12 +1,10 @@
-package hit.projects.resturantmanager.entity;
+package hit.projects.resturantmanager.pojo;
 
 import lombok.*;
-import org.springframework.data.util.ProxyUtils;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.util.Objects;
+
 @Data
 @MappedSuperclass
 public abstract class Worker {

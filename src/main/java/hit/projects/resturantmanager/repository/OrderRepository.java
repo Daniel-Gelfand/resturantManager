@@ -1,6 +1,6 @@
 package hit.projects.resturantmanager.repository;
 
-import hit.projects.resturantmanager.entity.Order;
+import hit.projects.resturantmanager.pojo.Order;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

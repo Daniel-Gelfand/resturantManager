@@ -1,10 +1,10 @@
 package hit.projects.resturantmanager.service;
 
-import hit.projects.resturantmanager.ENUMS.MenuCategories;
+import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.controller.MenuItemController;
 import hit.projects.resturantmanager.exception.MenuItemException;
 import hit.projects.resturantmanager.assembler.MenuItemAssembler;
-import hit.projects.resturantmanager.entity.MenuItem;
+import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -17,13 +17,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
 
+    //TODO: remove AllArgsConstructor and user @Autowired like WaiterServiceImpl
     private MenuItemRepository menuItemRepository;
     private MenuItemAssembler menuItemAssembler;
 
@@ -31,7 +31,9 @@ public class MenuItemServiceImpl implements MenuItemService {
     public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu() {
         List<EntityModel<MenuItem>> employeesList = menuItemRepository.findAll()
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(employeesList,linkTo(methodOn(MenuItemController.class).getMenu()).withSelfRel()));
+
+        return ResponseEntity.ok(CollectionModel.of(employeesList,linkTo(methodOn(MenuItemController.class)
+                .getMenu()).withSelfRel()));
     }
 
 
@@ -43,15 +45,17 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getAllCategory(String category) {
-        List<EntityModel<MenuItem>> categories = menuItemRepository.findAllByMenuCategories(MenuCategories.valueOf(category.toUpperCase()))
+        List<EntityModel<MenuItem>> categories = menuItemRepository.findAllByMenuCategories
+                        (MenuCategories.valueOf(category.toUpperCase()))
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
 
-        //TODO: new method of this shit
+        //TODO: new method of this shit - throw exception
         if (categories.size() == 0 ) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(CollectionModel.of(categories,linkTo(methodOn(MenuItemController.class).getAllCategory(category)).withSelfRel()));
+        return ResponseEntity.ok(CollectionModel.of(categories,linkTo(methodOn(MenuItemController.class)
+                .getAllCategory(category)).withSelfRel()));
     }
 
     @Override
@@ -81,6 +85,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemPrice(int price) {
         List<EntityModel<MenuItem>> itemPrices = menuItemRepository.findAllByPrice(price)
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
+        //TODO: use our exception
         if (itemPrices.size() == 0 ) {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -95,6 +100,7 @@ public class MenuItemServiceImpl implements MenuItemService {
                             .getSingleMenuItem(savedMenuItem.getName()))
                             .toUri())
                     .body(menuItemAssembler.toModel(menuItem));
+            //TODO: use our exception
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -103,8 +109,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public ResponseEntity<?> deleteMenuItem(String name) {
         menuItemRepository.deleteByName(name);
+        //TODO: אולי להוסיף ולידציה שהשם לא קיים ואז לזרוק אקסיפשן בהתאם.
         return ResponseEntity.noContent().build();
-
-
     }
 }

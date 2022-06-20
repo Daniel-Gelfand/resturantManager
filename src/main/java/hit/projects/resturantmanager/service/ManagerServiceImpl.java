@@ -1,6 +1,6 @@
 package hit.projects.resturantmanager.service;
 
-import hit.projects.resturantmanager.entity.Manager;
+import hit.projects.resturantmanager.pojo.Manager;
 import hit.projects.resturantmanager.repository.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

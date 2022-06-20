@@ -1,15 +1,12 @@
 package hit.projects.resturantmanager.controller;
 
-import hit.projects.resturantmanager.entity.Waiter;
+import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.service.WaiterService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController

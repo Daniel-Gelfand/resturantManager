@@ -1,7 +1,7 @@
 package hit.projects.resturantmanager.assembler;
 
 import hit.projects.resturantmanager.controller.MenuItemController;
-import hit.projects.resturantmanager.entity.MenuItem;
+import hit.projects.resturantmanager.pojo.MenuItem;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;

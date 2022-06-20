@@ -1,10 +1,8 @@
 package hit.projects.resturantmanager.repository;
 
-import hit.projects.resturantmanager.ENUMS.MenuCategories;
-import hit.projects.resturantmanager.entity.MenuItem;
+import hit.projects.resturantmanager.enums.MenuCategories;
+import hit.projects.resturantmanager.pojo.MenuItem;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;

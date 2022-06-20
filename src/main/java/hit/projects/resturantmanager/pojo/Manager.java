@@ -1,9 +1,7 @@
-package hit.projects.resturantmanager.entity;
+package hit.projects.resturantmanager.pojo;
 
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 

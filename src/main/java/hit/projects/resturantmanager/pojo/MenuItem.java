@@ -1,15 +1,11 @@
-package hit.projects.resturantmanager.entity;
+package hit.projects.resturantmanager.pojo;
 
-import hit.projects.resturantmanager.ENUMS.MenuCategories;
-import lombok.Builder;
+import hit.projects.resturantmanager.enums.MenuCategories;
 import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDate;
 
 //import javax.persistence.Id;
 @Data

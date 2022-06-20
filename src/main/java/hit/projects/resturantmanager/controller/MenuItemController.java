@@ -1,15 +1,12 @@
 package hit.projects.resturantmanager.controller;
 
-import hit.projects.resturantmanager.ENUMS.MenuCategories;
-import hit.projects.resturantmanager.entity.MenuItem;
+import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.service.MenuItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RequestMapping("/menu")

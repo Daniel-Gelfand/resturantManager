@@ -1,14 +1,10 @@
 package hit.projects.resturantmanager.assembler;
 
-import hit.projects.resturantmanager.controller.MenuItemController;
 import hit.projects.resturantmanager.controller.WaiterController;
-import hit.projects.resturantmanager.entity.MenuItem;
-import hit.projects.resturantmanager.entity.Waiter;
+import hit.projects.resturantmanager.pojo.Waiter;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
-
-import java.awt.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

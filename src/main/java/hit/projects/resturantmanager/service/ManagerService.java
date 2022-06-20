@@ -1,6 +1,6 @@
 package hit.projects.resturantmanager.service;
 
-import hit.projects.resturantmanager.entity.Manager;
+import hit.projects.resturantmanager.pojo.Manager;
 
 import java.util.List;
 

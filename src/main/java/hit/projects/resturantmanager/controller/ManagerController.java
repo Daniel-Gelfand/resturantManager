@@ -1,7 +1,7 @@
 package hit.projects.resturantmanager.controller;
 
 
-import hit.projects.resturantmanager.entity.Manager;
+import hit.projects.resturantmanager.pojo.Manager;
 import hit.projects.resturantmanager.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

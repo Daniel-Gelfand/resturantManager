@@ -1,8 +1,8 @@
 package hit.projects.resturantmanager.configuration;
 
-import hit.projects.resturantmanager.ENUMS.MenuCategories;
-import hit.projects.resturantmanager.entity.MenuItem;
-import hit.projects.resturantmanager.entity.Waiter;
+import hit.projects.resturantmanager.enums.MenuCategories;
+import hit.projects.resturantmanager.pojo.MenuItem;
+import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import hit.projects.resturantmanager.repository.WaiterRepository;
 import lombok.extern.slf4j.Slf4j;

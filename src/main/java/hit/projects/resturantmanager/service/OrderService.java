@@ -1,7 +1,6 @@
 package hit.projects.resturantmanager.service;
 
-import hit.projects.resturantmanager.entity.Order;
-import hit.projects.resturantmanager.entity.Waiter;
+import hit.projects.resturantmanager.pojo.Order;
 
 import java.util.List;
 

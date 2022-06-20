@@ -1,11 +1,9 @@
 package hit.projects.resturantmanager.service;
 
-import hit.projects.resturantmanager.entity.Waiter;
+import hit.projects.resturantmanager.pojo.Waiter;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 public interface WaiterService {
     ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters();
