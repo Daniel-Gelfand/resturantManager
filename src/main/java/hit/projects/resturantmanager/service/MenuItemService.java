@@ -1,6 +1,7 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.entity.MenuItem;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 
@@ -8,11 +9,11 @@ import java.util.List;
 
 public interface MenuItemService {
 
-    List<MenuItem> getMenu();
+    ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu();
 
-    MenuItem getMenuItem(Long id);
 
-    EntityModel<MenuItem> getSingleMenuItem(String name);
+
+    ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(String name);
 
 
 

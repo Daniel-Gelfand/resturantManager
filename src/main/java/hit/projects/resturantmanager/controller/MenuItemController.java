@@ -3,6 +3,7 @@ package hit.projects.resturantmanager.controller;
 import hit.projects.resturantmanager.entity.MenuItem;
 import hit.projects.resturantmanager.service.MenuItemService;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +19,14 @@ public class MenuItemController {
     private final MenuItemService menuItemService;
 
     @GetMapping()
-    public List<MenuItem> getMenu() {
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu() {
         return menuItemService.getMenu();
     }
 
 
 
     @GetMapping("/name/{name}")
-    public EntityModel<MenuItem> getSingleMenuItem(@PathVariable String name){
+    public ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(@PathVariable String name){
         return menuItemService.getSingleMenuItem(name);
     }
 
@@ -39,11 +40,6 @@ public class MenuItemController {
     @GetMapping("/category/{category}")
     public List<MenuItem> getAllCategory(@PathVariable String category) {
         return menuItemService.getAllCategory(category);
-    }
-
-    @GetMapping("/{id}")
-    public MenuItem getMenuItem(@PathVariable Long id) {
-        return menuItemService.getMenuItem(id);
     }
 
     @PutMapping("/update/{name}")

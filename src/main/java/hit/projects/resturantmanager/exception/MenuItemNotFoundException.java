@@ -1,9 +1,9 @@
 package hit.projects.resturantmanager.exception;
 
-public class MenuItemException extends RuntimeException{
+public class MenuItemNotFoundException extends RuntimeException{
 
 
-    public MenuItemException(String name) {
+    public MenuItemNotFoundException(String name) {
         super("There are not Menuitem corresponding to name = " + name);
     }
 }

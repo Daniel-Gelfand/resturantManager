@@ -12,8 +12,8 @@ public class MenuItemAdvice {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(MenuItemException.class)
-    String menuItemNotFoundHandler(MenuItemException mie){
+    @ExceptionHandler(MenuItemNotFoundException.class)
+    String menuItemNotFoundHandler(MenuItemNotFoundException mie){
         return mie.getMessage();
     }
 }
