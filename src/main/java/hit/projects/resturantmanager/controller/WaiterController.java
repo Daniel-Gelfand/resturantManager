@@ -2,7 +2,11 @@ package hit.projects.resturantmanager.controller;
 
 import hit.projects.resturantmanager.entity.Waiter;
 import hit.projects.resturantmanager.service.WaiterService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,22 +14,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/waiter")
+@AllArgsConstructor
 public class WaiterController {
 
-    private WaiterService waiterService;
-
-    @Autowired
-    public void setWaiterController(WaiterService waiterService) {
-        this.waiterService = waiterService;
-    }
+    private final WaiterService waiterService;
 
     @GetMapping
-    public List<Waiter> getAllWaiters() {
+    public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters() {
         return waiterService.getAllWaiters();
     }
 
     @GetMapping("/{personalId}")
-    public Waiter getWaiter(@PathVariable String personalId) {
+    public Waiter getWaiter(@PathVariable int personalId) {
         return waiterService.getWaiter(personalId);
     }
 

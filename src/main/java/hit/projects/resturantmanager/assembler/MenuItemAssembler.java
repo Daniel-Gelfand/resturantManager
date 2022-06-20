@@ -1,4 +1,4 @@
-package hit.projects.resturantmanager.repository;
+package hit.projects.resturantmanager.assembler;
 
 import hit.projects.resturantmanager.controller.MenuItemController;
 import hit.projects.resturantmanager.entity.MenuItem;

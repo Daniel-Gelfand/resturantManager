@@ -14,10 +14,9 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract class Worker {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    private String personalId;
+    @Id
+    private String id;
+    private int personalId;
     private String firstName;
     private String lastName;
     private double salary;
@@ -25,7 +24,7 @@ public abstract class Worker {
     public Worker() {
     }
 
-    public Worker(String personalId, String firstName, String lastName, double salary) {
+    public Worker(int personalId, String firstName, String lastName, double salary) {
         this.personalId = personalId;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -23,8 +23,6 @@ public class MenuItemController {
         return menuItemService.getMenu();
     }
 
-
-
     @GetMapping("/name/{name}")
     public ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(@PathVariable String name){
         return menuItemService.getSingleMenuItem(name);

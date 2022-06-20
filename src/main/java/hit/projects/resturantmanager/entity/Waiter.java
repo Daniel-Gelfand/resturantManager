@@ -16,7 +16,7 @@ public class Waiter extends Worker {
     @Column(name = "tips",nullable = false)
     private double tips;
 
-    public Waiter(String personalId, String firstName, String lastName, double salary, double tips) {
+    public Waiter(int personalId, String firstName, String lastName, double salary, double tips) {
         super(personalId, firstName, lastName, salary);
         this.tips = tips;
     }

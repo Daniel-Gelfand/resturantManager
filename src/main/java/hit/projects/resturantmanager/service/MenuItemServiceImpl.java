@@ -3,7 +3,7 @@ package hit.projects.resturantmanager.service;
 import hit.projects.resturantmanager.ENUMS.MenuCategories;
 import hit.projects.resturantmanager.controller.MenuItemController;
 import hit.projects.resturantmanager.exception.MenuItemNotFoundException;
-import hit.projects.resturantmanager.repository.MenuItemAssembler;
+import hit.projects.resturantmanager.assembler.MenuItemAssembler;
 import hit.projects.resturantmanager.entity.MenuItem;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import lombok.AllArgsConstructor;
