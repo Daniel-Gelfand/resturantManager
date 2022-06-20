@@ -28,4 +28,5 @@ public class MenuItem {
         this.menuCategories = menuCategories;
         this.price = price;
     }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MenuItemService {
 
@@ -17,12 +18,14 @@ public interface MenuItemService {
 
 
 
-    List<MenuItem> getAllCategory(String category);
+    ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getAllCategory(String category);
 
-    MenuItem updateMenuItem(String name, MenuItem menuItem);
+    ResponseEntity<EntityModel<MenuItem>> updateMenuItem(String name, MenuItem menuItem);
 
 
-    List<MenuItem> getSingleMenuItemPrice(int price);
+    ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemPrice(int price);
 
     ResponseEntity<EntityModel<MenuItem>> newMenuItem(MenuItem menuItem);
+
+    ResponseEntity<?> deleteMenuItem(String name);
 }

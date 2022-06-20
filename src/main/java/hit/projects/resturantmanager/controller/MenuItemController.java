@@ -1,5 +1,6 @@
 package hit.projects.resturantmanager.controller;
 
+import hit.projects.resturantmanager.ENUMS.MenuCategories;
 import hit.projects.resturantmanager.entity.MenuItem;
 import hit.projects.resturantmanager.service.MenuItemService;
 import lombok.AllArgsConstructor;
@@ -29,19 +30,19 @@ public class MenuItemController {
     }
 
     @GetMapping("/price/{price}")
-    public List<MenuItem> getSingleMenuItemByPrice(@PathVariable int price){
-        System.out.println(price);
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemByPrice(@PathVariable int price){
         return menuItemService.getSingleMenuItemPrice(price);
     }
 
 
     @GetMapping("/category/{category}")
-    public List<MenuItem> getAllCategory(@PathVariable String category) {
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getAllCategory(@PathVariable String category) {
         return menuItemService.getAllCategory(category);
     }
 
     @PutMapping("/update/{name}")
-    public MenuItem updateMenuItem(@PathVariable String name, @RequestBody MenuItem menuItem) {
+    public ResponseEntity<EntityModel<MenuItem>> updateMenuItem(@PathVariable String name, @RequestBody MenuItem menuItem) {
+//        System.out.println(MenuCategories.valueOf(menuItem.getMenuCategories().toString().toUpperCase()));
         return menuItemService.updateMenuItem(name, menuItem);
     }
 
@@ -53,6 +54,12 @@ public class MenuItemController {
     @PostMapping
     public ResponseEntity<EntityModel<MenuItem>> newMenuItem(@RequestBody MenuItem menuItem) {
         return menuItemService.newMenuItem(menuItem);
+    }
+
+
+    @DeleteMapping("/delete/{name}")
+    public ResponseEntity<?>  deleteMenuItem(@PathVariable String name){
+        return menuItemService.deleteMenuItem(name);
     }
 
 

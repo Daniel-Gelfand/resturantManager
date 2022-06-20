@@ -31,14 +31,16 @@ public class MongoConfiguration {
         MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT,25);
         MenuItem menuItem3 = new MenuItem("Coca-Cola", MenuCategories.DRINKS,12);
         MenuItem menuItem4 = new MenuItem("Carpaccio", MenuCategories.APPETIZER,33);
+        MenuItem menuItem5 = new MenuItem("Sprite", MenuCategories.DRINKS,12);
 
         myMenu.deleteAll();
-        myMenu.insert(List.of(menuItem1,menuItem2,menuItem3,menuItem4));
+        myMenu.insert(List.of(menuItem1,menuItem2,menuItem3,menuItem4,menuItem5));
 
         String s = "drinks";
-        System.out.println(MenuCategories.valueOf(s.toUpperCase()));
-        System.out.println(myMenu.findAllByMenuCategories(MenuCategories.valueOf(s.toUpperCase())));
-        System.out.println(myMenu.getMenuItemByPrice(69));
+        //System.out.println(MenuCategories.valueOf(s.toUpperCase()));
+        //.out.println(myMenu.findAllByMenuCategories(MenuCategories.valueOf(s.toUpperCase())));
+        //System.out.println(myMenu.getMenuItemByPrice(69));
+//        System.out.println(myMenu.findByName("IceCream"));
     }
 
     private void setWaiterItemBean(WaiterRepository waiterRepository) {
