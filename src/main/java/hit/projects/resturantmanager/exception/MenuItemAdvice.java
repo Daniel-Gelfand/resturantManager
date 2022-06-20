@@ -25,6 +25,7 @@ public class MenuItemAdvice {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+
     String menuItemPriceNotFoundHandler(MenuItemException mie) {
         return mie.getMessage();
     }
