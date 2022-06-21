@@ -32,6 +32,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
+    // TODO: All the methods should return something like this CollectionModel<EntityModel<MenuItem>>
+    //  And the controller should return ResponseEntity<T> in this method  T = CollectionModel<EntityModel<MenuItem>>
     public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu() {
         List<EntityModel<MenuItem>> employeesList = menuItemRepository.findAll()
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
@@ -53,7 +55,11 @@ public class MenuItemServiceImpl implements MenuItemService {
                         (MenuCategories.valueOf(category.toUpperCase()))
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
 
-        if (categories.size() == 0 ) {
+        //TODO: maybe add some description into the exception
+        // For example "Category X not found".
+
+        //Instead categories.size() == 0
+        if (categories.isEmpty()) {
             throw new MenuItemException(category);
         }
 

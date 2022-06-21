@@ -1,6 +1,7 @@
 package hit.projects.resturantmanager.pojo;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,6 +20,7 @@ public class MenuItem {
     private MenuCategories menuCategories;
     private int price;
 
+    @Builder
     public MenuItem(String name, MenuCategories menuCategories, int price) {
         this.name = name;
         this.menuCategories = menuCategories;
