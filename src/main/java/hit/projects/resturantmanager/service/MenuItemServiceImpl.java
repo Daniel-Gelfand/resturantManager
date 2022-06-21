@@ -6,10 +6,9 @@ import hit.projects.resturantmanager.exception.MenuItemException;
 import hit.projects.resturantmanager.assembler.MenuItemAssembler;
 import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -20,12 +19,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
 
-    //TODO: remove AllArgsConstructor and user @Autowired like WaiterServiceImpl
     private MenuItemRepository menuItemRepository;
     private MenuItemAssembler menuItemAssembler;
+
+
+    @Autowired
+    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, MenuItemAssembler menuItemAssembler) {
+        this.menuItemRepository = menuItemRepository;
+        this.menuItemAssembler = menuItemAssembler;
+    }
 
     @Override
     public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu() {
@@ -49,9 +53,8 @@ public class MenuItemServiceImpl implements MenuItemService {
                         (MenuCategories.valueOf(category.toUpperCase()))
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
 
-        //TODO: new method of this shit - throw exception
         if (categories.size() == 0 ) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new MenuItemException(category);
         }
 
         return ResponseEntity.ok(CollectionModel.of(categories,linkTo(methodOn(MenuItemController.class)
@@ -85,9 +88,8 @@ public class MenuItemServiceImpl implements MenuItemService {
     public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemPrice(int price) {
         List<EntityModel<MenuItem>> itemPrices = menuItemRepository.findAllByPrice(price)
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
-        //TODO: use our exception
         if (itemPrices.size() == 0 ) {
-           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+           throw new MenuItemException(price);
         }
         return ResponseEntity.ok(CollectionModel.of(itemPrices,linkTo(methodOn(MenuItemController.class).getSingleMenuItemByPrice(price)).withSelfRel()));
     }
@@ -100,16 +102,19 @@ public class MenuItemServiceImpl implements MenuItemService {
                             .getSingleMenuItem(savedMenuItem.getName()))
                             .toUri())
                     .body(menuItemAssembler.toModel(menuItem));
-            //TODO: use our exception
         }else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new MenuItemException(menuItem);
         }
     }
 
     @Override
     public ResponseEntity<?> deleteMenuItem(String name) {
+        boolean isExists = menuItemRepository.existsByName(name);
+        if (isExists == false)
+        {
+            throw new MenuItemException(name);
+        }
         menuItemRepository.deleteByName(name);
-        //TODO: אולי להוסיף ולידציה שהשם לא קיים ואז לזרוק אקסיפשן בהתאם.
         return ResponseEntity.noContent().build();
     }
 }

@@ -12,6 +12,7 @@ import java.util.Map;
 
 //TODO: בתאכלס אין סיבה לעשות לכל סרביס קונטרול אדוויס משלו, אפשר לבנות 1 לכולם ולהוסיף בו כמה סוגי החזרות שונים כמו ה-404 שהחזרנו
 @ControllerAdvice
+
 public class RestaurantAdvice {
 
     @ExceptionHandler(MenuItemException.class)
@@ -24,6 +25,13 @@ public class RestaurantAdvice {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+
+
+
+
+    String WaiterOnDutyNotFoundHandler(WaiterException waiterException){
+        return waiterException.getMessage();
+    }
 
     String menuItemPriceNotFoundHandler(MenuItemException mie) {
         return mie.getMessage();

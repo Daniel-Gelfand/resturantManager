@@ -39,15 +39,10 @@ public class MenuItemController {
 
     @PutMapping("/update/{name}")
     public ResponseEntity<EntityModel<MenuItem>> updateMenuItem(@PathVariable String name, @RequestBody MenuItem menuItem) {
-//        System.out.println(MenuCategories.valueOf(menuItem.getMenuCategories().toString().toUpperCase()));
         return menuItemService.updateMenuItem(name, menuItem);
     }
 
-    /**
-     * Add new menu item to DB.
-     * @param menuItem
-     * @return
-     */
+
     @PostMapping
     public ResponseEntity<EntityModel<MenuItem>> newMenuItem(@RequestBody MenuItem menuItem) {
         return menuItemService.newMenuItem(menuItem);
