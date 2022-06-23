@@ -115,7 +115,11 @@ public class WaiterServiceImpl implements WaiterService {
     @Override
     public void deleteWaiter(int personalId) {
         //TODO: להוסיף ולידציה ואז לזרוק אקסיפשן במקרה שהיוזר לא קיים במערכת
-        waiterRepository.deleteByPersonalId(personalId);
+        if (waiterRepository.existsByPersonalId(personalId)) {
+            waiterRepository.deleteByPersonalId(personalId);
+        }else {
+            throw new WaiterException(personalId);
+        }
     }
 
     /**

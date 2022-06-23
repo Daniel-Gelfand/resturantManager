@@ -12,4 +12,5 @@ public interface WaiterRepository extends MongoRepository<Waiter, Long> {
     void deleteByPersonalId(int personalId);
     List<Waiter> findAllByOnDuty(boolean onDuty);
     List<Waiter> getAllByOnDuty(boolean onDuty);
+    boolean existsByPersonalId(int personalId);
 }
