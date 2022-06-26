@@ -1,15 +1,22 @@
 package hit.projects.resturantmanager.configuration;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
+import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.pojo.MenuItem;
+import hit.projects.resturantmanager.pojo.Order;
+import hit.projects.resturantmanager.pojo.Table;
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
+import hit.projects.resturantmanager.repository.OrderRepository;
+import hit.projects.resturantmanager.repository.TableRepository;
 import hit.projects.resturantmanager.repository.WaiterRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -17,12 +24,17 @@ import java.util.List;
 public class MongoConfiguration {
 
     @Bean
-    CommandLineRunner runner(MenuItemRepository myMenu, WaiterRepository waiterRepository){
+    CommandLineRunner runner(MenuItemRepository myMenu, WaiterRepository waiterRepository, OrderRepository orderRepository, TableRepository tableRepository){
         return args -> {
 
             setMenuItemBean(myMenu);
-
             setWaiterItemBean(waiterRepository);
+            setTables(tableRepository);
+
+            setOrder(orderRepository, tableRepository, myMenu);
+
+            Table table = tableRepository.getTableByTableNumber(1);
+            log.info(String.valueOf(table));
         };
     }
 
@@ -52,5 +64,53 @@ public class MongoConfiguration {
 
         waiterRepository.deleteAll();
         waiterRepository.insert(List.of(waiter1,waiter2,waiter3,waiter4));
+    }
+
+    private void setOrder(OrderRepository orderRepository, TableRepository tableRepository, MenuItemRepository menuItemRepository) {
+        try {
+            int tableNumber = 1;
+            Table table = tableRepository.getTableByTableNumber(tableNumber);
+            List<MenuItem> orderList = menuItemRepository.findAll();
+
+
+            Order order1 = Order.builder().orderNumber(1).orderStatus(true).orderList(orderList).table(table).build();
+            order1.setOrderList(orderList);
+            orderList.forEach(menuItem -> {
+                order1.setBill(order1.getBill() + menuItem.getPrice());
+            });
+
+            Order order2 = Order.builder().orderNumber(2).orderStatus(true).orderList(orderList).table(table).build();
+            order2.setOrderList(orderList);
+            orderList.forEach(menuItem -> {
+                order2.setBill(order1.getBill() + menuItem.getPrice());
+            });
+
+            Order order3 = Order.builder().orderNumber(3).orderStatus(true).orderList(orderList).table(table).build();
+            order3.setOrderList(orderList);
+            orderList.forEach(menuItem -> {
+                order3.setBill(order3.getBill() + menuItem.getPrice());
+
+            });
+
+            orderRepository.deleteAll();
+            orderRepository.insert(List.of(order1, order2, order3));
+            table.setTableStatus(TableStatus.BUSY);
+            ArrayList<Order> orders = new ArrayList<>(Arrays.asList(order1,order2,order3));
+            table.setOrderList(orders);
+            System.out.println(table);
+            tableRepository.save(table);
+        } catch (Exception err) {
+
+        }
+    }
+
+    public void setTables(TableRepository tableRepository) {
+        Table table1 = Table.builder().tableNumber(1).tableStatus(TableStatus.AVAILABLE).build();
+        Table table2 = Table.builder().tableNumber(2).tableStatus(TableStatus.AVAILABLE).build();
+        Table table3 = Table.builder().tableNumber(3).tableStatus(TableStatus.AVAILABLE).build();
+        Table table4 = Table.builder().tableNumber(4).tableStatus(TableStatus.AVAILABLE).build();
+
+        tableRepository.deleteAll();
+        tableRepository.insert(List.of(table1, table2, table3, table4));
     }
 }

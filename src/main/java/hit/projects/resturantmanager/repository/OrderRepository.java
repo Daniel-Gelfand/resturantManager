@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface OrderRepository extends MongoRepository<Order, Long> {
-    Order getOrderByOrderNumber();
+public interface OrderRepository extends MongoRepository<Order, String> {
+    Order getOrderByOrderNumber(int number);
 
     List<Order> getOrderByBillGreaterThan(double bill);
 }
