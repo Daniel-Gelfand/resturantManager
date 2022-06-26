@@ -25,16 +25,17 @@ public class Order {
     private Date orderDate;
     private boolean orderStatus;
     private List<MenuItem> orderList;
-
-    private Table table;
+//    @DBRef
+    private String tableId;
 
     @Builder
-    public Order(int orderNumber, double bill, boolean orderStatus, List<MenuItem> orderList, Table table) {
+    public Order(int orderNumber, double bill, boolean orderStatus, List<MenuItem> orderList, String tableId) {
         this.orderNumber = orderNumber;
         this.bill = bill;
         this.orderDate = new Date();
         this.orderStatus = orderStatus;
         this.orderList = orderList;
-        this.table = table;
+        this.tableId = tableId;
     }
+
 }
