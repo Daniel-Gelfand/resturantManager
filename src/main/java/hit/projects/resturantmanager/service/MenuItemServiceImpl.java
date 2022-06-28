@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
 
-    private MenuItemRepository menuItemRepository;
-    private MenuItemAssembler menuItemAssembler;
+    private final MenuItemRepository menuItemRepository;
+    private final MenuItemAssembler menuItemAssembler;
 
 
     @Autowired
@@ -116,7 +116,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public ResponseEntity<?> deleteMenuItem(String name) {
         boolean isExists = menuItemRepository.existsByName(name);
-        if (isExists == false)
+        if (!isExists)
         {
             throw new MenuItemException(name);
         }

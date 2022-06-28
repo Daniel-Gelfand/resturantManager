@@ -25,6 +25,16 @@ public class RestaurantAdvice {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TableException.class)
+    public ResponseEntity<Object> tableNotFound(TableException tableException) {
+        Map<String, Object> body = new LinkedHashMap<>();
+
+        body.put("time", LocalDateTime.now());
+        body.put("message", tableException.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
 
 
 

@@ -4,6 +4,10 @@ import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Optional;
+
 public interface TableRepository extends MongoRepository<Table, String> {
-    Table getTableByTableNumber(int tableNumber);
+    Optional<Table> getTableByTableNumber(int tableNumber);
+    boolean existsByTableNumber(int tableNumber);
+    void deleteByTableNumber(int tableNumber);
 }

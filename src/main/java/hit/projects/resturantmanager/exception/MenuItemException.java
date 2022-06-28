@@ -5,7 +5,6 @@ import hit.projects.resturantmanager.pojo.MenuItem;
 public class MenuItemException extends RuntimeException{
 
 
-
     public MenuItemException(String name) {
         super("There are not Menuitem corresponding to name = " + name);
     }

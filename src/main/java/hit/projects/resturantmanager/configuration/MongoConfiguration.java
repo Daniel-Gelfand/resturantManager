@@ -33,7 +33,7 @@ public class MongoConfiguration {
 
             setOrder(orderRepository, tableRepository, myMenu);
 
-            Table table = tableRepository.getTableByTableNumber(1);
+            Table table = tableRepository.getTableByTableNumber(1).orElseThrow();
             log.info(String.valueOf(table));
             table.getOrderList().forEach(order -> log.info(String.valueOf(order.getBill())));
         };
@@ -70,7 +70,7 @@ public class MongoConfiguration {
     private void setOrder(OrderRepository orderRepository, TableRepository tableRepository, MenuItemRepository menuItemRepository) {
         try {
             int tableNumber = 1;
-            Table table = tableRepository.getTableByTableNumber(tableNumber);
+            Table table = tableRepository.getTableByTableNumber(tableNumber).orElseThrow();
             List<MenuItem> orderList = menuItemRepository.findAll();
 
 
