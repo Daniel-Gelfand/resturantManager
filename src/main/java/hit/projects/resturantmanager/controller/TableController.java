@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 public class TableController {
+
     private final TableService tableService;
 
 
@@ -47,5 +48,4 @@ public class TableController {
 
         return ResponseEntity.ok().body("Table number " + number + " is deleted.");
     }
-
 }
