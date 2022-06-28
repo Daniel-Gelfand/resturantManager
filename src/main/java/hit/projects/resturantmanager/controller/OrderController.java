@@ -3,6 +3,7 @@ package hit.projects.resturantmanager.controller;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class OrderController {
     }
 
     @GetMapping("/{orderid}")
-    public Order getOrder(@PathVariable int orderId) {
-        return orderService.getOrder(orderId);
+    public ResponseEntity<Order> getOrder(@PathVariable int orderId) {
+        return ResponseEntity.ok().body(orderService.getOrder(orderId));
     }
 
     @GetMapping
