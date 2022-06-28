@@ -37,13 +37,13 @@ public class WaiterServiceImpl implements WaiterService {
      * @return
      */
     @Override
-    public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters() {
+    public CollectionModel<EntityModel<Waiter>> getAllWaiters() {
         List<Waiter> waiters = waiterRepository.findAll();
         List<EntityModel<Waiter>> waitersEntityModelList = waiters.stream().
                 map(waiterAssembler::toModel).collect(Collectors.toList());
 
-        return ResponseEntity.ok(CollectionModel.of(waitersEntityModelList,
-                linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel()));
+        return CollectionModel.of(waitersEntityModelList,
+                linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel());
     }
 
     /**
@@ -51,16 +51,16 @@ public class WaiterServiceImpl implements WaiterService {
      * @return
      */
     @Override
-    public ResponseEntity<EntityModel<Waiter>> getWaiter(int personalId) {
+    public EntityModel<Waiter> getWaiter(int personalId) {
         Waiter waiter = waiterRepository.findByPersonalId(personalId).
                 orElseThrow(() -> new IllegalArgumentException("NOT EXIST!"));
         // TODO: מי תופס את האקסיפשן הזה ?
 
-        return ResponseEntity.ok().body(waiterAssembler.toModel(waiter));
+        return waiterAssembler.toModel(waiter);
     }
 
     @Override
-    public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getDutyStatus(boolean onDuty) {
+    public CollectionModel<EntityModel<Waiter>> getDutyStatus(boolean onDuty) {
         System.out.println("service");
         List<Waiter> waiters = waiterRepository.getAllByOnDuty(onDuty);
         List<EntityModel<Waiter>> waitersEntityModelList = waiters.stream().map(waiterAssembler::toModel).collect(Collectors.toList());
@@ -69,7 +69,7 @@ public class WaiterServiceImpl implements WaiterService {
            throw new WaiterException(onDuty);
         }
 
-        return ResponseEntity.ok(CollectionModel.of(waitersEntityModelList, linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel()));
+        return CollectionModel.of(waitersEntityModelList, linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel());
     }
 
     /**
@@ -80,17 +80,17 @@ public class WaiterServiceImpl implements WaiterService {
      * @return ResponseEntity<EntityModel<Waiter>>
      */
     @Override
-    public ResponseEntity<EntityModel<Waiter>> updateWaiter(int personalId, Waiter waiter) {
+    public EntityModel<Waiter> updateWaiter(int personalId, Waiter waiter) {
         return waiterRepository.findByPersonalId(personalId)
                 .map(waiterToUpdate -> {
                     copyWaiterDetails(waiterToUpdate, waiter);
                     waiterRepository.save(waiterToUpdate);
-                    return ResponseEntity.ok().body(waiterAssembler.toModel(waiterToUpdate));
+                    return waiterAssembler.toModel(waiterToUpdate);
                 })
                 .orElseGet(()-> {
                     waiter.setPersonalId(personalId);
                     waiterRepository.save(waiter);
-                    return ResponseEntity.ok().body(waiterAssembler.toModel(waiter));
+                    return waiterAssembler.toModel(waiter);
                 });
     }
 
@@ -100,12 +100,12 @@ public class WaiterServiceImpl implements WaiterService {
      * @return
      */
     @Override
-    public ResponseEntity<EntityModel<Waiter>> addNewWaiter(Waiter waiterToAdd) {
+    public EntityModel<Waiter> addNewWaiter(Waiter waiterToAdd) {
         //TODO: we need to check validation of the body before we save in DB ???
         // אם אתה רוצה לחייב שדות מסוימים, זה המקום לעשות ולידציה ואז לזרוק אקסישן בהתאם לשדות שאתה רוצה לחייב לקבל
         waiterRepository.insert(waiterToAdd);
 
-        return ResponseEntity.ok().body(waiterAssembler.toModel(waiterToAdd));
+        return waiterAssembler.toModel(waiterToAdd);
     }
 
     /**

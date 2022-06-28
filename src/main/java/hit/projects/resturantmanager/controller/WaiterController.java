@@ -18,28 +18,28 @@ public class WaiterController {
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters() {
-        return waiterService.getAllWaiters();
+        return ResponseEntity.ok(waiterService.getAllWaiters());
     }
 
     @GetMapping("/{personalId}")
     public ResponseEntity<EntityModel<Waiter>> getWaiter(@PathVariable int personalId) {
-        return waiterService.getWaiter(personalId);
+        return ResponseEntity.ok(waiterService.getWaiter(personalId));
     }
 
     @GetMapping("/duty/{isOnDuty}")
     public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getDutyStatus(@PathVariable boolean isOnDuty) {
         System.out.println(isOnDuty);
-        return waiterService.getDutyStatus(isOnDuty);
+        return ResponseEntity.ok(waiterService.getDutyStatus(isOnDuty));
     }
 
     @PutMapping("/{personalId}")
     public ResponseEntity<EntityModel<Waiter>> updateWaiter(@PathVariable int personalId ,@RequestBody Waiter waiter) {
-        return waiterService.updateWaiter(personalId, waiter);
+        return ResponseEntity.ok(waiterService.updateWaiter(personalId, waiter));
     }
 
     @PostMapping
     public ResponseEntity<EntityModel<Waiter>> addNewWaiter(@RequestBody Waiter waiterToAdd) {
-        return waiterService.addNewWaiter(waiterToAdd);
+        return ResponseEntity.ok(waiterService.addNewWaiter(waiterToAdd));
     }
 
     @DeleteMapping("/{personalId}")

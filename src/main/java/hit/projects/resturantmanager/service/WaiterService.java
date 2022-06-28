@@ -6,15 +6,15 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 
 public interface WaiterService {
-    ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters();
+    CollectionModel<EntityModel<Waiter>> getAllWaiters();
 
-    ResponseEntity<EntityModel<Waiter>> getWaiter(int personalId);
+    EntityModel<Waiter> getWaiter(int personalId);
 
-    ResponseEntity<EntityModel<Waiter>> updateWaiter(int personalId, Waiter waiter);
+    EntityModel<Waiter> updateWaiter(int personalId, Waiter waiter);
 
-    ResponseEntity<EntityModel<Waiter>> addNewWaiter(Waiter waiterToAdd);
+    EntityModel<Waiter> addNewWaiter(Waiter waiterToAdd);
 
     void deleteWaiter(int personalId);
 
-    ResponseEntity<CollectionModel<EntityModel<Waiter>>> getDutyStatus(boolean isOnDuty);
+    CollectionModel<EntityModel<Waiter>> getDutyStatus(boolean isOnDuty);
 }
