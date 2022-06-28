@@ -12,20 +12,20 @@ public interface MenuItemService {
 
 
 
-    ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(String name);
+    EntityModel<MenuItem> getSingleMenuItem(String name);
 
 
 
     ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getAllCategory(String category);
 
-    ResponseEntity<EntityModel<MenuItem>> updateMenuItem(String name, MenuItem menuItem);
+    EntityModel<MenuItem> updateMenuItem(String name, MenuItem menuItem);
 
 
     ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemPrice(int price);
 
-    ResponseEntity<EntityModel<MenuItem>> newMenuItem(MenuItem menuItem);
+    EntityModel<MenuItem> newMenuItem(MenuItem menuItem);
 
-    ResponseEntity<?> deleteMenuItem(String name);
+    void deleteMenuItem(String name);
 
     CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(int price, MenuCategories eCategory);
 }
