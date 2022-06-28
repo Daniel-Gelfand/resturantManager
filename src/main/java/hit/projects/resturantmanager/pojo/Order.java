@@ -2,6 +2,7 @@ package hit.projects.resturantmanager.pojo;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -20,12 +21,12 @@ public class Order {
 
     @Id
     private String id;
+    @Indexed(unique = true)
     private int orderNumber;
     private double bill;
     private Date orderDate;
     private boolean orderStatus;
     private List<MenuItem> orderList;
-//    @DBRef
     private String tableId;
 
     @Builder

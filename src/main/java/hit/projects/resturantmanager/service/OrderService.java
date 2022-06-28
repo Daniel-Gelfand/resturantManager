@@ -17,5 +17,5 @@ public interface OrderService {
 
     void deleteOrder(int orderId);
 
-
+    public void addMenuItem(int orderNumber, String menuItemName, int count);
 }

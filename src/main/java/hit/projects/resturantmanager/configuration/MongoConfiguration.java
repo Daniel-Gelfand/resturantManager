@@ -28,8 +28,8 @@ public class MongoConfiguration {
         return args -> {
 
             setMenuItemBean(myMenu);
-            setWaiterItemBean(waiterRepository);
-            setTables(tableRepository);
+            setWaiterItemBean(waiterRepository, tableRepository);
+            setTables(tableRepository, waiterRepository);
 
             setOrder(orderRepository, tableRepository, myMenu);
 
@@ -49,19 +49,19 @@ public class MongoConfiguration {
         myMenu.deleteAll();
         myMenu.insert(List.of(menuItem1,menuItem2,menuItem3,menuItem4,menuItem5));
 
-        String s = "drinks";
-        //System.out.println(MenuCategories.valueOf(s.toUpperCase()));
-        //.out.println(myMenu.findAllByMenuCategories(MenuCategories.valueOf(s.toUpperCase())));
-        //System.out.println(myMenu.getMenuItemByPrice(69));
-//        System.out.println(myMenu.findByName("IceCream"));
     }
 
-    private void setWaiterItemBean(WaiterRepository waiterRepository) {
+    private void setWaiterItemBean(WaiterRepository waiterRepository, TableRepository tableRepository) {
+        List<Table> tables = tableRepository.findAll();
 
         Waiter waiter1 = new Waiter(318324258, "Matan", "Bar", 3000.0, 0.0, true);
+        waiter1.setTableList(tables);
         Waiter waiter2 = new Waiter(313324258, "Dani", "Gal", 3000.0, 0.0, true);
+        waiter2.setTableList(tables);
         Waiter waiter3 = new Waiter(209324258, "Yarin", "Ben", 3000.0, 0.0, true);
+        waiter3.setTableList(tables);
         Waiter waiter4 = new Waiter(208324258, "Matan", "Kor", 3000.0, 0.0, true);
+        waiter4.setTableList(tables);
 
         waiterRepository.deleteAll();
         waiterRepository.insert(List.of(waiter1,waiter2,waiter3,waiter4));
@@ -105,11 +105,17 @@ public class MongoConfiguration {
         }
     }
 
-    public void setTables(TableRepository tableRepository) {
+    public void setTables(TableRepository tableRepository, WaiterRepository waiterRepository) {
+        List<Waiter> waiters = waiterRepository.findAllByOnDuty(true);
+
         Table table1 = Table.builder().tableNumber(1).tableStatus(TableStatus.AVAILABLE).build();
+        table1.setWaitersList(waiters);
         Table table2 = Table.builder().tableNumber(2).tableStatus(TableStatus.AVAILABLE).build();
+        table2.setWaitersList(waiters);
         Table table3 = Table.builder().tableNumber(3).tableStatus(TableStatus.AVAILABLE).build();
+        table3.setWaitersList(waiters);
         Table table4 = Table.builder().tableNumber(4).tableStatus(TableStatus.AVAILABLE).build();
+        table4.setWaitersList(waiters);
 
         tableRepository.deleteAll();
         tableRepository.insert(List.of(table1, table2, table3, table4));

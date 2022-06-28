@@ -1,9 +1,14 @@
 package hit.projects.resturantmanager.pojo;
 
 import lombok.*;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @MappedSuperclass
@@ -11,6 +16,7 @@ public abstract class Worker {
 
     @Id
     private String id;
+    @Indexed(unique = true)
     private int personalId;
     private String firstName;
     private String lastName;

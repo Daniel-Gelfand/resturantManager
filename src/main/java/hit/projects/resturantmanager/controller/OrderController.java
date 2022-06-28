@@ -40,6 +40,12 @@ public class OrderController {
         return orderService.updateOrder(orderId,updateOrder);
     }
 
+    @PutMapping("/{orderId}/add/menuItem")
+    public ResponseEntity<?> addFoo(@PathVariable int orderId, @RequestParam String name, @RequestParam int count) {
+        orderService.addMenuItem(orderId, name, count);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{orderId}")
     public void deleteOrder(@PathVariable int orderId) {
         orderService.deleteOrder(orderId);
