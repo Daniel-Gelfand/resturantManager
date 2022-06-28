@@ -14,6 +14,8 @@ public class WaiterAssembler implements RepresentationModelAssembler<Waiter, Ent
 
     @Override
     public EntityModel<Waiter> toModel(Waiter entity) {
-        return EntityModel.of(entity, linkTo(methodOn(WaiterController.class).getWaiter(entity.getPersonalId())).withSelfRel(), linkTo(methodOn(WaiterController.class).getAllWaiters()).withRel("All Waiters"));
+        return EntityModel.of(entity, linkTo(methodOn(WaiterController.class)
+                .getWaiter(entity.getPersonalId())).withSelfRel(), linkTo(methodOn(WaiterController.class)
+                .getAllWaiters()).withRel("All Waiters"));
     }
 }

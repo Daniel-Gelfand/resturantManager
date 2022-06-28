@@ -14,7 +14,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class TableAssembler implements RepresentationModelAssembler<Table, EntityModel<Table>> {
     @Override
     public EntityModel<Table> toModel(Table entity) {
-        return EntityModel.of(entity,linkTo(methodOn(TableController.class).getTable(entity.getTableNumber())).withSelfRel(), linkTo(methodOn(TableController.class).getAllTables()).withRel("All tables"));
+        return EntityModel.of(entity,linkTo(methodOn(TableController.class)
+                .getTable(entity.getTableNumber())).withSelfRel(), linkTo(methodOn(TableController.class)
+                .getAllTables()).withRel("All tables"));
     }
 
     @Override
