@@ -17,10 +17,9 @@ public class OrderAssembler implements RepresentationModelAssembler<Order, Entit
 
     @Override
     public EntityModel<Order> toModel(Order entity) {
-        return null;
-//        return EntityModel.of(entity,linkTo(methodOn(OrderController.class)
-//                .getOrder((entity.getId()))).withSelfRel(), linkTo(methodOn(OrderController.class).
-//                getAllOrders()).withRel("All orders"));
+        return EntityModel.of(entity,linkTo(methodOn(OrderController.class)
+                .getOrder((entity.getOrderNumber()))).withSelfRel(), linkTo(methodOn(OrderController.class).
+                getAllOrders()).withRel("All orders"));
     }
 
     @Override

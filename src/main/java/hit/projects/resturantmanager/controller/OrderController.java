@@ -20,9 +20,9 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/{orderid}")
-    public ResponseEntity<Order> getOrder(@PathVariable int orderId) {
-        return ResponseEntity.ok().body(orderService.getOrder(orderId));
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<Order> getOrder(@PathVariable int orderNumber) {
+        return ResponseEntity.ok().body(orderService.getOrder(orderNumber));
     }
 
     @GetMapping
