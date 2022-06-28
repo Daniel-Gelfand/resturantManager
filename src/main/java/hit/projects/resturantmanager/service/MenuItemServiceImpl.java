@@ -123,4 +123,15 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItemRepository.deleteByName(name);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(int price, MenuCategories eCategory) {
+        List<EntityModel<MenuItem>> categories = menuItemRepository
+                .findAllByPriceLessThanAndMenuCategoriesEquals(price,MenuCategories.valueOf(eCategory.toString()))
+                .stream()
+                .map(menuItemAssembler::toModel).collect(Collectors.toList());
+
+        return CollectionModel.of(categories);
+    }
+
 }

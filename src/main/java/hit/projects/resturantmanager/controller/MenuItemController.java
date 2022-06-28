@@ -1,5 +1,6 @@
 package hit.projects.resturantmanager.controller;
 
+import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.service.MenuItemService;
 import lombok.AllArgsConstructor;
@@ -52,6 +53,12 @@ public class MenuItemController {
     @DeleteMapping("/delete/{name}")
     public ResponseEntity<?>  deleteMenuItem(@PathVariable String name){
         return menuItemService.deleteMenuItem(name);
+    }
+
+
+    @GetMapping("/search")
+    public CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(@RequestParam(defaultValue = "13") int price , @RequestParam MenuCategories category){
+        return menuItemService.getByCategoryAndPrice(price,category);
     }
 
 

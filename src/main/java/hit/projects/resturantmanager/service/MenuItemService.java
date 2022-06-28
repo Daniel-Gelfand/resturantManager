@@ -1,5 +1,6 @@
 package hit.projects.resturantmanager.service;
 
+import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.pojo.MenuItem;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -25,4 +26,6 @@ public interface MenuItemService {
     ResponseEntity<EntityModel<MenuItem>> newMenuItem(MenuItem menuItem);
 
     ResponseEntity<?> deleteMenuItem(String name);
+
+    CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(int price, MenuCategories eCategory);
 }
