@@ -44,9 +44,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
 
     @Override
-    public ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(String name) {
+    public EntityModel<MenuItem> getSingleMenuItem(String name) {
         MenuItem menuItem = menuItemRepository.getMenuItemByName(name).orElseThrow(()-> new MenuItemException(name));
-        return ResponseEntity.ok().body(menuItemAssembler.toModel(menuItem));
+        return menuItemAssembler.toModel(menuItem);
     }
 
     @Override
@@ -58,7 +58,6 @@ public class MenuItemServiceImpl implements MenuItemService {
         //TODO: maybe add some description into the exception
         // For example "Category X not found".
 
-        //Instead categories.size() == 0
         if (categories.isEmpty()) {
             throw new MenuItemException(category);
         }
@@ -68,7 +67,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public ResponseEntity<EntityModel<MenuItem>> updateMenuItem(String name, MenuItem mItem) {
+    public EntityModel<MenuItem> updateMenuItem(String name, MenuItem mItem) {
         //TODO: mItem.getMenuCategories().toString().toUpperCase())  ? ? ?
         return menuItemRepository.findByName(name)
                 .map(menuItemToUpdate -> {
@@ -77,14 +76,14 @@ public class MenuItemServiceImpl implements MenuItemService {
                     System.out.println(menuItemToUpdate.getMenuCategories());
                     menuItemToUpdate.setPrice(mItem.getPrice());
                     menuItemRepository.save(menuItemToUpdate);
-                    return ResponseEntity.ok().body(menuItemAssembler.toModel(menuItemToUpdate));
+                    return menuItemAssembler.toModel(menuItemToUpdate);
                 })
                 .orElseGet(()-> {
                     System.out.println("orElseGet");
 //                    mItem.setMenuCategories(MenuCategories.valueOf(mItem.getMenuCategories().toString().toLowerCase(Locale.ROOT)));
                     System.out.println(mItem.getMenuCategories());
                     menuItemRepository.save(mItem);
-                    return ResponseEntity.ok().body(menuItemAssembler.toModel(mItem));
+                    return menuItemAssembler.toModel(mItem);
                 });
 
     }
@@ -101,27 +100,23 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public ResponseEntity<EntityModel<MenuItem>> newMenuItem(MenuItem menuItem) {
+    public EntityModel<MenuItem> newMenuItem(MenuItem menuItem) {
         if (!menuItemRepository.existsByName(menuItem.getName())) {
             MenuItem savedMenuItem = menuItemRepository.save(menuItem);
-            return ResponseEntity.created(linkTo(methodOn(MenuItemServiceImpl.class)
-                            .getSingleMenuItem(savedMenuItem.getName()))
-                            .toUri())
-                    .body(menuItemAssembler.toModel(menuItem));
+            return menuItemAssembler.toModel(menuItem);
         }else {
             throw new MenuItemException(menuItem);
         }
     }
 
     @Override
-    public ResponseEntity<?> deleteMenuItem(String name) {
+    public void deleteMenuItem(String name) {
         boolean isExists = menuItemRepository.existsByName(name);
         if (!isExists)
         {
             throw new MenuItemException(name);
         }
         menuItemRepository.deleteByName(name);
-        return ResponseEntity.noContent().build();
     }
 
     @Override

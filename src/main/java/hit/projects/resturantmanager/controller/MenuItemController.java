@@ -6,6 +6,7 @@ import hit.projects.resturantmanager.service.MenuItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class MenuItemController {
 
     @GetMapping("/name/{name}")
     public ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(@PathVariable String name){
-        return menuItemService.getSingleMenuItem(name);
+        return ResponseEntity.ok().body(menuItemService.getSingleMenuItem(name));
     }
 
     @GetMapping("/price/{price}")
@@ -40,25 +41,26 @@ public class MenuItemController {
 
     @PutMapping("/update/{name}")
     public ResponseEntity<EntityModel<MenuItem>> updateMenuItem(@PathVariable String name, @RequestBody MenuItem menuItem) {
-        return menuItemService.updateMenuItem(name, menuItem);
+        return ResponseEntity.ok(menuItemService.updateMenuItem(name, menuItem));
     }
 
 
     @PostMapping
     public ResponseEntity<EntityModel<MenuItem>> newMenuItem(@RequestBody MenuItem menuItem) {
-        return menuItemService.newMenuItem(menuItem);
+        return new ResponseEntity<>(menuItemService.newMenuItem(menuItem),HttpStatus.CREATED);
     }
 
 
     @DeleteMapping("/delete/{name}")
     public ResponseEntity<?>  deleteMenuItem(@PathVariable String name){
-        return menuItemService.deleteMenuItem(name);
+        menuItemService.deleteMenuItem(name);
+        return ResponseEntity.status(202).build();
     }
 
 
     @GetMapping("/search")
-    public CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(@RequestParam(defaultValue = "13") int price , @RequestParam MenuCategories category){
-        return menuItemService.getByCategoryAndPrice(price,category);
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getByCategoryAndPrice(@RequestParam(defaultValue = "13") int price , @RequestParam MenuCategories category){
+        return ResponseEntity.ok().body(menuItemService.getByCategoryAndPrice(price,category));
     }
 
 
