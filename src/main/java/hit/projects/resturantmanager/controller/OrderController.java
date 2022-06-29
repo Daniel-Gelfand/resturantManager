@@ -3,9 +3,12 @@ package hit.projects.resturantmanager.controller;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -13,31 +16,36 @@ import java.util.List;
 @RestController
 public class OrderController {
 
-    private OrderService orderService;
+    private final OrderService orderService;
 
-    @Autowired
-    public void setOrderService(OrderService orderService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
     @GetMapping("/{orderNumber}")
-    public ResponseEntity<Order> getOrder(@PathVariable int orderNumber) {
+    public ResponseEntity<EntityModel<Order>> getOrder(@PathVariable int orderNumber) {
         return ResponseEntity.ok().body(orderService.getOrder(orderNumber));
     }
 
     @GetMapping
-    public List<Order> getAllOrders(){
-        return orderService.getAllOrders();
+    public ResponseEntity<CollectionModel<EntityModel<Order>>> getAllOrders(){
+        return ResponseEntity.ok().body(orderService.getAllOrders());
     }
 
+    @GetMapping("/report")
+    public ResponseEntity<CollectionModel<EntityModel<Order>>> getReportByDates(@RequestParam int startYear,@RequestParam int startMonth,@RequestParam int startDay,@RequestParam int endYear,@RequestParam int endMonth,@RequestParam int endDay) {
+        return ResponseEntity.ok().body(orderService.getOrderReportByDates(LocalDateTime.of(startYear,startMonth,startDay,0,0), LocalDateTime.of(endYear,endMonth,endDay,23,59)));
+    }
+
+
     @PostMapping
-    public Order addOrder(@RequestBody Order newOrder){
+    public EntityModel<Order> addOrder(@RequestBody Order newOrder){
         return orderService.addOrder(newOrder);
     }
 
     @PutMapping("/{orderId}")
-    public Order updateOrder(@PathVariable int orderId,@RequestBody Order updateOrder){
-        return orderService.updateOrder(orderId,updateOrder);
+    public ResponseEntity<EntityModel<Order>> updateOrder(@PathVariable int orderId, @RequestBody Order updateOrder){
+        return ResponseEntity.ok().body(orderService.updateOrder(orderId,updateOrder));
     }
 
     @PutMapping("/{orderId}/add/menuItem")

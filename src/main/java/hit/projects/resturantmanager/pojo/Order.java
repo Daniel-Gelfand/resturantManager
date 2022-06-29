@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +25,8 @@ public class Order {
     @Indexed(unique = true)
     private int orderNumber;
     private double bill;
-    private Date orderDate;
+    private LocalDateTime orderDate;
+
     private boolean orderStatus;
     private List<MenuItem> orderList;
     private String tableId;
@@ -33,7 +35,7 @@ public class Order {
     public Order(int orderNumber, double bill, boolean orderStatus, List<MenuItem> orderList, String tableId) {
         this.orderNumber = orderNumber;
         this.bill = bill;
-        this.orderDate = new Date();
+        this.orderDate = LocalDateTime.now();
         this.orderStatus = orderStatus;
         this.orderList = orderList;
         this.tableId = tableId;

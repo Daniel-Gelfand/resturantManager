@@ -35,6 +35,16 @@ public class RestaurantAdvice {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<Object> orderNotFound(OrderException orderException) {
+        Map<String, Object> body = new LinkedHashMap<>();
+
+        body.put("time", LocalDateTime.now());
+        body.put("message", orderException.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
 
 
 

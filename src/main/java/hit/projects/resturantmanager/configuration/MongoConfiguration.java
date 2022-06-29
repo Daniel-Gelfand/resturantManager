@@ -15,9 +15,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.*;
 
 @Configuration
 @Slf4j
@@ -33,9 +34,8 @@ public class MongoConfiguration {
 
             setOrder(orderRepository, tableRepository, myMenu);
 
-            Table table = tableRepository.getTableByTableNumber(1).orElseThrow();
-            log.info(String.valueOf(table));
-            table.getOrderList().forEach(order -> log.info(String.valueOf(order.getBill())));
+            log.info(String.valueOf(LocalDate.of(2002, Month.APRIL, 1)));
+
         };
     }
 

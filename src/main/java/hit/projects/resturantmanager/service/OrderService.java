@@ -1,21 +1,27 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.pojo.Order;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public interface OrderService {
 
 
-    List<Order> getAllOrders();
+    CollectionModel<EntityModel<Order>> getAllOrders();
 
-    Order getOrder(int orderId);
+    EntityModel<Order> getOrder(int orderId);
 
-    Order addOrder (Order newOrder);
+    EntityModel<Order> addOrder (Order newOrder);
 
-    Order updateOrder(int orderId,Order updateOrder);
+    EntityModel<Order> updateOrder(int orderId,Order updateOrder);
 
     void deleteOrder(int orderId);
 
-    public void addMenuItem(int orderNumber, String menuItemName, int count);
+    void addMenuItem(int orderNumber, String menuItemName, int count);
+
+    CollectionModel<EntityModel<Order>> getOrderReportByDates(LocalDateTime startDate, LocalDateTime endDate);
 }
