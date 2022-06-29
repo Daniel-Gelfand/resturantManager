@@ -2,6 +2,8 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.WaiterAssembler;
 import hit.projects.resturantmanager.controller.WaiterController;
+import hit.projects.resturantmanager.exception.MenuItemException;
+import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.exception.WaiterException;
 import hit.projects.resturantmanager.repository.WaiterRepository;
@@ -101,11 +103,17 @@ public class WaiterServiceImpl implements WaiterService {
      */
     @Override
     public EntityModel<Waiter> addNewWaiter(Waiter waiterToAdd) {
-        //TODO: we need to check validation of the body before we save in DB ???
-        // אם אתה רוצה לחייב שדות מסוימים, זה המקום לעשות ולידציה ואז לזרוק אקסישן בהתאם לשדות שאתה רוצה לחייב לקבל
-        waiterRepository.insert(waiterToAdd);
+       //TODO: CHECK THIS SHIT IF THAT WORKING
 
-        return waiterAssembler.toModel(waiterToAdd);
+        if (!waiterRepository.existsByPersonalId(waiterToAdd.getPersonalId())) {
+            Waiter savedWaiter = waiterRepository.save(waiterToAdd);
+            return waiterAssembler.toModel(waiterToAdd);
+        }else {
+            throw new WaiterException(waiterToAdd.getPersonalId());
+        }
+        //waiterRepository.insert(waiterToAdd);
+
+        //return waiterAssembler.toModel(waiterToAdd);
     }
 
     /**

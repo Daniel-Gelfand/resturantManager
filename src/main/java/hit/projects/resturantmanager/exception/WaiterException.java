@@ -8,4 +8,5 @@ public class WaiterException extends RuntimeException{
     public WaiterException(boolean isOnDuty) {
         super(isOnDuty ? "There is no one in the duty" : "All Waiters are in duty");
     }
+
 }

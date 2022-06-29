@@ -3,12 +3,16 @@ package hit.projects.resturantmanager.controller;
 
 import hit.projects.resturantmanager.pojo.Manager;
 import hit.projects.resturantmanager.service.ManagerService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 @RequestMapping("/manager")
 @RestController
+@AllArgsConstructor
 public class ManagerController {
 
     ManagerService managerService;
@@ -19,27 +23,28 @@ public class ManagerController {
     }
 
     @GetMapping
-    public List<Manager> getAllManagers() {
-        return managerService.getAllManagers();
+    public ResponseEntity<CollectionModel<EntityModel<Manager>>> getAllManagers() {
+        return ResponseEntity.ok().body(managerService.getAllManagers());
     }
 
     @GetMapping("/{personalId}")
-    public Manager getManager(@PathVariable String personalId) {
-        return managerService.getManager(personalId);
+    public ResponseEntity<EntityModel<Manager>> getManager(@PathVariable int personalId) {
+        return ResponseEntity.ok().body(managerService.getManager(personalId));
     }
 
     @PutMapping("/{personalId}")
-    public Manager updateManager(@PathVariable String personalId, @RequestBody Manager managerToUpdate) {
-        return managerService.updateManager(personalId, managerToUpdate);
+    public ResponseEntity<EntityModel<Manager>> updateManager(@PathVariable int personalId, @RequestBody Manager managerToUpdate) {
+        return ResponseEntity.ok().body(managerService.updateManager(personalId, managerToUpdate));
     }
 
     @PostMapping
-    public Manager addNewManager(@RequestBody Manager managerToAdd) {
-        return managerService.addNewManager(managerToAdd);
+    public ResponseEntity<EntityModel<Manager>> addNewManager(@RequestBody Manager managerToAdd) {
+        return ResponseEntity.ok().body(managerService.addNewManager(managerToAdd));
     }
 
     @DeleteMapping("/{personalId}")
-    public Manager deleteManager(@PathVariable String personalId) {
-        return managerService.deleteManager(personalId);
+    public ResponseEntity<EntityModel<Manager>> deleteManager(@PathVariable int personalId) {
+        managerService.deleteManager(personalId);
+        return ResponseEntity.status(202).build();
     }
 }

@@ -8,24 +8,21 @@ import org.springframework.http.ResponseEntity;
 
 public interface MenuItemService {
 
-    ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu();
+    CollectionModel<EntityModel<MenuItem>> getMenu();
 
+    CollectionModel<EntityModel<MenuItem>> getSingleMenuItemPrice(int price);
 
+    CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(int price, MenuCategories eCategory);
 
-    EntityModel<MenuItem> getSingleMenuItem(String name);
-
-
-
-    ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getAllCategory(String category);
-
-    EntityModel<MenuItem> updateMenuItem(String name, MenuItem menuItem);
-
-
-    ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemPrice(int price);
+    CollectionModel<EntityModel<MenuItem>> getAllCategory(String category);
 
     EntityModel<MenuItem> newMenuItem(MenuItem menuItem);
 
+    EntityModel<MenuItem> updateMenuItem(String name, MenuItem menuItem);
+
+    EntityModel<MenuItem> getSingleMenuItem(String name);
+
     void deleteMenuItem(String name);
 
-    CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(int price, MenuCategories eCategory);
+
 }

@@ -2,14 +2,8 @@ package hit.projects.resturantmanager.configuration;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.enums.TableStatus;
-import hit.projects.resturantmanager.pojo.MenuItem;
-import hit.projects.resturantmanager.pojo.Order;
-import hit.projects.resturantmanager.pojo.Table;
-import hit.projects.resturantmanager.pojo.Waiter;
-import hit.projects.resturantmanager.repository.MenuItemRepository;
-import hit.projects.resturantmanager.repository.OrderRepository;
-import hit.projects.resturantmanager.repository.TableRepository;
-import hit.projects.resturantmanager.repository.WaiterRepository;
+import hit.projects.resturantmanager.pojo.*;
+import hit.projects.resturantmanager.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -25,18 +19,28 @@ import java.util.*;
 public class MongoConfiguration {
 
     @Bean
-    CommandLineRunner runner(MenuItemRepository myMenu, WaiterRepository waiterRepository, OrderRepository orderRepository, TableRepository tableRepository){
+    CommandLineRunner runner(MenuItemRepository myMenu, WaiterRepository waiterRepository, OrderRepository orderRepository, TableRepository tableRepository, ManagerRepository managerRepository){
         return args -> {
 
             setMenuItemBean(myMenu);
             setWaiterItemBean(waiterRepository, tableRepository);
             setTables(tableRepository, waiterRepository);
-
+            setManagers(managerRepository);
             setOrder(orderRepository, tableRepository, myMenu);
 
             log.info(String.valueOf(LocalDate.of(2002, Month.APRIL, 1)));
 
         };
+    }
+
+    private void setManagers(ManagerRepository managerRepository){
+        Manager manager1 = new Manager(209381773,"Gilad","Shalit",8000.0,true);
+        Manager manager2 = new Manager(209222772,"Benjamin","Netanyahu",8000.0,false);
+        Manager manager3 = new Manager(318324258,"Naftali","Benet",8000.0,false);
+        Manager manager4 = new Manager(209444775,"Yakov","Ha-Hayat",8000.0,true);
+        System.out.println(manager1);
+        managerRepository.deleteAll();
+        managerRepository.insert(List.of(manager1,manager2,manager3,manager4));
     }
 
     private void setMenuItemBean(MenuItemRepository myMenu) {

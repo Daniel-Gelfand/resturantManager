@@ -1,18 +1,18 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.pojo.Manager;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 
 public interface ManagerService {
 
-    List<Manager> getAllManagers();
+    CollectionModel<EntityModel<Manager>> getAllManagers();
 
-    Manager getManager(String personalId);
+    EntityModel<Manager> getManager(int personalId);
 
-    Manager updateManager(String personalId, Manager managerToUpdate);
+    EntityModel<Manager> updateManager(int personalId, Manager managerToUpdate);
 
-    Manager addNewManager(Manager managerToAdd);
+    EntityModel<Manager> addNewManager(Manager managerToAdd);
 
-    Manager deleteManager(String personalId);
+    void deleteManager(int personalId);
 }

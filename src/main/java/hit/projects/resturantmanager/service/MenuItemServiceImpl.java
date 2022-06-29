@@ -9,7 +9,6 @@ import hit.projects.resturantmanager.repository.MenuItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -32,25 +31,26 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    // TODO: All the methods should return something like this CollectionModel<EntityModel<MenuItem>>
-    //  And the controller should return ResponseEntity<T> in this method  T = CollectionModel<EntityModel<MenuItem>>
-    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu() {
+    public CollectionModel<EntityModel<MenuItem>> getMenu() {
         List<EntityModel<MenuItem>> employeesList = menuItemRepository.findAll()
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
 
-        return ResponseEntity.ok(CollectionModel.of(employeesList,linkTo(methodOn(MenuItemController.class)
-                .getMenu()).withSelfRel()));
-    }
-
-
-    @Override
-    public EntityModel<MenuItem> getSingleMenuItem(String name) {
-        MenuItem menuItem = menuItemRepository.getMenuItemByName(name).orElseThrow(()-> new MenuItemException(name));
-        return menuItemAssembler.toModel(menuItem);
+        return CollectionModel.of(employeesList,linkTo(methodOn(MenuItemController.class)
+                .getMenu()).withSelfRel());
     }
 
     @Override
-    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getAllCategory(String category) {
+    public CollectionModel<EntityModel<MenuItem>> getSingleMenuItemPrice(int price) {
+        List<EntityModel<MenuItem>> itemPrices = menuItemRepository.findAllByPrice(price)
+                .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
+        if (itemPrices.size() == 0 ) {
+            throw new MenuItemException(price);
+        }
+        return CollectionModel.of(itemPrices,linkTo(methodOn(MenuItemController.class).getSingleMenuItemByPrice(price)).withSelfRel());
+    }
+
+    @Override
+    public CollectionModel<EntityModel<MenuItem>> getAllCategory(String category) {
         List<EntityModel<MenuItem>> categories = menuItemRepository.findAllByMenuCategories
                         (MenuCategories.valueOf(category.toUpperCase()))
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
@@ -62,8 +62,25 @@ public class MenuItemServiceImpl implements MenuItemService {
             throw new MenuItemException(category);
         }
 
-        return ResponseEntity.ok(CollectionModel.of(categories,linkTo(methodOn(MenuItemController.class)
-                .getAllCategory(category)).withSelfRel()));
+        return CollectionModel.of(categories,linkTo(methodOn(MenuItemController.class)
+                .getAllCategory(category)).withSelfRel());
+    }
+
+
+    @Override
+    public CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(int price, MenuCategories eCategory) {
+        List<EntityModel<MenuItem>> categories = menuItemRepository
+                .findAllByPriceLessThanAndMenuCategoriesEquals(price,MenuCategories.valueOf(eCategory.toString()))
+                .stream()
+                .map(menuItemAssembler::toModel).collect(Collectors.toList());
+
+        return CollectionModel.of(categories);
+    }
+
+    @Override
+    public EntityModel<MenuItem> getSingleMenuItem(String name) {
+        MenuItem menuItem = menuItemRepository.getMenuItemByName(name).orElseThrow(()-> new MenuItemException(name));
+        return menuItemAssembler.toModel(menuItem);
     }
 
     @Override
@@ -88,23 +105,13 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     }
 
-
-    @Override
-    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemPrice(int price) {
-        List<EntityModel<MenuItem>> itemPrices = menuItemRepository.findAllByPrice(price)
-                .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
-        if (itemPrices.size() == 0 ) {
-           throw new MenuItemException(price);
-        }
-        return ResponseEntity.ok(CollectionModel.of(itemPrices,linkTo(methodOn(MenuItemController.class).getSingleMenuItemByPrice(price)).withSelfRel()));
-    }
-
     @Override
     public EntityModel<MenuItem> newMenuItem(MenuItem menuItem) {
         if (!menuItemRepository.existsByName(menuItem.getName())) {
-            MenuItem savedMenuItem = menuItemRepository.save(menuItem);
+            menuItemRepository.save(menuItem);
             return menuItemAssembler.toModel(menuItem);
-        }else {
+        }
+        else {
             throw new MenuItemException(menuItem);
         }
     }
@@ -119,14 +126,5 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItemRepository.deleteByName(name);
     }
 
-    @Override
-    public CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(int price, MenuCategories eCategory) {
-        List<EntityModel<MenuItem>> categories = menuItemRepository
-                .findAllByPriceLessThanAndMenuCategoriesEquals(price,MenuCategories.valueOf(eCategory.toString()))
-                .stream()
-                .map(menuItemAssembler::toModel).collect(Collectors.toList());
-
-        return CollectionModel.of(categories);
-    }
 
 }

@@ -20,7 +20,22 @@ public class MenuItemController {
 
     @GetMapping()
     public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu() {
-        return menuItemService.getMenu();
+        return ResponseEntity.ok().body(menuItemService.getMenu());
+    }
+
+    @GetMapping("/price/{price}")
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemByPrice(@PathVariable int price){
+        return ResponseEntity.ok().body(menuItemService.getSingleMenuItemPrice(price));
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getAllCategory(@PathVariable String category) {
+        return ResponseEntity.ok().body(menuItemService.getAllCategory(category));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getByCategoryAndPrice(@RequestParam(defaultValue = "13") int price , @RequestParam MenuCategories category){
+        return ResponseEntity.ok().body(menuItemService.getByCategoryAndPrice(price,category));
     }
 
     @GetMapping("/name/{name}")
@@ -28,28 +43,15 @@ public class MenuItemController {
         return ResponseEntity.ok().body(menuItemService.getSingleMenuItem(name));
     }
 
-    @GetMapping("/price/{price}")
-    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemByPrice(@PathVariable int price){
-        return menuItemService.getSingleMenuItemPrice(price);
-    }
-
-
-    @GetMapping("/category/{category}")
-    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getAllCategory(@PathVariable String category) {
-        return menuItemService.getAllCategory(category);
-    }
-
     @PutMapping("/update/{name}")
     public ResponseEntity<EntityModel<MenuItem>> updateMenuItem(@PathVariable String name, @RequestBody MenuItem menuItem) {
         return ResponseEntity.ok(menuItemService.updateMenuItem(name, menuItem));
     }
 
-
     @PostMapping
     public ResponseEntity<EntityModel<MenuItem>> newMenuItem(@RequestBody MenuItem menuItem) {
         return new ResponseEntity<>(menuItemService.newMenuItem(menuItem),HttpStatus.CREATED);
     }
-
 
     @DeleteMapping("/delete/{name}")
     public ResponseEntity<?>  deleteMenuItem(@PathVariable String name){
@@ -58,10 +60,7 @@ public class MenuItemController {
     }
 
 
-    @GetMapping("/search")
-    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getByCategoryAndPrice(@RequestParam(defaultValue = "13") int price , @RequestParam MenuCategories category){
-        return ResponseEntity.ok().body(menuItemService.getByCategoryAndPrice(price,category));
-    }
+
 
 
 }
