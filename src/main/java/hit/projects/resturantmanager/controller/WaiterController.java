@@ -43,7 +43,9 @@ public class WaiterController {
     }
 
     @DeleteMapping("/{personalId}")
-    public void deleteWaiter(@PathVariable int personalId) {
-       waiterService.deleteWaiter(personalId);
+    public ResponseEntity<?> deleteWaiter(@PathVariable int personalId) {
+        waiterService.deleteWaiter(personalId);
+        return ResponseEntity.status(202).build();
+
     }
 }

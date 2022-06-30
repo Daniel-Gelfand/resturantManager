@@ -46,6 +46,17 @@ public class RestaurantAdvice {
     }
 
 
+    @ExceptionHandler(ManagerException.class)
+    public ResponseEntity<Object> managerNotFound(ManagerException managerException) {
+        Map<String, Object> body = new LinkedHashMap<>();
+
+        body.put("time", LocalDateTime.now());
+        body.put("message", managerException.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+
 
 
 

@@ -2,11 +2,8 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.ManagerAssembler;
 import hit.projects.resturantmanager.controller.ManagerController;
-import hit.projects.resturantmanager.controller.MenuItemController;
-import hit.projects.resturantmanager.enums.MenuCategories;
-import hit.projects.resturantmanager.exception.MenuItemException;
+import hit.projects.resturantmanager.exception.ManagerException;
 import hit.projects.resturantmanager.pojo.Manager;
-import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.repository.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -43,8 +40,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public EntityModel<Manager> getManager(int personalId) {
-        //TODO: change to ManagerException
-        Manager manager = managerRepository.getManagerByPersonalId(personalId).orElseThrow(()-> new RuntimeException("change it to manager exception"));
+        Manager manager = managerRepository.getManagerByPersonalId(personalId).orElseThrow(()-> new ManagerException(personalId));
 
         return managerAssembler.toModel(manager);
     }
@@ -74,7 +70,7 @@ public class ManagerServiceImpl implements ManagerService {
             Manager savedNewManager = managerRepository.save(managerToAdd);
             return managerAssembler.toModel(managerToAdd);
         }else {
-            throw new RuntimeException();
+            throw new ManagerException(managerToAdd.getFirstName());
         }
     }
 
@@ -84,7 +80,7 @@ public class ManagerServiceImpl implements ManagerService {
         boolean isExists = managerRepository.existsById(personalId);
         if (!isExists)
         {
-            throw new RuntimeException();
+            throw new ManagerException(personalId);
         }
         managerRepository.deleteById(personalId);
     }

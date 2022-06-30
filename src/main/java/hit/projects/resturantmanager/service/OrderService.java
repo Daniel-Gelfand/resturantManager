@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface OrderService {
 
+    CollectionModel<EntityModel<Order>> getOrderReportByDates(LocalDateTime startDate, LocalDateTime endDate);
 
     CollectionModel<EntityModel<Order>> getAllOrders();
 
@@ -23,5 +24,5 @@ public interface OrderService {
 
     void addMenuItem(int orderNumber, String menuItemName, int count);
 
-    CollectionModel<EntityModel<Order>> getOrderReportByDates(LocalDateTime startDate, LocalDateTime endDate);
+
 }

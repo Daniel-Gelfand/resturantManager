@@ -10,11 +10,19 @@ import java.util.Optional;
 
 
 public interface TableService{
+
     EntityModel<Table> getTable(int tableNumber);
-    Double getAverageBillIncome();
-    void addOrder(int tableNumber, Order order);
+
     List<Table> getAllTables();
+
+    Double getAverageBillIncome();
+
+    void addOrder(int tableNumber, Order order);
+
     void updateTable(Table tableToUpdate);
+
     void createTable(Table newTable);
+
     void deleteTable(int tableNumber);
 }
+

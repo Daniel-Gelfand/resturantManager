@@ -6,7 +6,10 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 
 public interface WaiterService {
+
     CollectionModel<EntityModel<Waiter>> getAllWaiters();
+
+    CollectionModel<EntityModel<Waiter>> getDutyStatus(boolean isOnDuty);
 
     EntityModel<Waiter> getWaiter(int personalId);
 
@@ -16,5 +19,5 @@ public interface WaiterService {
 
     void deleteWaiter(int personalId);
 
-    CollectionModel<EntityModel<Waiter>> getDutyStatus(boolean isOnDuty);
+
 }
