@@ -1,15 +1,14 @@
 package hit.projects.resturantmanager.controller;
 
 import hit.projects.resturantmanager.pojo.Order;
+import hit.projects.resturantmanager.pojo.dto2.OrderDTO;
 import hit.projects.resturantmanager.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @RequestMapping("/order")
@@ -49,7 +48,7 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}/add/menuItem")
-    public ResponseEntity<?> addFoo(@PathVariable int orderId, @RequestParam String name, @RequestParam int count) {
+    public ResponseEntity<?> addMenuItemToOrderList(@PathVariable int orderId, @RequestParam String name, @RequestParam int count) {
         orderService.addMenuItem(orderId, name, count);
         return ResponseEntity.ok().build();
     }
@@ -61,4 +60,16 @@ public class OrderController {
         return ResponseEntity.status(202).build();
 
     }
+
+    @GetMapping("/{orderNumber}/info")
+    public ResponseEntity<EntityModel<OrderDTO>> getOrderInfo(@PathVariable int orderNumber) {
+        return ResponseEntity.ok().body(orderService.getOrderDTO(orderNumber));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<CollectionModel<EntityModel<OrderDTO>>> getAllOrdersInfo() {
+        return ResponseEntity.ok().body(orderService.getAllOrdersDTO());
+    }
+
+
 }

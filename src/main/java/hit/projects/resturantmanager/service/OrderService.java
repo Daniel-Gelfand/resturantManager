@@ -1,12 +1,11 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.pojo.Order;
+import hit.projects.resturantmanager.pojo.dto2.OrderDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 public interface OrderService {
 
@@ -24,5 +23,7 @@ public interface OrderService {
 
     void addMenuItem(int orderNumber, String menuItemName, int count);
 
+    EntityModel<OrderDTO> getOrderDTO(int name);
 
+    CollectionModel<EntityModel<OrderDTO>> getAllOrdersDTO();
 }

@@ -2,6 +2,7 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.pojo.MenuItem;
+import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,7 @@ public interface MenuItemService {
 
     void deleteMenuItem(String name);
 
+    EntityModel<MenuItemDTO> getMenuItemInfo(String name);
 
+    CollectionModel<EntityModel<MenuItemDTO>> getAllMenuItemInfo();
 }

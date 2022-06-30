@@ -102,7 +102,6 @@ public class MongoConfiguration {
             table.setTableStatus(TableStatus.BUSY);
             ArrayList<Order> orders = new ArrayList<>(Arrays.asList(order1,order2,order3));
             table.setOrderList(orders);
-            System.out.println(table);
             tableRepository.save(table);
         } catch (Exception err) {
 

@@ -2,6 +2,7 @@ package hit.projects.resturantmanager.controller;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.pojo.MenuItem;
+import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
 import hit.projects.resturantmanager.service.MenuItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -9,6 +10,9 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 @RequestMapping("/menu")
@@ -59,8 +63,13 @@ public class MenuItemController {
         return ResponseEntity.status(202).build();
     }
 
+    @GetMapping("/{name}/info")
+    public ResponseEntity<EntityModel<MenuItemDTO>> menuItemInfo(@PathVariable String name) {
+        return ResponseEntity.ok().body(menuItemService.getMenuItemInfo(name));
+    }
 
-
-
-
+    @GetMapping("/info")
+    public ResponseEntity<CollectionModel<EntityModel<MenuItemDTO>>> allMenuItemInfo() {
+        return ResponseEntity.ok().body(menuItemService.getAllMenuItemInfo());
+    }
 }

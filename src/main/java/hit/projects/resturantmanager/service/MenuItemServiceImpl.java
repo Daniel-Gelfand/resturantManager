@@ -1,10 +1,12 @@
 package hit.projects.resturantmanager.service;
 
+import hit.projects.resturantmanager.assembler.dto.MenuItemDTOAssembler;
 import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.controller.MenuItemController;
 import hit.projects.resturantmanager.exception.MenuItemException;
 import hit.projects.resturantmanager.assembler.MenuItemAssembler;
 import hit.projects.resturantmanager.pojo.MenuItem;
+import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -12,22 +14,27 @@ import org.springframework.hateoas.EntityModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
     private final MenuItemAssembler menuItemAssembler;
+    private final MenuItemDTOAssembler menuItemDTOAssembler;
 
 
     @Autowired
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, MenuItemAssembler menuItemAssembler) {
+    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, MenuItemAssembler menuItemAssembler, MenuItemDTOAssembler menuItemDTOAssemble) {
         this.menuItemRepository = menuItemRepository;
         this.menuItemAssembler = menuItemAssembler;
+        this.menuItemDTOAssembler = menuItemDTOAssemble;
     }
 
     @Override
@@ -126,5 +133,18 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItemRepository.deleteByName(name);
     }
 
+    @Override
+    public EntityModel<MenuItemDTO> getMenuItemInfo(String name) {
+        return menuItemRepository.getMenuItemByName(name).map(MenuItemDTO::new).map(menuItemDTOAssembler::toModel).orElseThrow(()->new MenuItemException(name));
+    }
 
+    @Override
+    public CollectionModel<EntityModel<MenuItemDTO>> getAllMenuItemInfo() {
+
+        return CollectionModel.of(menuItemDTOAssembler
+                .toCollectionModel(StreamSupport
+                        .stream(menuItemRepository.findAll().spliterator(), false)
+                        .map(MenuItemDTO::new)
+                        .collect(Collectors.toList())));
+    }
 }
