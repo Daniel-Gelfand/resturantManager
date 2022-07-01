@@ -18,7 +18,7 @@ public interface TableService{
 
     EntityModel<Table> updateTable(String tableNumber ,Table tableSent);
 
-    void createTable(Table newTable);
+    EntityModel<Table> createTable(Table newTable);
 
     void deleteTable(int tableNumber);
 }

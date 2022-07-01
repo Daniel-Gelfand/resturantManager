@@ -81,9 +81,9 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public void createTable(Table newTable) {
+    public EntityModel<Table> createTable(Table newTable) {
         if (!tableRepository.existsByTableNumber(newTable.getTableNumber())) {
-            tableRepository.save(newTable);
+            return tableAssembler.toModel(tableRepository.save(newTable));
         }
 
         throw new RestaurantConflictException(

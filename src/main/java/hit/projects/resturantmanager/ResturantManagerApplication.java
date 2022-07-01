@@ -35,3 +35,14 @@ public class ResturantManagerApplication {
 //        };
 //    }
 }
+
+/*
+ 1. Add DTO objects.
+ 2. Add status in the controller.
+ 3. CRUD + 3 GET for each controller.
+ 4. Check ex 11 in the PDF.
+ 5. Put in all the dto objets JsonPropertyObject.
+ 6. Use value annotation.
+ 7. Use Async with RestTemplate.
+ 8. add Documentation.
+ */
