@@ -68,7 +68,7 @@ public class WaiterServiceImpl implements WaiterService {
 
         if (CollectionUtils.isEmpty(waiters)) {
             throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE , "manager on duty", onDuty)));
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "manager on duty", onDuty)));
         }
 
         return CollectionModel.of(waitersEntityModelList, linkTo(methodOn(WaiterController.class)

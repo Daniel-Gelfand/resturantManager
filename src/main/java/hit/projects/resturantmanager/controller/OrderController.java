@@ -28,13 +28,13 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<Order>>> getAllOrders(){
+    public ResponseEntity<CollectionModel<EntityModel<Order>>> getAllOrders() {
         return ResponseEntity.ok().body(orderService.getAllOrders());
     }
 
     @GetMapping("/report")
-    public ResponseEntity<CollectionModel<EntityModel<Order>>> getReportByDates(@RequestParam int startYear,@RequestParam int startMonth,@RequestParam int startDay,@RequestParam int endYear,@RequestParam int endMonth,@RequestParam int endDay) {
-        return ResponseEntity.ok().body(orderService.getOrderReportByDates(LocalDateTime.of(startYear,startMonth,startDay,0,0), LocalDateTime.of(endYear,endMonth,endDay,23,59)));
+    public ResponseEntity<CollectionModel<EntityModel<Order>>> getReportByDates(@RequestParam int startYear, @RequestParam int startMonth, @RequestParam int startDay, @RequestParam int endYear, @RequestParam int endMonth, @RequestParam int endDay) {
+        return ResponseEntity.ok().body(orderService.getOrderReportByDates(LocalDateTime.of(startYear, startMonth, startDay, 0, 0), LocalDateTime.of(endYear, endMonth, endDay, 23, 59)));
     }
 
     @GetMapping("/{orderNumber}/info")
@@ -48,13 +48,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<EntityModel<Order>> addOrder(@RequestBody Order newOrder){
+    public ResponseEntity<EntityModel<Order>> addOrder(@RequestBody Order newOrder) {
         return new ResponseEntity<>(orderService.addOrder(newOrder), HttpStatus.CREATED);
     }
 
     @PutMapping("/{orderId}")
-    public ResponseEntity<EntityModel<Order>> updateOrder(@PathVariable int orderId, @RequestBody Order updateOrder){
-        return ResponseEntity.ok().body(orderService.updateOrder(orderId,updateOrder));
+    public ResponseEntity<EntityModel<Order>> updateOrder(@PathVariable int orderId, @RequestBody Order updateOrder) {
+        return ResponseEntity.ok().body(orderService.updateOrder(orderId, updateOrder));
     }
 
     @PutMapping("/{orderId}/add/menuItem")

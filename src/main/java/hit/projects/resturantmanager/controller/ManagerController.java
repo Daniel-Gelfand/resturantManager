@@ -2,9 +2,7 @@ package hit.projects.resturantmanager.controller;
 
 
 import hit.projects.resturantmanager.pojo.Manager;
-import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.service.ManagerService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;

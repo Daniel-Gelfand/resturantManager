@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Column;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
 @Document("Waiter")
 public class Waiter extends Worker {
     //database configuration
-    @Column(name = "tips",nullable = false)
+    @Column(name = "tips", nullable = false)
     private double tips;
     @DBRef
     private List<Table> tableList;
@@ -22,7 +21,7 @@ public class Waiter extends Worker {
     public Waiter(int personalId, String firstName, String lastName, double salary, double tips, boolean onDuty) {
         super(personalId, firstName, lastName, salary, onDuty);
         this.tips = tips;
-        this.tableList  = new LinkedList<>();
+        this.tableList = new LinkedList<>();
     }
 
 

@@ -1,14 +1,10 @@
 package hit.projects.resturantmanager.pojo;
 
-import lombok.*;
+import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @MappedSuperclass

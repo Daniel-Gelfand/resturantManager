@@ -2,7 +2,6 @@ package hit.projects.resturantmanager.controller;
 
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.service.WaiterService;
-import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -36,7 +35,7 @@ public class WaiterController {
     }
 
     @PutMapping("/{personalId}")
-    public ResponseEntity<EntityModel<Waiter>> updateWaiter(@PathVariable int personalId ,@RequestBody Waiter waiter) {
+    public ResponseEntity<EntityModel<Waiter>> updateWaiter(@PathVariable int personalId, @RequestBody Waiter waiter) {
         return ResponseEntity.ok(waiterService.updateWaiter(personalId, waiter));
     }
 

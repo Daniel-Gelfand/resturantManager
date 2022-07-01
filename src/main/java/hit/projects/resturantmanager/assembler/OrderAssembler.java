@@ -1,7 +1,6 @@
 package hit.projects.resturantmanager.assembler;
 
 import hit.projects.resturantmanager.controller.OrderController;
-import hit.projects.resturantmanager.controller.TableController;
 import hit.projects.resturantmanager.pojo.Order;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -17,7 +16,7 @@ public class OrderAssembler implements RepresentationModelAssembler<Order, Entit
 
     @Override
     public EntityModel<Order> toModel(Order entity) {
-        return EntityModel.of(entity,linkTo(methodOn(OrderController.class)
+        return EntityModel.of(entity, linkTo(methodOn(OrderController.class)
                 .getOrder((entity.getOrderNumber()))).withSelfRel(), linkTo(methodOn(OrderController.class).
                 getAllOrders()).withRel("All orders"));
     }

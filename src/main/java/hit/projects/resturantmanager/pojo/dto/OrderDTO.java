@@ -22,5 +22,8 @@ public class OrderDTO {
     public List<MenuItemDTO> getOrderList() {
         return order.getOrderList().stream().map(MenuItemDTO::new).collect(Collectors.toList());
     }
-    public Double getBill() {return order.getBill();}
+
+    public Double getBill() {
+        return order.getBill();
+    }
 }

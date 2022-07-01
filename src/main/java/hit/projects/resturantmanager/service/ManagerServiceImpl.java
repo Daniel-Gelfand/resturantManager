@@ -2,11 +2,9 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.ManagerAssembler;
 import hit.projects.resturantmanager.controller.ManagerController;
-import hit.projects.resturantmanager.controller.WaiterController;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Manager;
-import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.repository.ManagerRepository;
 import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +44,9 @@ public class ManagerServiceImpl implements ManagerService {
     public EntityModel<Manager> getManager(int personalId) {
         Manager manager = managerRepository
                 .getManagerByPersonalId(personalId)
-                .orElseThrow(()->
+                .orElseThrow(() ->
                         new RestaurantNotFoundException(
-                                (String.format(Constant.NOT_FOUND_MESSAGE , "personal id", personalId))));
+                                (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId))));
 
         return managerAssembler.toModel(manager);
     }
@@ -59,38 +57,37 @@ public class ManagerServiceImpl implements ManagerService {
                 .map(managerToUpdate -> managerAssembler
                         .toModel(managerRepository
                                 .save(managerToUpdate.update(manager))))
-                .orElseGet(()-> managerAssembler.toModel(managerRepository.save(manager)));
+                .orElseGet(() -> managerAssembler.toModel(managerRepository.save(manager)));
     }
 
     @Override
-    public EntityModel<Manager> addNewManager (Manager managerToAdd) {
+    public EntityModel<Manager> addNewManager(Manager managerToAdd) {
 
         if (!managerRepository.existsByPersonalId(managerToAdd.getPersonalId())) {
             return managerAssembler.toModel(managerRepository.save(managerToAdd));
         }
         throw new RestaurantConflictException(
-                    (String.format(Constant.ALREADY_EXISTS_MESSAGE , "manager", managerToAdd.getFirstName())));
+                (String.format(Constant.ALREADY_EXISTS_MESSAGE, "manager", managerToAdd.getFirstName())));
     }
 
     @Override
     public void deleteManager(int personalId) {
-        if (!managerRepository.existsByPersonalId(personalId))
-        {
+        if (!managerRepository.existsByPersonalId(personalId)) {
             throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE , "personal id", personalId)));
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
         }
         managerRepository.deleteById(personalId);
     }
 
     @Override
     public CollectionModel<EntityModel<Manager>> getDutyStatus(boolean isOnDuty) {
-        List<Manager> managers =  managerRepository.getAllByOnDuty(isOnDuty);
+        List<Manager> managers = managerRepository.getAllByOnDuty(isOnDuty);
         List<EntityModel<Manager>> managersEntityModelList = managers.stream()
                 .map(managerAssembler::toModel).collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(managers)) {
             throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE , "manager on duty", isOnDuty)));
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "manager on duty", isOnDuty)));
         }
 
         return CollectionModel.of(managersEntityModelList, linkTo(methodOn(ManagerController.class)

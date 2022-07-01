@@ -17,6 +17,5 @@ public class RestaurantManagerApplication {
 
 /*
  1. Add DTO objects.
- 4. Check ex 11 in the PDF.
  15. add Documentation.
  */

@@ -3,17 +3,10 @@ package hit.projects.resturantmanager.pojo;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Document("Order")
@@ -40,7 +33,7 @@ public class Order {
         this.tableId = tableId;
     }
 
-    public Order update(Order detailsToUpdate){
+    public Order update(Order detailsToUpdate) {
         this.setBill(detailsToUpdate.getBill());
         this.setOrderDate(detailsToUpdate.getOrderDate());
         this.setOrderNumber(detailsToUpdate.getOrderNumber());

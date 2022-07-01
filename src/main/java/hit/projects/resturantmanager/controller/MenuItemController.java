@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @RequestMapping("/menu")
 @RestController
 public class MenuItemController {
@@ -28,7 +27,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/price/{price}")
-    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemByPrice(@PathVariable int price){
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getSingleMenuItemByPrice(@PathVariable int price) {
         return ResponseEntity.ok().body(menuItemService.getSingleMenuItemPrice(price));
     }
 
@@ -38,12 +37,12 @@ public class MenuItemController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getByCategoryAndPrice(@RequestParam(defaultValue = "13") int price , @RequestParam MenuCategories category){
-        return ResponseEntity.ok().body(menuItemService.getByCategoryAndPrice(price,category));
+    public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getByCategoryAndPrice(@RequestParam(defaultValue = "13") int price, @RequestParam MenuCategories category) {
+        return ResponseEntity.ok().body(menuItemService.getByCategoryAndPrice(price, category));
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(@PathVariable String name){
+    public ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(@PathVariable String name) {
         return ResponseEntity.ok().body(menuItemService.getSingleMenuItem(name));
     }
 
@@ -68,7 +67,7 @@ public class MenuItemController {
     }
 
     @DeleteMapping("/delete/{name}")
-    public ResponseEntity<?>  deleteMenuItem(@PathVariable String name){
+    public ResponseEntity<?> deleteMenuItem(@PathVariable String name) {
         menuItemService.deleteMenuItem(name);
         return ResponseEntity.status(202).build();
     }

@@ -1,21 +1,14 @@
 package hit.projects.resturantmanager.controller;
 
 import hit.projects.resturantmanager.enums.TableStatus;
-import hit.projects.resturantmanager.pojo.Manager;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
-import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.service.TableService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.swing.text.html.parser.Entity;
-import java.util.List;
 
 @RequestMapping("/table")
 @RestController

@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-
 @Document("Manager")
 @Data
 public class Manager extends Worker {
@@ -14,7 +13,7 @@ public class Manager extends Worker {
         super(personalId, firstName, lastName, salary, onDuty);
     }
 
-    public Manager update(Manager detailsToUpdate){
+    public Manager update(Manager detailsToUpdate) {
         this.setFirstName(detailsToUpdate.getFirstName());
         this.setLastName(detailsToUpdate.getLastName());
         this.setOnDuty(detailsToUpdate.isOnDuty());

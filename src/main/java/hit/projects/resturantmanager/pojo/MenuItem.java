@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 
-//import javax.persistence.Id;
 @Data
 @Document
 public class MenuItem {
@@ -26,7 +25,7 @@ public class MenuItem {
         this.price = price;
     }
 
-    public MenuItem update(MenuItem detailsToUpdate){
+    public MenuItem update(MenuItem detailsToUpdate) {
         this.setName(detailsToUpdate.getName());
         this.setMenuCategories(MenuCategories.valueOf(detailsToUpdate.getMenuCategories().toString().toUpperCase()));
         this.setPrice(detailsToUpdate.getPrice());

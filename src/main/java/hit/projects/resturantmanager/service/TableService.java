@@ -7,7 +7,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
 
-public interface TableService{
+public interface TableService {
 
     EntityModel<Table> getTable(int tableNumber);
 
@@ -17,7 +17,7 @@ public interface TableService{
 
     void addOrder(int tableNumber, Order order);
 
-    EntityModel<Table> updateTable(String tableNumber ,Table tableSent);
+    EntityModel<Table> updateTable(String tableNumber, Table tableSent);
 
     EntityModel<Table> createTable(Table newTable);
 

@@ -9,13 +9,14 @@ import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Component
 public class ManagerAssembler implements RepresentationModelAssembler<Manager, EntityModel<Manager>> {
 
     @Override
     public EntityModel<Manager> toModel(Manager entity) {
 
-        return EntityModel.of(entity,linkTo(methodOn(ManagerController.class)
+        return EntityModel.of(entity, linkTo(methodOn(ManagerController.class)
                 .getManager((entity.getPersonalId()))).withSelfRel(), linkTo(methodOn(ManagerController.class).
                 getAllManagers()).withRel("All managers"));
     }

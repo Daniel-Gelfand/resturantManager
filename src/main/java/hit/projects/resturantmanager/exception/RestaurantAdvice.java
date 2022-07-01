@@ -14,17 +14,17 @@ import java.util.Map;
 public class RestaurantAdvice {
 
     @ExceptionHandler(RestaurantNotFoundException.class)
-    public ResponseEntity<Object> restaurantNotFoundHandler(RestaurantNotFoundException rnfe){
+    public ResponseEntity<Object> restaurantNotFoundHandler(RestaurantNotFoundException rnfe) {
         return new ResponseEntity<>(getStringMessage(rnfe.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RestaurantConflictException.class)
-    public ResponseEntity<Object> restaurantConflictHandler(RestaurantConflictException rce){
+    public ResponseEntity<Object> restaurantConflictHandler(RestaurantConflictException rce) {
         return new ResponseEntity<>(getStringMessage(rce.getMessage()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(RestaurantGeneralException.class)
-    public ResponseEntity<Object> restaurantGeneralExceptionHandler(RestaurantGeneralException rge){
+    public ResponseEntity<Object> restaurantGeneralExceptionHandler(RestaurantGeneralException rge) {
         return new ResponseEntity<>(getStringMessage(rge.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

@@ -13,7 +13,12 @@ public class MenuItemDTO {
     @JsonIgnore
     private MenuItem menuItem;
 
-    public String getName() {return this.menuItem.getName(); }
-    public int getPrice() { return this.menuItem.getPrice(); }
+    public String getName() {
+        return this.menuItem.getName();
+    }
+
+    public int getPrice() {
+        return this.menuItem.getPrice();
+    }
 
 }

@@ -20,7 +20,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Configuration
@@ -39,7 +41,7 @@ public class MongoConfiguration {
     CommandLineRunner runner(MenuItemRepository myMenu, WaiterRepository waiterRepository,
                              OrderRepository orderRepository, TableRepository tableRepository,
                              ManagerRepository managerRepository, RestTemplate restTemplate,
-                             ResponseEntityConvertor responseEntityConvertor){
+                             ResponseEntityConvertor responseEntityConvertor) {
         return args -> {
 
             setMenuItemBean(myMenu, restTemplate, responseEntityConvertor);
@@ -53,13 +55,13 @@ public class MongoConfiguration {
         };
     }
 
-    private void setManagers(ManagerRepository managerRepository){
-        Manager manager1 = new Manager(209381773,"Gilad","Shalit",8000.0,true);
-        Manager manager2 = new Manager(209222772,"Benjamin","Netanyahu",8000.0,false);
-        Manager manager3 = new Manager(318324258,"Naftali","Benet",8000.0,false);
-        Manager manager4 = new Manager(209444775,"Yakov","Ha-Hayat",8000.0,true);
+    private void setManagers(ManagerRepository managerRepository) {
+        Manager manager1 = new Manager(209381773, "Gilad", "Shalit", 8000.0, true);
+        Manager manager2 = new Manager(209222772, "Benjamin", "Netanyahu", 8000.0, false);
+        Manager manager3 = new Manager(318324258, "Naftali", "Benet", 8000.0, false);
+        Manager manager4 = new Manager(209444775, "Yakov", "Ha-Hayat", 8000.0, true);
         managerRepository.deleteAll();
-        managerRepository.insert(List.of(manager1,manager2,manager3,manager4));
+        managerRepository.insert(List.of(manager1, manager2, manager3, manager4));
     }
 
     private void setMenuItemBean(MenuItemRepository myMenu, RestTemplate restTemplate,
@@ -68,19 +70,18 @@ public class MongoConfiguration {
             List<MenuItem> pizzas = getPizzas(restTemplate, responseEntityConvertor).get();
             List<MenuItem> desserts = getDesserts(restTemplate, responseEntityConvertor).get();
 
-            MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE,69);
-            MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT,25);
-            MenuItem menuItem3 = new MenuItem("Coca-Cola", MenuCategories.DRINKS,12);
-            MenuItem menuItem4 = new MenuItem("Carpaccio", MenuCategories.APPETIZER,33);
-            MenuItem menuItem5 = new MenuItem("Sprite", MenuCategories.DRINKS,12);
+            MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE, 69);
+            MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT, 25);
+            MenuItem menuItem3 = new MenuItem("Coca-Cola", MenuCategories.DRINKS, 12);
+            MenuItem menuItem4 = new MenuItem("Carpaccio", MenuCategories.APPETIZER, 33);
+            MenuItem menuItem5 = new MenuItem("Sprite", MenuCategories.DRINKS, 12);
 
 
             myMenu.deleteAll();
-            myMenu.insert(List.of(menuItem1,menuItem2,menuItem3,menuItem4,menuItem5));
+            myMenu.insert(List.of(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5));
             myMenu.insert(pizzas);
             myMenu.insert(desserts);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("setMenuItemBean", "message: problem with fetching food");
         }
     }
@@ -98,7 +99,7 @@ public class MongoConfiguration {
         waiter4.setTableList(tables);
 
         waiterRepository.deleteAll();
-        waiterRepository.insert(List.of(waiter1,waiter2,waiter3,waiter4));
+        waiterRepository.insert(List.of(waiter1, waiter2, waiter3, waiter4));
     }
 
     private void setOrder(OrderRepository orderRepository, TableRepository tableRepository, MenuItemRepository menuItemRepository) {
@@ -130,7 +131,7 @@ public class MongoConfiguration {
             orderRepository.deleteAll();
             orderRepository.insert(List.of(order1, order2, order3));
             table.setTableStatus(TableStatus.BUSY);
-            ArrayList<Order> orders = new ArrayList<>(Arrays.asList(order1,order2,order3));
+            ArrayList<Order> orders = new ArrayList<>(Arrays.asList(order1, order2, order3));
             table.setOrderList(orders);
             tableRepository.save(table);
         } catch (Exception err) {
@@ -156,7 +157,7 @@ public class MongoConfiguration {
 
     @Async
     public CompletableFuture<List<MenuItem>> getDesserts(RestTemplate restTemplate,
-                                                           ResponseEntityConvertor responseEntityConvertor){
+                                                         ResponseEntityConvertor responseEntityConvertor) {
         try {
             final HttpEntity<String> entity = getHeaders();
 
@@ -171,8 +172,7 @@ public class MongoConfiguration {
 
             log.error("getDesserts", "message: Request desserts Failed with status = " + response.getStatusCode());
             throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("addDesserts", "message: problem with fetching desserts API.");
             throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
         }
@@ -180,7 +180,7 @@ public class MongoConfiguration {
 
     @Async
     public CompletableFuture<List<MenuItem>> getPizzas(RestTemplate restTemplate,
-                                                         ResponseEntityConvertor responseEntityConvertor){
+                                                       ResponseEntityConvertor responseEntityConvertor) {
         try {
             final HttpEntity<String> entity = getHeaders();
 
@@ -195,8 +195,7 @@ public class MongoConfiguration {
 
             log.error("getPizzas", "message: Request pizzas Failed with status = " + response.getStatusCode());
             throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("addPizzas", "message: problem with fetching pizzas API.");
             throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
         }
