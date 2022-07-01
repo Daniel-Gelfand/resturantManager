@@ -15,11 +15,14 @@ import java.util.List;
 
 @RequestMapping("/table")
 @RestController
-@AllArgsConstructor
 public class TableController {
 
     private final TableService tableService;
 
+
+    public TableController(TableService tableService) {
+        this.tableService = tableService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Table>> getAllTables() {

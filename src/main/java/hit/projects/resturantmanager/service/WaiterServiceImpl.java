@@ -2,15 +2,11 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.WaiterAssembler;
 import hit.projects.resturantmanager.controller.WaiterController;
-import hit.projects.resturantmanager.exception.MenuItemException;
-import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.Waiter;
-import hit.projects.resturantmanager.exception.WaiterException;
 import hit.projects.resturantmanager.repository.WaiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

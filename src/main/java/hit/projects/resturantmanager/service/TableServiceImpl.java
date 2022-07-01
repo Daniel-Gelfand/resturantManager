@@ -2,7 +2,6 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.TableAssembler;
 import hit.projects.resturantmanager.enums.TableStatus;
-import hit.projects.resturantmanager.exception.TableException;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
 import hit.projects.resturantmanager.repository.OrderRepository;
@@ -11,7 +10,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TableServiceImpl implements TableService{

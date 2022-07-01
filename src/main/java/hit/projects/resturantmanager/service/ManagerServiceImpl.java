@@ -2,9 +2,11 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.ManagerAssembler;
 import hit.projects.resturantmanager.controller.ManagerController;
-import hit.projects.resturantmanager.exception.ManagerException;
+import hit.projects.resturantmanager.exception.RestaurantConflictException;
+import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Manager;
 import hit.projects.resturantmanager.repository.ManagerRepository;
+import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -13,12 +15,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static hit.projects.resturantmanager.utils.Constant.NOT_FOUND_MESSAGE;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
-
 
     private final ManagerRepository managerRepository;
     private final ManagerAssembler managerAssembler;
@@ -34,13 +36,17 @@ public class ManagerServiceImpl implements ManagerService {
         List<EntityModel<Manager>> managerList = managerRepository.findAll()
                 .stream().map(managerAssembler::toModel).collect(Collectors.toList());
 
-        return CollectionModel.of(managerList,linkTo(methodOn(ManagerController.class)
+        return CollectionModel.of(managerList, linkTo(methodOn(ManagerController.class)
                 .getAllManagers()).withSelfRel());
     }
 
     @Override
     public EntityModel<Manager> getManager(int personalId) {
-        Manager manager = managerRepository.getManagerByPersonalId(personalId).orElseThrow(()-> new ManagerException(personalId));
+        Manager manager = managerRepository
+                .getManagerByPersonalId(personalId)
+                .orElseThrow(()->
+                        new RestaurantNotFoundException(
+                                (String.format(Constant.NOT_FOUND_MESSAGE , "personal id", personalId))));
 
         return managerAssembler.toModel(manager);
     }
@@ -48,39 +54,29 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public EntityModel<Manager> updateManager(int personalId, Manager manager) {
         return managerRepository.findById(personalId)
-                .map(managerToUpdate -> {
-                    managerToUpdate.setFirstName(manager.getFirstName());
-                    managerToUpdate.setLastName(manager.getLastName());
-                    managerToUpdate.setOnDuty(manager.isOnDuty());
-                    managerToUpdate.setPersonalId(manager.getPersonalId());
-                    managerToUpdate.setSalary(manager.getSalary());
-                    managerRepository.save(managerToUpdate);
-                    return managerAssembler.toModel(managerToUpdate);
-                })
-                .orElseGet(()-> {
-                    managerRepository.save(manager);
-                    return managerAssembler.toModel(manager);
-                });
+                .map(managerToUpdate -> managerAssembler
+                        .toModel(managerRepository
+                                .save(managerToUpdate.update(manager))))
+                .orElseGet(()-> managerAssembler.toModel(managerRepository.save(manager)));
     }
 
     @Override
     public EntityModel<Manager> addNewManager (Manager managerToAdd) {
-        //TODO: Change to ManagerException
+
         if (!managerRepository.existsById(managerToAdd.getPersonalId())) {
-            Manager savedNewManager = managerRepository.save(managerToAdd);
-            return managerAssembler.toModel(managerToAdd);
-        }else {
-            throw new ManagerException(managerToAdd.getFirstName());
+            return managerAssembler.toModel(managerRepository.save(managerToAdd));
+        } else {
+            throw new RestaurantConflictException(
+                    (String.format(Constant.ALREADY_EXISTS_MESSAGE , "manager", managerToAdd.getFirstName())));
         }
     }
 
     @Override
     public void deleteManager(int personalId) {
-        //TODO: Change to ManagerException
-        boolean isExists = managerRepository.existsById(personalId);
-        if (!isExists)
+        if (!managerRepository.existsById(personalId))
         {
-            throw new ManagerException(personalId);
+            throw new RestaurantNotFoundException(
+                    (String.format(Constant.NOT_FOUND_MESSAGE , "personal id", personalId)));
         }
         managerRepository.deleteById(personalId);
     }

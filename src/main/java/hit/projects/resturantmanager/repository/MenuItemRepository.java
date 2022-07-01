@@ -18,6 +18,6 @@ public interface MenuItemRepository extends MongoRepository<MenuItem,String> {
 
     Optional<MenuItem> findByName(String name);
 
-    List<MenuItem> findAllByPriceLessThanAndMenuCategoriesEquals(int price,MenuCategories menuCategories);
+    List<MenuItem> findAllByPriceLessThanAndMenuCategoriesEquals(int price, MenuCategories menuCategories);
 
 }

@@ -10,61 +10,26 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-//TODO: בתאכלס אין סיבה לעשות לכל סרביס קונטרול אדוויס משלו, אפשר לבנות 1 לכולם ולהוסיף בו כמה סוגי החזרות שונים כמו ה-404 שהחזרנו
 @ControllerAdvice
-
 public class RestaurantAdvice {
 
-    @ExceptionHandler(MenuItemException.class)
-    public ResponseEntity<Object> menuItemNotFoundHandler(MenuItemException mie){
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<Object> restaurantNotFoundHandler(RestaurantNotFoundException rnfe){
         Map<String, Object> body = new LinkedHashMap<>();
 
         body.put("time", LocalDateTime.now());
-        body.put("message", mie.getMessage());
+        body.put("message", rnfe.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(TableException.class)
-    public ResponseEntity<Object> tableNotFound(TableException tableException) {
+    @ExceptionHandler(RestaurantConflictException.class)
+    public ResponseEntity<Object> restaurantConflictHandler(RestaurantConflictException rce){
         Map<String, Object> body = new LinkedHashMap<>();
 
         body.put("time", LocalDateTime.now());
-        body.put("message", tableException.getMessage());
+        body.put("message", rce.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(OrderException.class)
-    public ResponseEntity<Object> orderNotFound(OrderException orderException) {
-        Map<String, Object> body = new LinkedHashMap<>();
-
-        body.put("time", LocalDateTime.now());
-        body.put("message", orderException.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-
-    @ExceptionHandler(ManagerException.class)
-    public ResponseEntity<Object> managerNotFound(ManagerException managerException) {
-        Map<String, Object> body = new LinkedHashMap<>();
-
-        body.put("time", LocalDateTime.now());
-        body.put("message", managerException.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-
-
-
-
-    String WaiterOnDutyNotFoundHandler(WaiterException waiterException){
-        return waiterException.getMessage();
-    }
-
-    String menuItemPriceNotFoundHandler(MenuItemException mie) {
-        return mie.getMessage();
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 }

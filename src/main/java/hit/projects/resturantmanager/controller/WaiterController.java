@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/waiter")
-@AllArgsConstructor
 public class WaiterController {
 
     private final WaiterService waiterService;
+
+    public WaiterController(WaiterService waiterService) {
+        this.waiterService = waiterService;
+    }
 
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters() {

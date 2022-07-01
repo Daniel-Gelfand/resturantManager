@@ -5,6 +5,7 @@ import hit.projects.resturantmanager.pojo.dto2.OrderDTO;
 import hit.projects.resturantmanager.service.OrderService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +39,8 @@ public class OrderController {
 
 
     @PostMapping
-    public EntityModel<Order> addOrder(@RequestBody Order newOrder){
-        return orderService.addOrder(newOrder);
+    public ResponseEntity<EntityModel<Order>> addOrder(@RequestBody Order newOrder){
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.addOrder(newOrder));
     }
 
     @PutMapping("/{orderId}")

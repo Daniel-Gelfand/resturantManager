@@ -18,6 +18,4 @@ public interface WaiterService {
     EntityModel<Waiter> addNewWaiter(Waiter waiterToAdd);
 
     void deleteWaiter(int personalId);
-
-
 }

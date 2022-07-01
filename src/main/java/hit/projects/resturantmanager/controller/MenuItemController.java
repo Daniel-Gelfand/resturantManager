@@ -5,6 +5,7 @@ import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
 import hit.projects.resturantmanager.service.MenuItemService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,13 @@ import java.util.stream.StreamSupport;
 
 @RequestMapping("/menu")
 @RestController
-@AllArgsConstructor
 public class MenuItemController {
 
-    private final MenuItemService menuItemService;
+    private MenuItemService menuItemService;
+
+    public MenuItemController(MenuItemService menuItemService) {
+        this.menuItemService = menuItemService;
+    }
 
     @GetMapping()
     public ResponseEntity<CollectionModel<EntityModel<MenuItem>>> getMenu() {

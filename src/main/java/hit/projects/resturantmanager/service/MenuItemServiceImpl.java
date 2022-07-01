@@ -3,7 +3,6 @@ package hit.projects.resturantmanager.service;
 import hit.projects.resturantmanager.assembler.dto.MenuItemDTOAssembler;
 import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.controller.MenuItemController;
-import hit.projects.resturantmanager.exception.MenuItemException;
 import hit.projects.resturantmanager.assembler.MenuItemAssembler;
 import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
@@ -14,11 +13,9 @@ import org.springframework.hateoas.EntityModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
