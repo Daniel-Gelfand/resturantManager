@@ -26,7 +26,6 @@ public class Order {
     private int orderNumber;
     private double bill;
     private LocalDateTime orderDate;
-
     private boolean orderStatus;
     private List<MenuItem> orderList;
     private String tableId;
@@ -41,4 +40,13 @@ public class Order {
         this.tableId = tableId;
     }
 
+    public Order update(Order detailsToUpdate){
+        this.setBill(detailsToUpdate.getBill());
+        this.setOrderDate(detailsToUpdate.getOrderDate());
+        this.setOrderNumber(detailsToUpdate.getOrderNumber());
+        this.setOrderStatus(detailsToUpdate.isOrderStatus());
+        this.setTableId(detailsToUpdate.getTableId());
+
+        return this;
+    }
 }

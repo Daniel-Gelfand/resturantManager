@@ -15,21 +15,19 @@ public class RestaurantAdvice {
 
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<Object> restaurantNotFoundHandler(RestaurantNotFoundException rnfe){
-        Map<String, Object> body = new LinkedHashMap<>();
-
-        body.put("time", LocalDateTime.now());
-        body.put("message", rnfe.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(getStringMessage(rnfe.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RestaurantConflictException.class)
     public ResponseEntity<Object> restaurantConflictHandler(RestaurantConflictException rce){
+        return new ResponseEntity<>(getStringMessage(rce.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    private Map<String, Object> getStringMessage(String message) {
         Map<String, Object> body = new LinkedHashMap<>();
 
         body.put("time", LocalDateTime.now());
-        body.put("message", rce.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+        body.put("message", message);
+        return body;
     }
 }

@@ -65,10 +65,9 @@ public class ManagerServiceImpl implements ManagerService {
 
         if (!managerRepository.existsById(managerToAdd.getPersonalId())) {
             return managerAssembler.toModel(managerRepository.save(managerToAdd));
-        } else {
-            throw new RestaurantConflictException(
-                    (String.format(Constant.ALREADY_EXISTS_MESSAGE , "manager", managerToAdd.getFirstName())));
         }
+        throw new RestaurantConflictException(
+                    (String.format(Constant.ALREADY_EXISTS_MESSAGE , "manager", managerToAdd.getFirstName())));
     }
 
     @Override

@@ -27,4 +27,12 @@ public class MenuItem {
         this.price = price;
     }
 
+    public MenuItem update(MenuItem detailsToUpdate){
+        this.setName(detailsToUpdate.getName());
+        this.setMenuCategories(MenuCategories.valueOf(detailsToUpdate.getMenuCategories().toString().toUpperCase()));
+        this.setPrice(detailsToUpdate.getPrice());
+
+        return this;
+    }
+
 }
