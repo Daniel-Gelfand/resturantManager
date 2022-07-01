@@ -1,4 +1,4 @@
-package hit.projects.resturantmanager.pojo.dto2;
+package hit.projects.resturantmanager.pojo.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

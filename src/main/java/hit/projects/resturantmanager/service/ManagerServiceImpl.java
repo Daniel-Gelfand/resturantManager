@@ -65,7 +65,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public EntityModel<Manager> addNewManager (Manager managerToAdd) {
 
-        if (!managerRepository.existsById(managerToAdd.getPersonalId())) {
+        if (!managerRepository.existsByPersonalId(managerToAdd.getPersonalId())) {
             return managerAssembler.toModel(managerRepository.save(managerToAdd));
         }
         throw new RestaurantConflictException(
@@ -74,7 +74,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void deleteManager(int personalId) {
-        if (!managerRepository.existsById(personalId))
+        if (!managerRepository.existsByPersonalId(personalId))
         {
             throw new RestaurantNotFoundException(
                     (String.format(Constant.NOT_FOUND_MESSAGE , "personal id", personalId)));

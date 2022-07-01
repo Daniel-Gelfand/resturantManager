@@ -6,7 +6,7 @@ import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.Order;
-import hit.projects.resturantmanager.pojo.dto2.OrderDTO;
+import hit.projects.resturantmanager.pojo.dto.OrderDTO;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.utils.Constant;

@@ -13,4 +13,5 @@ public interface ManagerRepository extends MongoRepository<Manager, Integer> {
 
     List<Manager> getAllByOnDuty(boolean onDuty);
 
+    boolean existsByPersonalId(int personalId);
 }

@@ -37,7 +37,6 @@ public class ManagerController {
         return ResponseEntity.ok(managerService.getDutyStatus(isOnDuty));
     }
 
-
     @PutMapping("/{personalId}")
     public ResponseEntity<EntityModel<Manager>> updateManager(@PathVariable int personalId, @RequestBody Manager managerToUpdate) {
         return ResponseEntity.ok().body(managerService.updateManager(personalId, managerToUpdate));

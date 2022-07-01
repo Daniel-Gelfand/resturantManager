@@ -1,7 +1,7 @@
 package hit.projects.resturantmanager.controller;
 
 import hit.projects.resturantmanager.pojo.Order;
-import hit.projects.resturantmanager.pojo.dto2.OrderDTO;
+import hit.projects.resturantmanager.pojo.dto.OrderDTO;
 import hit.projects.resturantmanager.service.OrderService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;

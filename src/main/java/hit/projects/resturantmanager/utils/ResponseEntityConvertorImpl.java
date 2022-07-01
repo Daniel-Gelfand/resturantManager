@@ -1,9 +1,9 @@
 package hit.projects.resturantmanager.utils;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
-import hit.projects.resturantmanager.pojo.DessertsResponseEntity;
+import hit.projects.resturantmanager.pojo.response.DessertsResponseEntity;
 import hit.projects.resturantmanager.pojo.MenuItem;
-import hit.projects.resturantmanager.pojo.PizzaResponseEntity;
+import hit.projects.resturantmanager.pojo.response.PizzaResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

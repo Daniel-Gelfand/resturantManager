@@ -1,8 +1,7 @@
-package hit.projects.resturantmanager.pojo.dto2;
+package hit.projects.resturantmanager.pojo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.Order;
 import lombok.Value;
 

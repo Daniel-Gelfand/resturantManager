@@ -2,7 +2,7 @@ package hit.projects.resturantmanager.controller;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.pojo.MenuItem;
-import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
+import hit.projects.resturantmanager.pojo.dto.MenuItemDTO;
 import hit.projects.resturantmanager.service.MenuItemService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;

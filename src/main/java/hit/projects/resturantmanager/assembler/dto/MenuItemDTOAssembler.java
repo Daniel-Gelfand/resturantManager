@@ -1,7 +1,7 @@
 package hit.projects.resturantmanager.assembler.dto;
 
 import hit.projects.resturantmanager.controller.MenuItemController;
-import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
+import hit.projects.resturantmanager.pojo.dto.MenuItemDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.SimpleRepresentationModelAssembler;
