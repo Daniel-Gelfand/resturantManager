@@ -4,18 +4,27 @@ import hit.projects.resturantmanager.assembler.MenuItemAssembler;
 import hit.projects.resturantmanager.assembler.dto.MenuItemDTOAssembler;
 import hit.projects.resturantmanager.controller.MenuItemController;
 import hit.projects.resturantmanager.enums.MenuCategories;
+import hit.projects.resturantmanager.exception.RestaurantGeneralException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
+import hit.projects.resturantmanager.pojo.DessertsResponseEntity;
 import hit.projects.resturantmanager.pojo.MenuItem;
+import hit.projects.resturantmanager.pojo.PizzaResponseEntity;
 import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import hit.projects.resturantmanager.utils.Constant;
-import org.springframework.beans.factory.annotation.Autowired;
+import hit.projects.resturantmanager.utils.ResponseEntityConvertor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -23,17 +32,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
+@Slf4j
 public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
     private final MenuItemAssembler menuItemAssembler;
     private final MenuItemDTOAssembler menuItemDTOAssembler;
 
-    @Autowired
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, MenuItemAssembler menuItemAssembler, MenuItemDTOAssembler menuItemDTOAssemble) {
+    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, MenuItemAssembler menuItemAssembler, MenuItemDTOAssembler menuItemDTOAssembler) {
         this.menuItemRepository = menuItemRepository;
         this.menuItemAssembler = menuItemAssembler;
-        this.menuItemDTOAssembler = menuItemDTOAssemble;
+        this.menuItemDTOAssembler = menuItemDTOAssembler;
     }
 
     @Override

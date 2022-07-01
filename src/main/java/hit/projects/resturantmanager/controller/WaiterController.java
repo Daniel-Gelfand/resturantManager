@@ -5,6 +5,7 @@ import hit.projects.resturantmanager.service.WaiterService;
 import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/waiter")
 public class WaiterController {
-
     private final WaiterService waiterService;
 
     public WaiterController(WaiterService waiterService) {
@@ -42,13 +42,12 @@ public class WaiterController {
 
     @PostMapping
     public ResponseEntity<EntityModel<Waiter>> addNewWaiter(@RequestBody Waiter waiterToAdd) {
-        return ResponseEntity.ok(waiterService.addNewWaiter(waiterToAdd));
+        return new ResponseEntity<>(waiterService.addNewWaiter(waiterToAdd), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{personalId}")
     public ResponseEntity<?> deleteWaiter(@PathVariable int personalId) {
         waiterService.deleteWaiter(personalId);
         return ResponseEntity.status(202).build();
-
     }
 }

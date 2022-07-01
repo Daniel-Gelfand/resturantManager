@@ -13,7 +13,6 @@ import javax.persistence.Id;
 @Document
 public class MenuItem {
     @Id
-    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String id;
     @Indexed(unique = true)
     private String name;

@@ -3,6 +3,7 @@ package hit.projects.resturantmanager.pojo;
 import hit.projects.resturantmanager.enums.TableStatus;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Value;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;

@@ -2,27 +2,47 @@ package hit.projects.resturantmanager.configuration;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.enums.TableStatus;
+import hit.projects.resturantmanager.exception.RestaurantGeneralException;
 import hit.projects.resturantmanager.pojo.*;
 import hit.projects.resturantmanager.repository.*;
+import hit.projects.resturantmanager.utils.Constant;
+import hit.projects.resturantmanager.utils.ResponseEntityConvertor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Configuration
 @Slf4j
 public class MongoConfiguration {
+    @Bean
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
+    }
+
+    @Value("${app.foodUrl}")
+    private String foodUrl;
+
 
     @Bean
-    CommandLineRunner runner(MenuItemRepository myMenu, WaiterRepository waiterRepository, OrderRepository orderRepository, TableRepository tableRepository, ManagerRepository managerRepository){
+    CommandLineRunner runner(MenuItemRepository myMenu, WaiterRepository waiterRepository,
+                             OrderRepository orderRepository, TableRepository tableRepository,
+                             ManagerRepository managerRepository, RestTemplate restTemplate,
+                             ResponseEntityConvertor responseEntityConvertor){
         return args -> {
 
-            setMenuItemBean(myMenu);
+            setMenuItemBean(myMenu, restTemplate, responseEntityConvertor);
             setWaiterItemBean(waiterRepository, tableRepository);
             setTables(tableRepository, waiterRepository);
             setManagers(managerRepository);
@@ -38,21 +58,31 @@ public class MongoConfiguration {
         Manager manager2 = new Manager(209222772,"Benjamin","Netanyahu",8000.0,false);
         Manager manager3 = new Manager(318324258,"Naftali","Benet",8000.0,false);
         Manager manager4 = new Manager(209444775,"Yakov","Ha-Hayat",8000.0,true);
-        System.out.println(manager1);
         managerRepository.deleteAll();
         managerRepository.insert(List.of(manager1,manager2,manager3,manager4));
     }
 
-    private void setMenuItemBean(MenuItemRepository myMenu) {
-        MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE,69);
-        MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT,25);
-        MenuItem menuItem3 = new MenuItem("Coca-Cola", MenuCategories.DRINKS,12);
-        MenuItem menuItem4 = new MenuItem("Carpaccio", MenuCategories.APPETIZER,33);
-        MenuItem menuItem5 = new MenuItem("Sprite", MenuCategories.DRINKS,12);
+    private void setMenuItemBean(MenuItemRepository myMenu, RestTemplate restTemplate,
+                                 ResponseEntityConvertor responseEntityConvertor) {
+        try {
+            List<MenuItem> pizzas = getPizzas(restTemplate, responseEntityConvertor).get();
+            List<MenuItem> desserts = getDesserts(restTemplate, responseEntityConvertor).get();
 
-        myMenu.deleteAll();
-        myMenu.insert(List.of(menuItem1,menuItem2,menuItem3,menuItem4,menuItem5));
+            MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE,69);
+            MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT,25);
+            MenuItem menuItem3 = new MenuItem("Coca-Cola", MenuCategories.DRINKS,12);
+            MenuItem menuItem4 = new MenuItem("Carpaccio", MenuCategories.APPETIZER,33);
+            MenuItem menuItem5 = new MenuItem("Sprite", MenuCategories.DRINKS,12);
 
+
+            myMenu.deleteAll();
+            myMenu.insert(List.of(menuItem1,menuItem2,menuItem3,menuItem4,menuItem5));
+            myMenu.insert(pizzas);
+            myMenu.insert(desserts);
+        }
+        catch (Exception e){
+            log.error("setMenuItemBean", "message: problem with fetching food");
+        }
     }
 
     private void setWaiterItemBean(WaiterRepository waiterRepository, TableRepository tableRepository) {
@@ -108,7 +138,7 @@ public class MongoConfiguration {
         }
     }
 
-    public void setTables(TableRepository tableRepository, WaiterRepository waiterRepository) {
+    private void setTables(TableRepository tableRepository, WaiterRepository waiterRepository) {
         List<Waiter> waiters = waiterRepository.findAllByOnDuty(true);
 
         Table table1 = Table.builder().tableNumber(1).tableStatus(TableStatus.AVAILABLE).build();
@@ -122,5 +152,63 @@ public class MongoConfiguration {
 
         tableRepository.deleteAll();
         tableRepository.insert(List.of(table1, table2, table3, table4));
+    }
+
+    @Async
+    public CompletableFuture<List<MenuItem>> getDesserts(RestTemplate restTemplate,
+                                                           ResponseEntityConvertor responseEntityConvertor){
+        try {
+            final HttpEntity<String> entity = getHeaders();
+
+            ResponseEntity<DessertsResponseEntity[]> response =
+                    restTemplate.exchange(foodUrl + "/desserts", HttpMethod.GET, entity, DessertsResponseEntity[].class);
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                log.info("getDesserts", "message: Request desserts Successful.");
+                return CompletableFuture
+                        .completedFuture(responseEntityConvertor.convertDesserts(List.of(response.getBody())));
+            }
+
+            log.error("getDesserts", "message: Request desserts Failed with status = " + response.getStatusCode());
+            throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
+        }
+        catch (Exception e){
+            log.error("addDesserts", "message: problem with fetching desserts API.");
+            throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
+        }
+    }
+
+    @Async
+    public CompletableFuture<List<MenuItem>> getPizzas(RestTemplate restTemplate,
+                                                         ResponseEntityConvertor responseEntityConvertor){
+        try {
+            final HttpEntity<String> entity = getHeaders();
+
+            ResponseEntity<PizzaResponseEntity[]> response =
+                    restTemplate.exchange(foodUrl + "/pizzas", HttpMethod.GET, entity, PizzaResponseEntity[].class);
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                log.info("getPizzas", "message: Request pizzas Successful.");
+                return CompletableFuture
+                        .completedFuture(responseEntityConvertor.convertPizzas(List.of(response.getBody())));
+            }
+
+            log.error("getPizzas", "message: Request pizzas Failed with status = " + response.getStatusCode());
+            throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
+        }
+        catch (Exception e){
+            log.error("addPizzas", "message: problem with fetching pizzas API.");
+            throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
+        }
+    }
+
+    private HttpEntity<String> getHeaders() {
+        final HttpHeaders headers = new HttpHeaders();
+
+        headers.set("X-RapidAPI-Key", "e7b095a3d8msh7747ffc57c63532p196fdajsnebd249aeae22");
+        headers.set("X-RapidAPI-Host", "pizza-and-desserts.p.rapidapi.com");
+
+        final HttpEntity<String> entity = new HttpEntity<>(headers);
+        return entity;
     }
 }

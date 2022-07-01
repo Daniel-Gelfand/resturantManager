@@ -1,5 +1,6 @@
 package hit.projects.resturantmanager.service;
 
+import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
 import org.springframework.hateoas.CollectionModel;
@@ -21,5 +22,7 @@ public interface TableService{
     EntityModel<Table> createTable(Table newTable);
 
     void deleteTable(int tableNumber);
+
+    CollectionModel<EntityModel<Table>> getTableByStatus(TableStatus status);
 }
 

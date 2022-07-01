@@ -2,15 +2,18 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.ManagerAssembler;
 import hit.projects.resturantmanager.controller.ManagerController;
+import hit.projects.resturantmanager.controller.WaiterController;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Manager;
+import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.repository.ManagerRepository;
 import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,6 +81,22 @@ public class ManagerServiceImpl implements ManagerService {
         }
         managerRepository.deleteById(personalId);
     }
+
+    @Override
+    public CollectionModel<EntityModel<Manager>> getDutyStatus(boolean isOnDuty) {
+        List<Manager> managers =  managerRepository.getAllByOnDuty(isOnDuty);
+        List<EntityModel<Manager>> managersEntityModelList = managers.stream()
+                .map(managerAssembler::toModel).collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(managers)) {
+            throw new RestaurantNotFoundException(
+                    (String.format(Constant.NOT_FOUND_MESSAGE , "manager on duty", isOnDuty)));
+        }
+
+        return CollectionModel.of(managersEntityModelList, linkTo(methodOn(ManagerController.class)
+                .getAllManagers()).withSelfRel());
+    }
+
 
 }
 

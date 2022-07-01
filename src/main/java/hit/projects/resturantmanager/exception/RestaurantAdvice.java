@@ -23,6 +23,11 @@ public class RestaurantAdvice {
         return new ResponseEntity<>(getStringMessage(rce.getMessage()), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(RestaurantGeneralException.class)
+    public ResponseEntity<Object> restaurantGeneralExceptionHandler(RestaurantGeneralException rge){
+        return new ResponseEntity<>(getStringMessage(rge.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private Map<String, Object> getStringMessage(String message) {
         Map<String, Object> body = new LinkedHashMap<>();
 

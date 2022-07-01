@@ -15,4 +15,6 @@ public interface ManagerService {
     EntityModel<Manager> addNewManager(Manager managerToAdd);
 
     void deleteManager(int personalId);
+
+    CollectionModel<EntityModel<Manager>> getDutyStatus(boolean isOnDuty);
 }

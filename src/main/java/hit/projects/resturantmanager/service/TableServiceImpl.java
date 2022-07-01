@@ -2,17 +2,20 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.TableAssembler;
 import hit.projects.resturantmanager.controller.TableController;
+import hit.projects.resturantmanager.controller.WaiterController;
 import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
+import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.repository.TableRepository;
 import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,5 +101,20 @@ public class TableServiceImpl implements TableService {
 
         throw new RestaurantNotFoundException(
                 (String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber)));
+    }
+
+    @Override
+    public CollectionModel<EntityModel<Table>> getTableByStatus(TableStatus status) {
+        List<Table> tables = tableRepository.getTableByTableStatus(status);
+        List<EntityModel<Table>> tablesEntityModelList = tables.stream()
+                .map(tableAssembler::toModel).collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(tables)) {
+            throw new RestaurantNotFoundException(
+                    (String.format(Constant.NOT_FOUND_MESSAGE , "table status", status)));
+        }
+
+        return CollectionModel.of(tablesEntityModelList, linkTo(methodOn(TableController.class)
+                .getAllTables()).withSelfRel());
     }
 }

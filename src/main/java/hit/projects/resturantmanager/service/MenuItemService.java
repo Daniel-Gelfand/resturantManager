@@ -6,6 +6,8 @@ import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface MenuItemService {
 
     CollectionModel<EntityModel<MenuItem>> getMenu();
@@ -28,3 +30,4 @@ public interface MenuItemService {
 
     CollectionModel<EntityModel<MenuItemDTO>> getAllMenuItemInfo();
 }
+

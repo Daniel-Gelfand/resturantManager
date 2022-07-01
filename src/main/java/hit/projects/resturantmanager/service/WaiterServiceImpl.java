@@ -67,10 +67,12 @@ public class WaiterServiceImpl implements WaiterService {
         List<EntityModel<Waiter>> waitersEntityModelList = waiters.stream().map(waiterAssembler::toModel).collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(waiters)) {
-            throw new RestaurantNotFoundException("No on duty waiters found");
+            throw new RestaurantNotFoundException(
+                    (String.format(Constant.NOT_FOUND_MESSAGE , "manager on duty", onDuty)));
         }
 
-        return CollectionModel.of(waitersEntityModelList, linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel());
+        return CollectionModel.of(waitersEntityModelList, linkTo(methodOn(WaiterController.class)
+                .getAllWaiters()).withSelfRel());
     }
 
     /**

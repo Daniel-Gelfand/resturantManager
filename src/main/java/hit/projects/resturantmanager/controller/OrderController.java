@@ -37,10 +37,19 @@ public class OrderController {
         return ResponseEntity.ok().body(orderService.getOrderReportByDates(LocalDateTime.of(startYear,startMonth,startDay,0,0), LocalDateTime.of(endYear,endMonth,endDay,23,59)));
     }
 
+    @GetMapping("/{orderNumber}/info")
+    public ResponseEntity<EntityModel<OrderDTO>> getOrderInfo(@PathVariable int orderNumber) {
+        return ResponseEntity.ok().body(orderService.getOrderDTO(orderNumber));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<CollectionModel<EntityModel<OrderDTO>>> getAllOrdersInfo() {
+        return ResponseEntity.ok().body(orderService.getAllOrdersDTO());
+    }
 
     @PostMapping
     public ResponseEntity<EntityModel<Order>> addOrder(@RequestBody Order newOrder){
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.addOrder(newOrder));
+        return new ResponseEntity<>(orderService.addOrder(newOrder), HttpStatus.CREATED);
     }
 
     @PutMapping("/{orderId}")
@@ -55,22 +64,8 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}")
-    //TODO: CHANHGE TO RESPONSEENTITY
     public ResponseEntity<?> deleteOrder(@PathVariable int orderId) {
         orderService.deleteOrder(orderId);
         return ResponseEntity.status(202).build();
-
     }
-
-    @GetMapping("/{orderNumber}/info")
-    public ResponseEntity<EntityModel<OrderDTO>> getOrderInfo(@PathVariable int orderNumber) {
-        return ResponseEntity.ok().body(orderService.getOrderDTO(orderNumber));
-    }
-
-    @GetMapping("/info")
-    public ResponseEntity<CollectionModel<EntityModel<OrderDTO>>> getAllOrdersInfo() {
-        return ResponseEntity.ok().body(orderService.getAllOrdersDTO());
-    }
-
-
 }
