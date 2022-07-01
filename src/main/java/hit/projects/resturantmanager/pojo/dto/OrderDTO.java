@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class OrderDTO {
 
     @JsonIgnore
-    Order order;
+    private Order order;
 
     public Order getOrder() {
         return order;

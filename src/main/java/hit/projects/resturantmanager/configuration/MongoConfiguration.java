@@ -28,13 +28,14 @@ import java.util.concurrent.CompletableFuture;
 @Configuration
 @Slf4j
 public class MongoConfiguration {
+
+    @Value("${app.foodUrl}")
+    private String foodUrl;
+
     @Bean
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
     }
-
-    @Value("${app.foodUrl}")
-    private String foodUrl;
 
 
     @Bean
