@@ -1,11 +1,13 @@
 package hit.projects.resturantmanager.controller;
 
+import hit.projects.resturantmanager.pojo.Manager;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.service.TableService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,9 @@ public class TableController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Table>> getAllTables() {
-        return ResponseEntity.ok(tableService.getAllTables());
+    public ResponseEntity<CollectionModel<EntityModel<Table>>> getAllTables() {
+        return ResponseEntity.ok().body(tableService.getAllTables());
+
     }
 
     @GetMapping("/{number}")
@@ -48,7 +51,6 @@ public class TableController {
 
     @DeleteMapping("/{number}")
     public ResponseEntity<?> deleteTable(@PathVariable int number) {
-
         return ResponseEntity.ok().body("Table number " + number + " is deleted.");
     }
 }

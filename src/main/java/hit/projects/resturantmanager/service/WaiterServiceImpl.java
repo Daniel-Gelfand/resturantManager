@@ -2,12 +2,17 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.WaiterAssembler;
 import hit.projects.resturantmanager.controller.WaiterController;
+import hit.projects.resturantmanager.exception.RestaurantConflictException;
+import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.repository.WaiterRepository;
+import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +27,6 @@ public class WaiterServiceImpl implements WaiterService {
 
     private WaiterAssembler waiterAssembler;
 
-    private final int NO_ONE_IN_DUTY = 0;
-
     @Autowired
     public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler) {
         this.waiterRepository = waiterRepository;
@@ -32,6 +35,7 @@ public class WaiterServiceImpl implements WaiterService {
 
     /**
      * This method Return all Waiters with links (to him self and to all waiters).
+     *
      * @return
      */
     @Override
@@ -46,25 +50,25 @@ public class WaiterServiceImpl implements WaiterService {
 
     /**
      * This method Return Waiter with self link.
+     *
      * @return
      */
     @Override
     public EntityModel<Waiter> getWaiter(int personalId) {
         Waiter waiter = waiterRepository.findByPersonalId(personalId).
-                orElseThrow(() -> new IllegalArgumentException("NOT EXIST!"));
-        // TODO: מי תופס את האקסיפשן הזה ?
+                orElseThrow(() -> new RestaurantNotFoundException(
+                        (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId))));
 
         return waiterAssembler.toModel(waiter);
     }
 
     @Override
     public CollectionModel<EntityModel<Waiter>> getDutyStatus(boolean onDuty) {
-        System.out.println("service");
         List<Waiter> waiters = waiterRepository.getAllByOnDuty(onDuty);
         List<EntityModel<Waiter>> waitersEntityModelList = waiters.stream().map(waiterAssembler::toModel).collect(Collectors.toList());
 
-        if (waiters.size() == NO_ONE_IN_DUTY) {
-           throw new WaiterException(onDuty);
+        if (CollectionUtils.isEmpty(waiters)) {
+            throw new RestaurantNotFoundException("No on duty waiters found");
         }
 
         return CollectionModel.of(waitersEntityModelList, linkTo(methodOn(WaiterController.class).getAllWaiters()).withSelfRel());
@@ -73,47 +77,42 @@ public class WaiterServiceImpl implements WaiterService {
     /**
      * This method update specific waiter.
      * If the waiter personalId doesn't exist we save new waiter in DB.
+     *
      * @param personalId
      * @param waiter
-     * @return ResponseEntity<EntityModel<Waiter>>
+     * @return ResponseEntity<EntityModel < Waiter>>
      */
     @Override
     public EntityModel<Waiter> updateWaiter(int personalId, Waiter waiter) {
         return waiterRepository.findByPersonalId(personalId)
-                .map(waiterToUpdate -> {
-                    copyWaiterDetails(waiterToUpdate, waiter);
-                    waiterRepository.save(waiterToUpdate);
-                    return waiterAssembler.toModel(waiterToUpdate);
-                })
-                .orElseGet(()-> {
+                .map(waiterToUpdate -> waiterAssembler.toModel(waiterRepository.save(waiterToUpdate.update(waiter))))
+                .orElseGet(() -> {
                     waiter.setPersonalId(personalId);
-                    waiterRepository.save(waiter);
-                    return waiterAssembler.toModel(waiter);
+                    return waiterAssembler.toModel(waiterRepository.save(waiter));
                 });
     }
 
     /**
      * This method insert new waiter to the DB
+     *
      * @param waiterToAdd
      * @return
      */
     @Override
     public EntityModel<Waiter> addNewWaiter(Waiter waiterToAdd) {
-       //TODO: CHECK THIS SHIT IF THAT WORKING
+        //TODO: CHECK THIS SHIT IF THAT WORKING
 
         if (!waiterRepository.existsByPersonalId(waiterToAdd.getPersonalId())) {
-            Waiter savedWaiter = waiterRepository.save(waiterToAdd);
-            return waiterAssembler.toModel(waiterToAdd);
-        }else {
-            throw new WaiterException(waiterToAdd.getPersonalId());
+            return waiterAssembler.toModel(waiterRepository.save(waiterToAdd));
+        } else {
+            throw new RestaurantConflictException(
+                    (String.format(Constant.ALREADY_EXISTS_MESSAGE, "waiter", waiterToAdd.getFirstName())));
         }
-        //waiterRepository.insert(waiterToAdd);
-
-        //return waiterAssembler.toModel(waiterToAdd);
     }
 
     /**
      * This method delete waiter from DB
+     *
      * @param personalId
      */
     @Override
@@ -121,22 +120,11 @@ public class WaiterServiceImpl implements WaiterService {
         //TODO: להוסיף ולידציה ואז לזרוק אקסיפשן במקרה שהיוזר לא קיים במערכת
         if (waiterRepository.existsByPersonalId(personalId)) {
             waiterRepository.deleteByPersonalId(personalId);
-        }else {
-            throw new WaiterException(personalId);
+        } else {
+            throw new RestaurantNotFoundException(
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
         }
     }
 
-    /**
-     * This method make a clone from waiter.
-     * @param newWaiter
-     * @param waiterToCopy
-     */
-    private void copyWaiterDetails(Waiter newWaiter, Waiter waiterToCopy) {
-        newWaiter.setFirstName(waiterToCopy.getFirstName());
-        newWaiter.setLastName(waiterToCopy.getLastName());
-        newWaiter.setSalary(waiterToCopy.getSalary());
-        newWaiter.setTips(waiterToCopy.getTips());
-        newWaiter.setOnDuty(waiterToCopy.isOnDuty());
-//        newWaiter.setOnDuty(waiterToCopy);
-    }
+
 }

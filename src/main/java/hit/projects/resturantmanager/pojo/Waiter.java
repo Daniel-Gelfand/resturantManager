@@ -24,4 +24,16 @@ public class Waiter extends Worker {
         this.tips = tips;
         this.tableList  = new LinkedList<>();
     }
+
+
+    public Waiter update(Waiter waiterToCopy) {
+
+        this.setFirstName(waiterToCopy.getFirstName());
+        this.setLastName(waiterToCopy.getLastName());
+        this.setSalary(waiterToCopy.getSalary());
+        this.setTips(waiterToCopy.getTips());
+        this.setOnDuty(waiterToCopy.isOnDuty());
+
+        return this;
+    }
 }

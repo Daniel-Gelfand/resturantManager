@@ -2,7 +2,9 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +15,13 @@ public interface TableService{
 
     EntityModel<Table> getTable(int tableNumber);
 
-    List<Table> getAllTables();
+    CollectionModel<EntityModel<Table>> getAllTables();
 
     Double getAverageBillIncome();
 
     void addOrder(int tableNumber, Order order);
 
-    void updateTable(Table tableToUpdate);
+    EntityModel<Table> updateTable(String tableNumber ,Table tableSent);
 
     void createTable(Table newTable);
 

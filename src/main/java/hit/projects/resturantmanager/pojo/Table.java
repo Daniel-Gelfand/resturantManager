@@ -40,4 +40,14 @@ public class Table {
         this.waitersList = new ArrayList<>();
     }
 
+    public Table update(Table tableToCopy) {
+
+        this.setTableStatus(tableToCopy.getTableStatus());
+        this.setTableNumber(tableToCopy.getTableNumber());
+        this.setOrderList(tableToCopy.getOrderList());
+        this.setWaitersList(tableToCopy.getWaitersList());
+
+        return this;
+    }
+
 }
