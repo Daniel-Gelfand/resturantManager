@@ -5,7 +5,6 @@ import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
 
 public interface MenuItemService {
 

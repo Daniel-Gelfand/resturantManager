@@ -1,12 +1,10 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.TableAssembler;
-import hit.projects.resturantmanager.controller.ManagerController;
 import hit.projects.resturantmanager.controller.TableController;
 import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
-import hit.projects.resturantmanager.pojo.Manager;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
 import hit.projects.resturantmanager.repository.OrderRepository;
@@ -74,32 +72,31 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public EntityModel<Table> updateTable(String tableNumber ,Table tableSent) {
+    public EntityModel<Table> updateTable(String tableNumber, Table tableSent) {
         return tableRepository.findById(tableNumber)
                 .map(tableToUpdate -> tableAssembler
                         .toModel(tableRepository
                                 .save(tableToUpdate.update(tableSent))))
-                .orElseGet(()-> tableAssembler.toModel(tableRepository.save(tableSent)));
+                .orElseGet(() -> tableAssembler.toModel(tableRepository.save(tableSent)));
     }
 
     @Override
     public void createTable(Table newTable) {
         if (!tableRepository.existsByTableNumber(newTable.getTableNumber())) {
             tableRepository.save(newTable);
-        } else {
-            throw new RestaurantConflictException(
-                    (String.format(Constant.ALREADY_EXISTS_MESSAGE , "table number", newTable.getTableNumber())));
         }
 
+        throw new RestaurantConflictException(
+                (String.format(Constant.ALREADY_EXISTS_MESSAGE, "table number", newTable.getTableNumber())));
     }
 
     @Override
     public void deleteTable(int tableNumber) {
         if (tableRepository.existsByTableNumber(tableNumber)) {
             tableRepository.deleteByTableNumber(tableNumber);
-        } else {
-            throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber)));
         }
+
+        throw new RestaurantNotFoundException(
+                (String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber)));
     }
 }

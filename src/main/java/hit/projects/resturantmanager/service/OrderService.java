@@ -15,9 +15,9 @@ public interface OrderService {
 
     EntityModel<Order> getOrder(int orderId);
 
-    EntityModel<Order> addOrder (Order newOrder);
+    EntityModel<Order> addOrder(Order newOrder);
 
-    EntityModel<Order> updateOrder(int orderId,Order updateOrder);
+    EntityModel<Order> updateOrder(int orderId, Order updateOrder);
 
     void deleteOrder(int orderId);
 

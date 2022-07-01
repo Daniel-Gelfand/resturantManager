@@ -3,7 +3,6 @@ package hit.projects.resturantmanager.service;
 import hit.projects.resturantmanager.pojo.Waiter;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
 
 public interface WaiterService {
 

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     private OrderRepository orderRepository;
     private MenuItemRepository menuItemRepository;
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService{
         return orderAssembler.toModel(
                 orderRepository.getOrderByOrderNumber(orderId)
                         .orElseThrow(() -> new RestaurantNotFoundException(
-                                (String.format(Constant.NOT_FOUND_MESSAGE , "order id", orderId)))));
+                                (String.format(Constant.NOT_FOUND_MESSAGE, "order id", orderId)))));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService{
         }
 
         throw new RestaurantConflictException(
-                    (String.format(Constant.ALREADY_EXISTS_MESSAGE , "order number", newOrder.getOrderNumber())));
+                (String.format(Constant.ALREADY_EXISTS_MESSAGE, "order number", newOrder.getOrderNumber())));
     }
 
     @Override
@@ -64,29 +64,28 @@ public class OrderServiceImpl implements OrderService{
                 .map(orderToUpdate -> orderAssembler
                         .toModel(orderRepository
                                 .save(orderToUpdate.update(updateOrder))))
-                .orElseGet(()-> orderAssembler.toModel(orderRepository.save(updateOrder)));
+                .orElseGet(() -> orderAssembler.toModel(orderRepository.save(updateOrder)));
     }
 
     @Override
     public void deleteOrder(int orderId) {
-        if (!orderRepository.existsByOrderNumber(orderId))
-        {
+        if (!orderRepository.existsByOrderNumber(orderId)) {
             throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE , "order number", orderId)));
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderId)));
         }
         orderRepository.deleteByOrderNumber(orderId);
     }
 
     @Override
-    public void addMenuItem(int orderNumber,String menuItemName, int count) {
+    public void addMenuItem(int orderNumber, String menuItemName, int count) {
         Order order = orderRepository
                 .getOrderByOrderNumber(orderNumber)
-                .orElseThrow(()-> new RestaurantNotFoundException(
+                .orElseThrow(() -> new RestaurantNotFoundException(
                         (String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderNumber))));
 
         MenuItem menuItem = menuItemRepository
                 .getMenuItemByName(menuItemName)
-                .orElseThrow(()-> new RestaurantNotFoundException(
+                .orElseThrow(() -> new RestaurantNotFoundException(
                         (String.format(Constant.NOT_FOUND_MESSAGE, "menu item name", menuItemName))));
 
         for (int i = 0; i < count; i++) {
@@ -107,7 +106,7 @@ public class OrderServiceImpl implements OrderService{
         }
 
         throw new RestaurantNotFoundException
-                    (String.format("There are not exist orders between %s - %s.", startDate, endDate));
+                (String.format("There are not exist orders between %s - %s.", startDate, endDate));
     }
 
     @Override

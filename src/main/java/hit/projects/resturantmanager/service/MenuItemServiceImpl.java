@@ -1,9 +1,9 @@
 package hit.projects.resturantmanager.service;
 
-import hit.projects.resturantmanager.assembler.dto.MenuItemDTOAssembler;
-import hit.projects.resturantmanager.enums.MenuCategories;
-import hit.projects.resturantmanager.controller.MenuItemController;
 import hit.projects.resturantmanager.assembler.MenuItemAssembler;
+import hit.projects.resturantmanager.assembler.dto.MenuItemDTOAssembler;
+import hit.projects.resturantmanager.controller.MenuItemController;
+import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.dto2.MenuItemDTO;
@@ -12,15 +12,15 @@ import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
@@ -41,7 +41,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         List<EntityModel<MenuItem>> employeesList = menuItemRepository.findAll()
                 .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
 
-        return CollectionModel.of(employeesList,linkTo(methodOn(MenuItemController.class)
+        return CollectionModel.of(employeesList, linkTo(methodOn(MenuItemController.class)
                 .getMenu()).withSelfRel());
     }
 
@@ -52,9 +52,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
         if (CollectionUtils.isEmpty(itemPrices)) {
             throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE , "price lower then", price)));
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "price lower then", price)));
         }
-        return CollectionModel.of(itemPrices,linkTo(methodOn(MenuItemController.class).getSingleMenuItemByPrice(price)).withSelfRel());
+        return CollectionModel.of(itemPrices, linkTo(methodOn(MenuItemController.class).getSingleMenuItemByPrice(price)).withSelfRel());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
         if (CollectionUtils.isEmpty(categories)) {
             throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE , "category", category)));
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "category", category)));
         }
 
         return CollectionModel.of(categories, linkTo(methodOn(MenuItemController.class)
@@ -75,7 +75,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public CollectionModel<EntityModel<MenuItem>> getByCategoryAndPrice(int price, MenuCategories eCategory) {
         List<EntityModel<MenuItem>> categories = menuItemRepository
-                .findAllByPriceLessThanAndMenuCategoriesEquals(price,MenuCategories.valueOf(eCategory.toString()))
+                .findAllByPriceLessThanAndMenuCategoriesEquals(price, MenuCategories.valueOf(eCategory.toString()))
                 .stream()
                 .map(menuItemAssembler::toModel).collect(Collectors.toList());
 
@@ -87,7 +87,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem menuItem = menuItemRepository
                 .getMenuItemByName(name)
                 .orElseThrow(() -> new RestaurantNotFoundException(
-                        (String.format(Constant.NOT_FOUND_MESSAGE , "name", name))));
+                        (String.format(Constant.NOT_FOUND_MESSAGE, "name", name))));
 
         return menuItemAssembler.toModel(menuItem);
     }
@@ -97,8 +97,8 @@ public class MenuItemServiceImpl implements MenuItemService {
         //TODO: mItem.getMenuCategories().toString().toUpperCase())  ? ? ?
         return menuItemRepository.findByName(name)
                 .map(menuItemToUpdate ->
-                     menuItemAssembler.toModel(menuItemRepository.save(menuItemToUpdate.update(mItem))))
-                .orElseGet( ()-> menuItemAssembler.toModel(menuItemRepository.save(mItem)));
+                        menuItemAssembler.toModel(menuItemRepository.save(menuItemToUpdate.update(mItem))))
+                .orElseGet(() -> menuItemAssembler.toModel(menuItemRepository.save(mItem)));
     }
 
     @Override
@@ -108,15 +108,14 @@ public class MenuItemServiceImpl implements MenuItemService {
         }
 
         throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE , "name", menuItem.getName())));
+                (String.format(Constant.NOT_FOUND_MESSAGE, "name", menuItem.getName())));
     }
 
     @Override
     public void deleteMenuItem(String name) {
-        if (!menuItemRepository.existsByName(name))
-        {
+        if (!menuItemRepository.existsByName(name)) {
             throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE , "name", name)));
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "name", name)));
         }
 
         menuItemRepository.deleteByName(name);
@@ -129,7 +128,7 @@ public class MenuItemServiceImpl implements MenuItemService {
                 .map(MenuItemDTO::new)
                 .map(menuItemDTOAssembler::toModel)
                 .orElseThrow(() -> new RestaurantNotFoundException(
-                        (String.format(Constant.NOT_FOUND_MESSAGE , "name", name))));
+                        (String.format(Constant.NOT_FOUND_MESSAGE, "name", name))));
     }
 
     @Override

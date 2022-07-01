@@ -12,7 +12,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.webjars.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,10 +103,11 @@ public class WaiterServiceImpl implements WaiterService {
 
         if (!waiterRepository.existsByPersonalId(waiterToAdd.getPersonalId())) {
             return waiterAssembler.toModel(waiterRepository.save(waiterToAdd));
-        } else {
-            throw new RestaurantConflictException(
-                    (String.format(Constant.ALREADY_EXISTS_MESSAGE, "waiter", waiterToAdd.getFirstName())));
         }
+
+        throw new RestaurantConflictException(
+                (String.format(Constant.ALREADY_EXISTS_MESSAGE, "waiter", waiterToAdd.getFirstName())));
+
     }
 
     /**
@@ -117,13 +117,13 @@ public class WaiterServiceImpl implements WaiterService {
      */
     @Override
     public void deleteWaiter(int personalId) {
-        //TODO: להוסיף ולידציה ואז לזרוק אקסיפשן במקרה שהיוזר לא קיים במערכת
         if (waiterRepository.existsByPersonalId(personalId)) {
             waiterRepository.deleteByPersonalId(personalId);
-        } else {
-            throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
         }
+
+        throw new RestaurantNotFoundException(
+                (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
+
     }
 
 
