@@ -7,7 +7,6 @@ import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.repository.WaiterRepository;
 import hit.projects.resturantmanager.utils.Constant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ public class WaiterServiceImpl implements WaiterService {
 
     private WaiterAssembler waiterAssembler;
 
-    @Autowired
     public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler) {
         this.waiterRepository = waiterRepository;
         this.waiterAssembler = waiterAssembler;

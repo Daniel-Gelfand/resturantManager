@@ -25,12 +25,15 @@ public class ManagerServiceImpl implements ManagerService {
     private final ManagerRepository managerRepository;
     private final ManagerAssembler managerAssembler;
 
-    @Autowired
     public ManagerServiceImpl(ManagerRepository managerRepository, ManagerAssembler managerAssembler) {
         this.managerRepository = managerRepository;
         this.managerAssembler = managerAssembler;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public CollectionModel<EntityModel<Manager>> getAllManagers() {
         List<EntityModel<Manager>> managerList = managerRepository.findAll()
@@ -40,6 +43,11 @@ public class ManagerServiceImpl implements ManagerService {
                 .getAllManagers()).withSelfRel());
     }
 
+    /**
+     *
+     * @param personalId
+     * @return
+     */
     @Override
     public EntityModel<Manager> getManager(int personalId) {
         Manager manager = managerRepository
@@ -51,6 +59,12 @@ public class ManagerServiceImpl implements ManagerService {
         return managerAssembler.toModel(manager);
     }
 
+    /**
+     *
+     * @param personalId
+     * @param manager
+     * @return
+     */
     @Override
     public EntityModel<Manager> updateManager(int personalId, Manager manager) {
         return managerRepository.findById(personalId)
@@ -60,6 +74,11 @@ public class ManagerServiceImpl implements ManagerService {
                 .orElseGet(() -> managerAssembler.toModel(managerRepository.save(manager)));
     }
 
+    /**
+     *
+     * @param managerToAdd
+     * @return
+     */
     @Override
     public EntityModel<Manager> addNewManager(Manager managerToAdd) {
 
@@ -70,6 +89,10 @@ public class ManagerServiceImpl implements ManagerService {
                 (String.format(Constant.ALREADY_EXISTS_MESSAGE, "manager", managerToAdd.getFirstName())));
     }
 
+    /**
+     *
+     * @param personalId
+     */
     @Override
     public void deleteManager(int personalId) {
         if (!managerRepository.existsByPersonalId(personalId)) {
@@ -79,6 +102,11 @@ public class ManagerServiceImpl implements ManagerService {
         managerRepository.deleteById(personalId);
     }
 
+    /**
+     *
+     * @param isOnDuty
+     * @return
+     */
     @Override
     public CollectionModel<EntityModel<Manager>> getDutyStatus(boolean isOnDuty) {
         List<Manager> managers = managerRepository.getAllByOnDuty(isOnDuty);
