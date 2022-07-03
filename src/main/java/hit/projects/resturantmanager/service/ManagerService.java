@@ -4,6 +4,8 @@ import hit.projects.resturantmanager.pojo.Manager;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
+
+
 public interface ManagerService {
 
     CollectionModel<EntityModel<Manager>> getAllManagers();
