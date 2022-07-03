@@ -32,6 +32,9 @@ public class MongoConfiguration {
     @Value("${app.foodUrl}")
     private String foodUrl;
 
+    //TODO: Option to pay with bitcoin, in the reception convert the price to BTC. {DANIEL}
+    //https://api.coindesk.com/v1/bpi/currentprice.json --> Bitcoin live rate
+
     @Bean
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
