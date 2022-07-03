@@ -21,7 +21,7 @@ public class ManagerController {
     }
 
     /**
-     *
+     * This method return all managers from DB
      * @return
      */
     @GetMapping
