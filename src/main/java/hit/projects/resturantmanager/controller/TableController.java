@@ -3,6 +3,7 @@ package hit.projects.resturantmanager.controller;
 import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
+import hit.projects.resturantmanager.pojo.dto.TableDTO;
 import hit.projects.resturantmanager.service.TableService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -50,5 +51,15 @@ public class TableController {
     public ResponseEntity<?> deleteTable(@PathVariable int number) {
         tableService.deleteTable(number);
         return ResponseEntity.status(202).build();
+    }
+
+    @GetMapping("/{tableId}/info")
+    public ResponseEntity<EntityModel<TableDTO>> getTableInfo(@PathVariable int tableId) {
+        return ResponseEntity.ok().body(tableService.getTableInfo(tableId));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<CollectionModel<EntityModel<TableDTO>>> getAllTablesInfo(){
+        return ResponseEntity.ok().body(tableService.getAllTablesInfo());
     }
 }
