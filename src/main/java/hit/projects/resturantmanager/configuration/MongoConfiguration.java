@@ -209,6 +209,7 @@ public class MongoConfiguration {
             ResponseEntity<PizzaResponseEntity[]> response =
                     restTemplate.exchange(foodUrl + "/pizzas", HttpMethod.GET, entity, PizzaResponseEntity[].class);
 
+
             if (response.getStatusCode() == HttpStatus.OK) {
                 log.info("getPizzas", "message: Request pizzas Successful.");
                 return CompletableFuture

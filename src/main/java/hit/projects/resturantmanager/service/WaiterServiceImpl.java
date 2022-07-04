@@ -1,10 +1,12 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.WaiterAssembler;
+import hit.projects.resturantmanager.assembler.dto.WaiterDTOAssembler;
 import hit.projects.resturantmanager.controller.WaiterController;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Waiter;
+import hit.projects.resturantmanager.pojo.dto.WaiterDTO;
 import hit.projects.resturantmanager.repository.WaiterRepository;
 import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.hateoas.CollectionModel;
@@ -14,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -25,9 +28,12 @@ public class WaiterServiceImpl implements WaiterService {
 
     private WaiterAssembler waiterAssembler;
 
-    public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler) {
+    private WaiterDTOAssembler waiterDTOAssembler;
+
+    public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler, WaiterDTOAssembler waiterDTOAssembler) {
         this.waiterRepository = waiterRepository;
         this.waiterAssembler = waiterAssembler;
+        this.waiterDTOAssembler = waiterDTOAssembler;
     }
 
     /**
@@ -119,12 +125,47 @@ public class WaiterServiceImpl implements WaiterService {
     public void deleteWaiter(int personalId) {
         if (waiterRepository.existsByPersonalId(personalId)) {
             waiterRepository.deleteByPersonalId(personalId);
+        }else {
+            throw new RestaurantNotFoundException(
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
         }
-
-        throw new RestaurantNotFoundException(
-                (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
-
     }
 
+    @Override
+    public CollectionModel<EntityModel<WaiterDTO>> getAllWaitersOnDutyInfo(boolean isOnDuty) {
+        CollectionModel<EntityModel<WaiterDTO>> waiters = CollectionModel
+                .of(waiterDTOAssembler
+                        .toCollectionModel(StreamSupport
+                                .stream(waiterRepository.getAllByOnDuty(isOnDuty).spliterator(), false)
+                                .map(WaiterDTO::new)
+                                .collect(Collectors.toList())));
 
+        if (waiters.getContent().isEmpty()) {
+            throw new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "isOnDuty", isOnDuty));
+        }
+
+        return waiters;
+    }
+
+    @Override
+    public EntityModel<WaiterDTO> getWaiterInfo(int personalId) {
+
+        return waiterRepository.findByPersonalId(personalId).map(WaiterDTO::new).map(waiterDTOAssembler::toModel).orElseThrow(()-> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
+    }
+
+    @Override
+    public CollectionModel<EntityModel<WaiterDTO>> getAllWaitersInfo() {
+        CollectionModel<EntityModel<WaiterDTO>> waiters = CollectionModel
+                .of(waiterDTOAssembler
+                        .toCollectionModel(StreamSupport
+                                .stream(waiterRepository.findAll().spliterator(), false)
+                                .map(WaiterDTO::new)
+                                .collect(Collectors.toList())));
+
+        if (waiters.getContent().isEmpty()) {
+            throw new RestaurantNotFoundException(Constant.NOT_FOUND_MESSAGE);
+        }
+
+        return waiters;
+    }
 }

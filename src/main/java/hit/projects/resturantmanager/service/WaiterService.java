@@ -1,6 +1,7 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.pojo.Waiter;
+import hit.projects.resturantmanager.pojo.dto.WaiterDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
@@ -17,4 +18,10 @@ public interface WaiterService {
     EntityModel<Waiter> addNewWaiter(Waiter waiterToAdd);
 
     void deleteWaiter(int personalId);
+
+    CollectionModel<EntityModel<WaiterDTO>> getAllWaitersOnDutyInfo(boolean isOnDuty);
+
+    EntityModel<WaiterDTO> getWaiterInfo(int personalId);
+
+    CollectionModel<EntityModel<WaiterDTO>> getAllWaitersInfo();
 }

@@ -49,4 +49,19 @@ public class WaiterController {
         waiterService.deleteWaiter(personalId);
         return ResponseEntity.status(202).build();
     }
+
+    @GetMapping("/info/{isOnDuty}")
+    public ResponseEntity<?> getAllWaitersOnDutyInfo(@PathVariable boolean isOnDuty) {
+        return ResponseEntity.ok(waiterService.getAllWaitersOnDutyInfo(isOnDuty));
+    }
+
+    @GetMapping("/{personalId}/info")
+    public ResponseEntity<?> waiterInfo(@PathVariable int personalId) {
+        return ResponseEntity.ok(waiterService.getWaiterInfo(personalId));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> allWaitersInfo() {
+        return ResponseEntity.ok(waiterService.getAllWaitersInfo());
+    }
 }
