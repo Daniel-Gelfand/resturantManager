@@ -6,18 +6,17 @@ import hit.projects.resturantmanager.pojo.Manager;
 import lombok.Value;
 
 @Value
-@JsonPropertyOrder({"firstName", "lastName","onDuty"})
+@JsonPropertyOrder({"fullName","onDuty"})
 public class ManagerDTO {
 
     @JsonIgnore
     private Manager manager;
 
-    public String getFirstName() {
-        return this.manager.getFirstName();
+
+    public String getFullName(){
+        return String.format("%s %s", manager.getFirstName(), manager.getLastName());
     }
-    public String getLastName() {
-        return this.manager.getLastName();
-    }
+
 
     public boolean isOnDuty(){
         return this.manager.isOnDuty();
