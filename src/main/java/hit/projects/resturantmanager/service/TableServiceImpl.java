@@ -1,12 +1,15 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.TableAssembler;
+import hit.projects.resturantmanager.assembler.dto.TableDTOAssembler;
 import hit.projects.resturantmanager.controller.TableController;
 import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
+import hit.projects.resturantmanager.pojo.dto.MenuItemDTO;
+import hit.projects.resturantmanager.pojo.dto.TableDTO;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.repository.TableRepository;
 import hit.projects.resturantmanager.utils.Constant;
@@ -17,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -27,11 +31,13 @@ public class TableServiceImpl implements TableService {
     TableRepository tableRepository;
     OrderRepository orderRepository;
     TableAssembler tableAssembler;
+    TableDTOAssembler tableDTOAssembler;
 
-    TableServiceImpl(TableRepository tableRepository, OrderRepository orderRepository, TableAssembler tableAssembler) {
+    TableServiceImpl(TableRepository tableRepository, OrderRepository orderRepository, TableAssembler tableAssembler,TableDTOAssembler tableDTOAssembler) {
         this.tableRepository = tableRepository;
         this.orderRepository = orderRepository;
         this.tableAssembler = tableAssembler;
+        this.tableDTOAssembler = tableDTOAssembler;
     }
 
     @Override
@@ -91,6 +97,8 @@ public class TableServiceImpl implements TableService {
                 (String.format(Constant.ALREADY_EXISTS_MESSAGE, "table number", newTable.getTableNumber())));
     }
 
+
+
     @Override
     public void deleteTable(int tableNumber) {
         if (tableRepository.existsByTableNumber(tableNumber)) {
@@ -115,4 +123,24 @@ public class TableServiceImpl implements TableService {
         return CollectionModel.of(tablesEntityModelList, linkTo(methodOn(TableController.class)
                 .getAllTables()).withSelfRel());
     }
+
+    @Override
+    public CollectionModel<EntityModel<TableDTO>> getAllTablesInfo() {
+        return CollectionModel.of(tableDTOAssembler
+                .toCollectionModel(StreamSupport
+                        .stream(tableRepository.findAll().spliterator(), false)
+                        .map(TableDTO::new)
+                        .collect(Collectors.toList())));
+    }
+
+    @Override
+    public EntityModel<TableDTO> getTableInfo(int tableNumber) {
+        return tableRepository
+                .getTableByTableNumber(tableNumber)
+                .map(TableDTO::new)
+                .map(tableDTOAssembler::toModel)
+                .orElseThrow(() -> new RestaurantNotFoundException(
+                        (String.format(Constant.NOT_FOUND_MESSAGE, "tableNumber", tableNumber))));
+    }
+
 }
