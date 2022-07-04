@@ -1,13 +1,15 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.ManagerAssembler;
+import hit.projects.resturantmanager.assembler.dto.ManagerDTOAssembler;
 import hit.projects.resturantmanager.controller.ManagerController;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Manager;
+import hit.projects.resturantmanager.pojo.dto.ManagerDTO;
+import hit.projects.resturantmanager.pojo.dto.MenuItemDTO;
 import hit.projects.resturantmanager.repository.ManagerRepository;
 import hit.projects.resturantmanager.utils.Constant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -24,10 +27,12 @@ public class ManagerServiceImpl implements ManagerService {
 
     private final ManagerRepository managerRepository;
     private final ManagerAssembler managerAssembler;
+    private final ManagerDTOAssembler managerDTOAssembler;
 
-    public ManagerServiceImpl(ManagerRepository managerRepository, ManagerAssembler managerAssembler) {
+    public ManagerServiceImpl(ManagerRepository managerRepository, ManagerAssembler managerAssembler,ManagerDTOAssembler managerDTOAssembler) {
         this.managerRepository = managerRepository;
         this.managerAssembler = managerAssembler;
+        this.managerDTOAssembler = managerDTOAssembler;
     }
 
     /**
@@ -120,6 +125,25 @@ public class ManagerServiceImpl implements ManagerService {
 
         return CollectionModel.of(managersEntityModelList, linkTo(methodOn(ManagerController.class)
                 .getAllManagers()).withSelfRel());
+    }
+
+    @Override
+    public CollectionModel<EntityModel<ManagerDTO>> getAllManagerInfo() {
+        return CollectionModel.of(managerDTOAssembler
+                .toCollectionModel(StreamSupport
+                        .stream(managerRepository.findAll().spliterator(), false)
+                        .map(ManagerDTO::new)
+                        .collect(Collectors.toList())));
+    }
+
+    @Override
+    public EntityModel<ManagerDTO> getManagerInfo(int personalId) {
+        return managerRepository
+                .getManagerByPersonalId(personalId)
+                .map(ManagerDTO::new)
+                .map(managerDTOAssembler::toModel)
+                .orElseThrow(() -> new RestaurantNotFoundException(
+                        (String.format(Constant.NOT_FOUND_MESSAGE, "personalId", personalId))));
     }
 
 

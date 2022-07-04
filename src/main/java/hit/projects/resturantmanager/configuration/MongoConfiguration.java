@@ -25,7 +25,6 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.List.*;
 import java.util.concurrent.CompletableFuture;
 
 @Configuration
@@ -69,7 +68,7 @@ public class MongoConfiguration {
             //getBitcoin(restTemplate);
 
             //TODO :: YARIN WATCH HERE
-            bitcoinDetails(restTemplate);
+            //bitcoinDetails(restTemplate);
 
 
             //System.out.println(bitcoinService.bitcoinDetails());
@@ -231,10 +230,14 @@ public class MongoConfiguration {
     public CompletableFuture<BitcoinResponseEntity> bitcoinDetails(RestTemplate restTemplate){
         String urlTemplate = "https://api.coindesk.com/v1/bpi/currentprice.json";
 
-        BitcoinResponseEntity btc = restTemplate.getForObject(urlTemplate,BitcoinResponseEntity.class);
+        ResponseEntity<BitcoinResponseEntity[]> btc =
+                restTemplate.exchange(urlTemplate,HttpMethod.GET,null,BitcoinResponseEntity[].class);
+
+        System.out.println("StatusCode: " + btc.getStatusCode());
+
 
         System.out.println(CompletableFuture.completedFuture(btc));
-        return CompletableFuture.completedFuture(btc);
+        return CompletableFuture.completedFuture((BitcoinResponseEntity)List.of(btc));
 
 
     }

@@ -1,6 +1,7 @@
 package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.pojo.Manager;
+import hit.projects.resturantmanager.pojo.dto.ManagerDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
@@ -19,4 +20,7 @@ public interface ManagerService {
     void deleteManager(int personalId);
 
     CollectionModel<EntityModel<Manager>> getDutyStatus(boolean isOnDuty);
+
+    CollectionModel<EntityModel<ManagerDTO>> getAllManagerInfo ();
+    EntityModel<ManagerDTO> getManagerInfo (int personalId);
 }

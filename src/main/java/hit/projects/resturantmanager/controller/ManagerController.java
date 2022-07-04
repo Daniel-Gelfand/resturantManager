@@ -2,6 +2,7 @@ package hit.projects.resturantmanager.controller;
 
 
 import hit.projects.resturantmanager.pojo.Manager;
+import hit.projects.resturantmanager.pojo.dto.ManagerDTO;
 import hit.projects.resturantmanager.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -79,5 +80,15 @@ public class ManagerController {
     public ResponseEntity<EntityModel<Manager>> deleteManager(@PathVariable int personalId) {
         managerService.deleteManager(personalId);
         return ResponseEntity.status(202).build();
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<CollectionModel<EntityModel<ManagerDTO>>> getAllManagerInfo(){
+        return ResponseEntity.ok().body(managerService.getAllManagerInfo());
+    }
+
+    @GetMapping("/{personalId}/info")
+    public ResponseEntity<EntityModel<ManagerDTO>> getManagerInfo(@PathVariable int personalId){
+        return ResponseEntity.ok().body(managerService.getManagerInfo(personalId));
     }
 }
