@@ -89,8 +89,8 @@ public class MongoConfiguration {
     private void setMenuItemBean(MenuItemRepository myMenu, RestTemplate restTemplate,
                                  ResponseEntityConvertor responseEntityConvertor) {
         try {
-            //List<MenuItem> pizzas = getPizzas(restTemplate, responseEntityConvertor).get();
-            //List<MenuItem> desserts = getDesserts(restTemplate, responseEntityConvertor).get();
+            List<MenuItem> pizzas = getPizzas(restTemplate, responseEntityConvertor).get();
+            List<MenuItem> desserts = getDesserts(restTemplate, responseEntityConvertor).get();
 
             MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE, 69);
             MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT, 25);
@@ -99,10 +99,11 @@ public class MongoConfiguration {
             MenuItem menuItem5 = new MenuItem("Sprite", MenuCategories.DRINKS, 12);
 
 
-            myMenu.deleteAll();
+            //myMenu.deleteAll();
+
             myMenu.insert(List.of(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5));
-            //myMenu.insert(pizzas);
-            //myMenu.insert(desserts);
+            myMenu.insert(pizzas);
+            myMenu.insert(desserts);
         } catch (Exception e) {
             log.error("setMenuItemBean", "message: problem with fetching food");
         }
@@ -260,8 +261,8 @@ public class MongoConfiguration {
     private HttpEntity<String> getHeaders() {
         final HttpHeaders headers = new HttpHeaders();
 
-        headers.set("X-RapidAPI-Key", "e7b095a3d8msh7747ffc57c63532p196fdajsnebd249aeae22");
-        headers.set("X-RapidAPI-Host", "pizza-and-desserts.p.rapidapi.com");
+        	headers.set("X-RapidAPI-Key", "3acb74cfe6mshe9000fa87a80359p1d86b8jsnb4a1daf4a027");
+            headers.set("X-RapidAPI-Host", "pizza-and-desserts.p.rapidapi.com");
 
         final HttpEntity<String> entity = new HttpEntity<>(headers);
         return entity;
