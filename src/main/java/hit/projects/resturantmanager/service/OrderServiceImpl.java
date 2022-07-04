@@ -10,10 +10,12 @@ import hit.projects.resturantmanager.pojo.dto.OrderDTO;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.utils.Constant;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +30,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderAssembler orderAssembler;
     private OrderDTOAssembler orderDTOAssembler;
 
-    public OrderServiceImpl(OrderRepository orderRepository, MenuItemRepository menuItemRepository, OrderAssembler orderAssembler, OrderDTOAssembler orderDTOAssembler) {
+
+    public OrderServiceImpl(OrderRepository orderRepository, MenuItemRepository menuItemRepository,
+                            OrderAssembler orderAssembler, OrderDTOAssembler orderDTOAssembler) {
         this.orderRepository = orderRepository;
         this.menuItemRepository = menuItemRepository;
         this.orderAssembler = orderAssembler;
