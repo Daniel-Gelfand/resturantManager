@@ -6,4 +6,6 @@ public class Constant {
     public static final String ALREADY_EXISTS_MESSAGE = "This %s = %s already exists";
 
     public static final String FETCHING_ERROR_MESSAGE = "Problem with fetching food API";
+
+    public static final Double BTC_START_RATE = 0.0;
 }

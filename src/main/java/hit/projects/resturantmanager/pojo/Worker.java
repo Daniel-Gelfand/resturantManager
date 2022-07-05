@@ -30,7 +30,5 @@ public abstract class Worker {
         this.onDuty = onDuty;
     }
 }
-/*
-    @MappedSuperclass -> build collections for worker kids
- */
+
 

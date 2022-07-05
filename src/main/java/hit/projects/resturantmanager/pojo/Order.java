@@ -18,7 +18,7 @@ public class Order {
     @Indexed(unique = true)
     private int orderNumber;
     private double bill;
-    private double btc;
+    private double bill_btc;
     private LocalDateTime orderDate;
     private boolean orderStatus;
     private List<MenuItem> orderList;

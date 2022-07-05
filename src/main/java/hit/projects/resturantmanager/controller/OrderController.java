@@ -4,6 +4,7 @@ import hit.projects.resturantmanager.configuration.MongoConfiguration;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.dto.OrderDTO;
 import hit.projects.resturantmanager.service.OrderService;
+import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -107,7 +108,7 @@ public class OrderController {
       */
     @PutMapping("/{orderId}/add/menuItem")
     public ResponseEntity<?> addMenuItemToOrderList(@PathVariable int orderId, @RequestParam String name, @RequestParam int count) {
-        Double bitcoinRate = 0.0;
+        Double bitcoinRate = Constant.BTC_START_RATE;
         //TODO: שינינו את המתודה של רסט טמפלט לסטטיק. צריך אולי לפנות אליה בדרך יותר יצירתית
         try {
              bitcoinRate = orderService.bitcoinDetails(MongoConfiguration.restTemplate()).get();

@@ -100,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
         for (int i = 0; i < count; i++) {
             order.getOrderList().add(menuItem);
             order.setBill(order.getBill() + menuItem.getPrice());
-            order.setBtc((order.getBill() / bitcoinRate));
+            order.setBill_btc((order.getBill() / bitcoinRate));
         }
 
         orderRepository.save(order);

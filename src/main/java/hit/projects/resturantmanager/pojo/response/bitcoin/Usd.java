@@ -1,4 +1,4 @@
-package hit.projects.resturantmanager.configuration.BTC;
+package hit.projects.resturantmanager.pojo.response.bitcoin;
 
 import lombok.Data;
 

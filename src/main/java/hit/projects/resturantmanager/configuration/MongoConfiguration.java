@@ -34,18 +34,7 @@ public class MongoConfiguration {
     private String foodUrl;
 
 
-
-    //TODO: Option to pay with bitcoin, in the reception convert the price to BTC. {DANIEL}
-    //https://api.coindesk.com/v1/bpi/currentprice.json --> Bitcoin live rate
-    @Value("${app.bitcoinRate}")
-    private String bitcoinRate;
-
-//    @Bean
-//    public RestTemplate getRestTemplate() {
-//        return new RestTemplate();
-//    }
-
-
+    //TODO: what about this static method ?
     @Bean
     public static RestTemplate restTemplate() {
         final RestTemplate restTemplate = new RestTemplate();
@@ -75,15 +64,6 @@ public class MongoConfiguration {
             setManagers(managerRepository);
             setOrder(orderRepository, tableRepository, myMenu);
 
-
-            //TODO :: YARIN WATCH HERE
-
-            //bitcoinDetails(restTemplate);
-
-            System.out.println("******************");
-            //bitcoinDetails2(restTemplate);
-
-            //System.out.println(bitcoinService.bitcoinDetails());
             log.info(String.valueOf(LocalDate.of(2002, Month.APRIL, 1)));
 
         };
@@ -236,50 +216,6 @@ public class MongoConfiguration {
             throw new RestaurantGeneralException(Constant.FETCHING_ERROR_MESSAGE);
         }
     }
-
-
-    //TODO :: YARIN WATCH HERE
-
-//    @Async
-//    public void bitcoinDetails(RestTemplate restTemplate){
-//        String urlTemplate = "https://api.coindesk.com/v1/bpi/currentprice.json";
-//
-////        ResponseEntity<BitcoinResponseEntity> btc =
-////                restTemplate.exchange(urlTemplate,HttpMethod.GET,null,BitcoinResponseEntity.class);
-////        Object btc =
-////                restTemplate.getForObject(urlTemplate,Object.class);
-////
-////        System.out.println(restTemplate.getForObject(urlTemplate,Object.class));
-//
-//        //System.out.println("StatusCode: " + btc.getStatusCode());
-//
-//        //option 1
-////        HttpHeaders headers = new HttpHeaders();
-////        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-////        HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
-////        ResponseEntity<BitcoinResponseEntity> result = restTemplate.exchange(urlTemplate,HttpMethod.GET,entity,BitcoinResponseEntity.class);
-////        System.out.println(result);
-////        System.out.println(CompletableFuture.completedFuture(result));
-//
-//        //option 2
-//
-//        ResponseEntity<BitcoinResponseEntity> result = restTemplate.getForEntity(urlTemplate,BitcoinResponseEntity.class);
-//        //String body = result.getBody();
-//        System.out.println(result.getBody().getBpi().get("USD").getRate_float());
-//
-//        HttpHeaders headers = result.getHeaders();
-//        //System.out.println(headers);
-//        //System.out.println(result.getStatusCode());
-//
-////        return CompletableFuture.completedFuture(List.of(result));
-//    }
-
-
-
-
-
-
-
 
 
     private HttpEntity<String> getHeaders() {

@@ -14,6 +14,7 @@ public interface OrderRepository extends MongoRepository<Order, String> {
 
     List<Order> getAllByOrderDateLessThan(LocalDateTime startDate);
 
+    //TODO: WHERE USED ?
     List<Order> getOrderByBillGreaterThan(double bill);
 
     boolean existsByOrderNumber(int orderNumber);

@@ -12,5 +12,6 @@ public interface ResponseEntityConvertor {
 
     List<MenuItem> convertDesserts(List<DessertsResponseEntity> dessertsResponseEntity);
 
+    //TODO: WHERE USED ?
     Double convertBTCRate(List<BitcoinResponseEntity> bitcoinResponseEntities);
 }
