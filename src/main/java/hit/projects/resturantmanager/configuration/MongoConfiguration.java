@@ -47,7 +47,7 @@ public class MongoConfiguration {
 
 
     @Bean
-    public RestTemplate restTemplate() {
+    public static RestTemplate restTemplate() {
         final RestTemplate restTemplate = new RestTemplate();
 
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
@@ -78,7 +78,7 @@ public class MongoConfiguration {
 
             //TODO :: YARIN WATCH HERE
 
-            bitcoinDetails(restTemplate);
+            //bitcoinDetails(restTemplate);
 
             System.out.println("******************");
             //bitcoinDetails2(restTemplate);
@@ -111,7 +111,7 @@ public class MongoConfiguration {
             MenuItem menuItem5 = new MenuItem("Sprite", MenuCategories.DRINKS, 12);
 
 
-            //myMenu.deleteAll();
+            myMenu.deleteAll();
 
             myMenu.insert(List.of(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5));
             //myMenu.insert(pizzas.get());
@@ -240,40 +240,39 @@ public class MongoConfiguration {
 
     //TODO :: YARIN WATCH HERE
 
-    @Async
-    public CompletableFuture<List<ResponseEntity<BitcoinResponseEntity>>> bitcoinDetails(RestTemplate restTemplate){
-        String urlTemplate = "https://api.coindesk.com/v1/bpi/currentprice.json";
-
-//        ResponseEntity<BitcoinResponseEntity> btc =
-//                restTemplate.exchange(urlTemplate,HttpMethod.GET,null,BitcoinResponseEntity.class);
-//        Object btc =
-//                restTemplate.getForObject(urlTemplate,Object.class);
+//    @Async
+//    public void bitcoinDetails(RestTemplate restTemplate){
+//        String urlTemplate = "https://api.coindesk.com/v1/bpi/currentprice.json";
 //
-//        System.out.println(restTemplate.getForObject(urlTemplate,Object.class));
-
-        //System.out.println("StatusCode: " + btc.getStatusCode());
-
-        //option 1
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//        HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
-//        ResponseEntity<BitcoinResponseEntity> result = restTemplate.exchange(urlTemplate,HttpMethod.GET,entity,BitcoinResponseEntity.class);
-//        System.out.println(result);
-//        System.out.println(CompletableFuture.completedFuture(result));
-
-        //option 2
-
-        ResponseEntity<BitcoinResponseEntity> result = restTemplate.getForEntity(urlTemplate,BitcoinResponseEntity.class);
-        //String body = result.getBody();
-        System.out.println(result.getBody());
-        HttpHeaders headers = result.getHeaders();
-        //System.out.println(headers);
-        //System.out.println(result.getStatusCode());
-
-        return CompletableFuture.completedFuture(List.of(result));
-
-
-    }
+////        ResponseEntity<BitcoinResponseEntity> btc =
+////                restTemplate.exchange(urlTemplate,HttpMethod.GET,null,BitcoinResponseEntity.class);
+////        Object btc =
+////                restTemplate.getForObject(urlTemplate,Object.class);
+////
+////        System.out.println(restTemplate.getForObject(urlTemplate,Object.class));
+//
+//        //System.out.println("StatusCode: " + btc.getStatusCode());
+//
+//        //option 1
+////        HttpHeaders headers = new HttpHeaders();
+////        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+////        HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
+////        ResponseEntity<BitcoinResponseEntity> result = restTemplate.exchange(urlTemplate,HttpMethod.GET,entity,BitcoinResponseEntity.class);
+////        System.out.println(result);
+////        System.out.println(CompletableFuture.completedFuture(result));
+//
+//        //option 2
+//
+//        ResponseEntity<BitcoinResponseEntity> result = restTemplate.getForEntity(urlTemplate,BitcoinResponseEntity.class);
+//        //String body = result.getBody();
+//        System.out.println(result.getBody().getBpi().get("USD").getRate_float());
+//
+//        HttpHeaders headers = result.getHeaders();
+//        //System.out.println(headers);
+//        //System.out.println(result.getStatusCode());
+//
+////        return CompletableFuture.completedFuture(List.of(result));
+//    }
 
 
 

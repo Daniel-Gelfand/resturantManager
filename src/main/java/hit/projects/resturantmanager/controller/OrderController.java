@@ -1,5 +1,6 @@
 package hit.projects.resturantmanager.controller;
 
+import hit.projects.resturantmanager.configuration.MongoConfiguration;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.dto.OrderDTO;
 import hit.projects.resturantmanager.service.OrderService;
@@ -106,8 +107,15 @@ public class OrderController {
       */
     @PutMapping("/{orderId}/add/menuItem")
     public ResponseEntity<?> addMenuItemToOrderList(@PathVariable int orderId, @RequestParam String name, @RequestParam int count) {
-        orderService.addMenuItem(orderId, name, count);
-        return ResponseEntity.ok().build();
+        Double bitcoinRate = 0.0;
+        //TODO: שינינו את המתודה של רסט טמפלט לסטטיק. צריך אולי לפנות אליה בדרך יותר יצירתית
+        try {
+             bitcoinRate = orderService.bitcoinDetails(MongoConfiguration.restTemplate()).get();
+        }catch (Exception err) {
+            System.out.println(err.getMessage());
+        }
+
+        return ResponseEntity.ok().body(orderService.addMenuItem(orderId, name, count, bitcoinRate));
     }
 
     /**

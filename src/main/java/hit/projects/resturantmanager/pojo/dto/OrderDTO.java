@@ -3,6 +3,7 @@ package hit.projects.resturantmanager.pojo.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import hit.projects.resturantmanager.pojo.Order;
+import hit.projects.resturantmanager.service.OrderService;
 import lombok.Value;
 
 import java.util.List;
@@ -26,4 +27,5 @@ public class OrderDTO {
     public Double getBill() {
         return order.getBill();
     }
+
 }

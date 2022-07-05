@@ -2,6 +2,7 @@ package hit.projects.resturantmanager.utils;
 
 import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.pojo.MenuItem;
+import hit.projects.resturantmanager.pojo.response.BitcoinResponseEntity;
 import hit.projects.resturantmanager.pojo.response.DessertsResponseEntity;
 import hit.projects.resturantmanager.pojo.response.PizzaResponseEntity;
 import org.springframework.stereotype.Component;
@@ -32,5 +33,10 @@ public class ResponseEntityConvertorImpl implements ResponseEntityConvertor {
                                 .price(currentDessertsResponseEntity.getPrice())
                                 .name(currentDessertsResponseEntity.getName())
                                 .build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public Double convertBTCRate(List<BitcoinResponseEntity> bitcoinResponseEntities) {
+        return null;
     }
 }

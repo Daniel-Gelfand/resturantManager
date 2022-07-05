@@ -7,18 +7,23 @@ import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.MenuItem;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.dto.OrderDTO;
+import hit.projects.resturantmanager.pojo.response.BitcoinResponseEntity;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.utils.Constant;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -81,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addMenuItem(int orderNumber, String menuItemName, int count) {
+    public EntityModel<Order> addMenuItem(int orderNumber, String menuItemName, int count, Double bitcoinRate) {
         Order order = orderRepository
                 .getOrderByOrderNumber(orderNumber)
                 .orElseThrow(() -> new RestaurantNotFoundException(
@@ -95,8 +100,12 @@ public class OrderServiceImpl implements OrderService {
         for (int i = 0; i < count; i++) {
             order.getOrderList().add(menuItem);
             order.setBill(order.getBill() + menuItem.getPrice());
+            order.setBtc((order.getBill() / bitcoinRate));
         }
+
         orderRepository.save(order);
+
+        return orderAssembler.toModel(order);
     }
 
     @Override
@@ -129,5 +138,18 @@ public class OrderServiceImpl implements OrderService {
                         .stream(orderRepository.findAll().spliterator(), false)
                         .map(OrderDTO::new)
                         .collect(Collectors.toList())));
+    }
+
+    @Override
+    @Async
+    public CompletableFuture<Double> bitcoinDetails(RestTemplate restTemplate){
+        String urlTemplate = "https://api.coindesk.com/v1/bpi/currentprice.json";
+
+        ResponseEntity<BitcoinResponseEntity> result = restTemplate.getForEntity(urlTemplate,BitcoinResponseEntity.class);
+        System.out.println("EUR" + result.getBody().getBpi().get("EUR").getRate_float());
+        System.out.println("GBD" + result.getBody().getBpi().get("GBP").getRate_float());
+        System.out.println("USD" +result.getBody().getBpi().get("USD").getRate_float());
+
+        return CompletableFuture.completedFuture(result.getBody().getBpi().get("USD").getRate_float());
     }
 }

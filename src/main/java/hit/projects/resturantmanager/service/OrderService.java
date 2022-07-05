@@ -2,10 +2,15 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.dto.OrderDTO;
+import hit.projects.resturantmanager.pojo.response.BitcoinResponseEntity;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface OrderService {
 
@@ -21,9 +26,11 @@ public interface OrderService {
 
     void deleteOrder(int orderId);
 
-    void addMenuItem(int orderNumber, String menuItemName, int count);
+    EntityModel<Order> addMenuItem(int orderNumber, String menuItemName, int count, Double bitcoinRate);
 
     EntityModel<OrderDTO> getOrderDTO(int name);
 
     CollectionModel<EntityModel<OrderDTO>> getAllOrdersDTO();
+
+    CompletableFuture<Double> bitcoinDetails(RestTemplate restTemplate);
 }
