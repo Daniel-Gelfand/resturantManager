@@ -5,15 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@JsonIgnoreProperties
+//@JsonIgnoreProperties
 public class BitcoinResponseEntity {
 
     //TODO :: YARIN WATCH HERE
 
-    private Object time;
-    private Object disclaimer;
-    private Object chartName;
+    //private Object time;
+    //private String disclaimer;
+    //private String chartName;
     private Object bpi;
 
 

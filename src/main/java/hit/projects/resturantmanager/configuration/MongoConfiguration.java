@@ -13,18 +13,17 @@ import hit.projects.resturantmanager.utils.ResponseEntityConvertor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Configuration
@@ -41,15 +40,26 @@ public class MongoConfiguration {
     @Value("${app.bitcoinRate}")
     private String bitcoinRate;
 
+//    @Bean
+//    public RestTemplate getRestTemplate() {
+//        return new RestTemplate();
+//    }
+
+
     @Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
+    public RestTemplate restTemplate() {
+        final RestTemplate restTemplate = new RestTemplate();
+
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        messageConverters.add(converter);
+        restTemplate.setMessageConverters(messageConverters);
+
+        return restTemplate;
     }
 
-//    @Bean
-//    public RestTemplateBuilder getRestTemplateBuilder(){
-//        return new RestTemplateBuilder();
-//    }
+
 
 
     @Bean
@@ -65,11 +75,13 @@ public class MongoConfiguration {
             setManagers(managerRepository);
             setOrder(orderRepository, tableRepository, myMenu);
 
-            //getBitcoin(restTemplate);
 
             //TODO :: YARIN WATCH HERE
-            //bitcoinDetails(restTemplate);
 
+            bitcoinDetails(restTemplate);
+
+            System.out.println("******************");
+            //bitcoinDetails2(restTemplate);
 
             //System.out.println(bitcoinService.bitcoinDetails());
             log.info(String.valueOf(LocalDate.of(2002, Month.APRIL, 1)));
@@ -89,8 +101,8 @@ public class MongoConfiguration {
     private void setMenuItemBean(MenuItemRepository myMenu, RestTemplate restTemplate,
                                  ResponseEntityConvertor responseEntityConvertor) {
         try {
-            List<MenuItem> pizzas = getPizzas(restTemplate, responseEntityConvertor).get();
-            List<MenuItem> desserts = getDesserts(restTemplate, responseEntityConvertor).get();
+            //CompletableFuture<List<MenuItem>> pizzas = getPizzas(restTemplate, responseEntityConvertor);
+            //CompletableFuture<List<MenuItem>> desserts = getDesserts(restTemplate, responseEntityConvertor);
 
             MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE, 69);
             MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT, 25);
@@ -102,8 +114,8 @@ public class MongoConfiguration {
             //myMenu.deleteAll();
 
             myMenu.insert(List.of(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5));
-            myMenu.insert(pizzas);
-            myMenu.insert(desserts);
+            //myMenu.insert(pizzas.get());
+            //myMenu.insert(desserts.get());
         } catch (Exception e) {
             log.error("setMenuItemBean", "message: problem with fetching food");
         }
@@ -229,31 +241,44 @@ public class MongoConfiguration {
     //TODO :: YARIN WATCH HERE
 
     @Async
-    public CompletableFuture<BitcoinResponseEntity> bitcoinDetails(RestTemplate restTemplate){
+    public CompletableFuture<List<ResponseEntity<BitcoinResponseEntity>>> bitcoinDetails(RestTemplate restTemplate){
         String urlTemplate = "https://api.coindesk.com/v1/bpi/currentprice.json";
 
-        ResponseEntity<BitcoinResponseEntity[]> btc =
-                restTemplate.exchange(urlTemplate,HttpMethod.GET,null,BitcoinResponseEntity[].class);
+//        ResponseEntity<BitcoinResponseEntity> btc =
+//                restTemplate.exchange(urlTemplate,HttpMethod.GET,null,BitcoinResponseEntity.class);
+//        Object btc =
+//                restTemplate.getForObject(urlTemplate,Object.class);
+//
+//        System.out.println(restTemplate.getForObject(urlTemplate,Object.class));
 
-        System.out.println("StatusCode: " + btc.getStatusCode());
+        //System.out.println("StatusCode: " + btc.getStatusCode());
 
+        //option 1
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//        HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
+//        ResponseEntity<BitcoinResponseEntity> result = restTemplate.exchange(urlTemplate,HttpMethod.GET,entity,BitcoinResponseEntity.class);
+//        System.out.println(result);
+//        System.out.println(CompletableFuture.completedFuture(result));
 
-        System.out.println(CompletableFuture.completedFuture(btc));
-        return CompletableFuture.completedFuture((BitcoinResponseEntity)List.of(btc));
+        //option 2
+
+        ResponseEntity<BitcoinResponseEntity> result = restTemplate.getForEntity(urlTemplate,BitcoinResponseEntity.class);
+        //String body = result.getBody();
+        System.out.println(result.getBody());
+        HttpHeaders headers = result.getHeaders();
+        //System.out.println(headers);
+        //System.out.println(result.getStatusCode());
+
+        return CompletableFuture.completedFuture(List.of(result));
 
 
     }
 
-//    @Async
-//    public void getBitcoin(RestTemplate restTemplate) {
-//
-//        ResponseEntity<BitcoinResponseEntity[]> response =
-//                restTemplate.getForEntity(
-//                        bitcoinRate,
-//                        BitcoinResponseEntity[].class);
-//        //BitcoinResponseEntity[] employees = response.getBody();
-//        System.out.println(response.getBody());
-//    }
+
+
+
+
 
 
 
@@ -267,4 +292,5 @@ public class MongoConfiguration {
         final HttpEntity<String> entity = new HttpEntity<>(headers);
         return entity;
     }
+
 }
