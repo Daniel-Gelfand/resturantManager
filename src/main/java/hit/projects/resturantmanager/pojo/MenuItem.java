@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Document
@@ -14,7 +15,7 @@ public class MenuItem {
     @Id
     private String id;
     @Indexed(unique = true)
-    private String name;
+    @NotBlank private String name;
     private MenuCategories menuCategories;
     private int price;
 

@@ -2,6 +2,7 @@ package hit.projects.resturantmanager.service;
 
 import hit.projects.resturantmanager.assembler.OrderAssembler;
 import hit.projects.resturantmanager.assembler.dto.OrderDTOAssembler;
+import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.MenuItem;
@@ -28,15 +29,18 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-@AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
+    @Autowired
     private OrderRepository orderRepository;
+    @Autowired
     private MenuItemRepository menuItemRepository;
+    @Autowired
     private TableService tableService;
+    @Autowired
     private OrderAssembler orderAssembler;
+    @Autowired
     private OrderDTOAssembler orderDTOAssembler;
-
     @Autowired
     private RestTemplate restTemplate;
 
@@ -67,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
 
         //TODO : change table id to table number in the order.
 
-        if (!tableService.isTableAvailable(newOrder.getTableId())) {
+        if (!tableService.isTableAvailable(newOrder.getTableNumber())) {
             throw new RestaurantConflictException("Table isn't available");
         }
 
@@ -163,14 +167,18 @@ public class OrderServiceImpl implements OrderService {
     public EntityModel<Order> payOrderBill(int orderNumber, int payment) {
         //TODO : add option to pay in parts
 
-        Order order = orderRepository.getOrderByOrderNumber(orderNumber).orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderNumber)));
+        Order order = orderRepository
+                .getOrderByOrderNumber(orderNumber)
+                .orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderNumber)));
 
-        order.setReceivedPayment(payment);
+        order.setReceivedPayment(order.getReceivedPayment() + payment);
 
-        if (order.getBill() <= payment) {
+        if (order.getBill() <= order.getReceivedPayment()) {
             order.setBillPaid(true);
+            tableService.changeTableStatus(order.getTableNumber(), TableStatus.AVAILABLE);
         }
 
+        orderRepository.save(order);
         return orderAssembler.toModel(order);
     }
 

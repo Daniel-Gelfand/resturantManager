@@ -55,6 +55,14 @@ public class MongoConfiguration {
                              ResponseEntityConvertor responseEntityConvertor) {
         return args -> {
 
+            managerRepository.deleteAll();
+            waiterRepository.deleteAll();
+            tableRepository.deleteAll();
+            orderRepository.deleteAll();
+
+
+
+
             setMenuItemBean(myMenu, restTemplate, responseEntityConvertor);
             setWaiterItemBean(waiterRepository, tableRepository);
             setTables(tableRepository, waiterRepository);
@@ -67,7 +75,6 @@ public class MongoConfiguration {
     }
 
     private void setManagers(ManagerRepository managerRepository) {
-        managerRepository.deleteAll();
 
         Manager manager1 = new Manager(209381773, "Gilad", "Shalit", 8000.0, true);
         Manager manager2 = new Manager(209222772, "Benjamin", "Netanyahu", 8000.0, false);
@@ -81,7 +88,6 @@ public class MongoConfiguration {
         try {
             //CompletableFuture<List<MenuItem>> pizzas = getPizzas(restTemplate, responseEntityConvertor);
             //CompletableFuture<List<MenuItem>> desserts = getDesserts(restTemplate, responseEntityConvertor);
-            myMenu.deleteAll();
 
             MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE, 69);
             MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT, 25);
@@ -100,7 +106,6 @@ public class MongoConfiguration {
     }
 
     private void setWaiterItemBean(WaiterRepository waiterRepository, TableRepository tableRepository) {
-        waiterRepository.deleteAll();
 
         List<Table> tables = tableRepository.findAll();
 
@@ -118,26 +123,25 @@ public class MongoConfiguration {
 
     private void setOrder(OrderRepository orderRepository, TableRepository tableRepository, MenuItemRepository menuItemRepository) {
         try {
-            orderRepository.deleteAll();
 
             int tableNumber = 1;
             Table table = tableRepository.getTableByTableNumber(tableNumber).orElseThrow();
             List<MenuItem> orderList = menuItemRepository.findAll();
 
 
-            Order order1 = Order.builder().orderNumber(1).isBillPaid(false).orderList(orderList).tableId(table.getId()).build();
+            Order order1 = Order.builder().orderNumber(1).isBillPaid(false).orderList(orderList).tableNumber(table.getTableNumber()).build();
             order1.setOrderList(orderList);
             orderList.forEach(menuItem -> {
                 order1.setBill(order1.getBill() + menuItem.getPrice());
             });
 
-            Order order2 = Order.builder().orderNumber(2).isBillPaid(false).orderList(orderList).tableId(table.getId()).build();
+            Order order2 = Order.builder().orderNumber(2).isBillPaid(false).orderList(orderList).tableNumber(table.getTableNumber()).build();
             order2.setOrderList(orderList);
             orderList.forEach(menuItem -> {
                 order2.setBill(order1.getBill() + menuItem.getPrice());
             });
 
-            Order order3 = Order.builder().orderNumber(3).isBillPaid(false).orderList(orderList).tableId(table.getId()).build();
+            Order order3 = Order.builder().orderNumber(3).isBillPaid(false).orderList(orderList).tableNumber(table.getTableNumber()).build();
             order3.setOrderList(orderList);
             orderList.forEach(menuItem -> {
                 order3.setBill(order3.getBill() + menuItem.getPrice());
@@ -155,7 +159,6 @@ public class MongoConfiguration {
     }
 
     private void setTables(TableRepository tableRepository, WaiterRepository waiterRepository) {
-        tableRepository.deleteAll();
 
         List<Waiter> waiters = waiterRepository.findAllByOnDuty(true);
 

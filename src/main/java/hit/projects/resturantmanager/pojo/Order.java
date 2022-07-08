@@ -22,17 +22,17 @@ public class Order {
     private LocalDateTime orderDate;
     private boolean isBillPaid;
     private List<MenuItem> orderList;
-    private String tableId;
+    private int tableNumber;
     private int receivedPayment;
 
     @Builder
-    public Order(int orderNumber, int bill, boolean isBillPaid, List<MenuItem> orderList, String tableId) {
+    public Order(int orderNumber, int bill, boolean isBillPaid, List<MenuItem> orderList, int tableNumber) {
         this.orderNumber = orderNumber;
         this.bill = bill;
         this.orderDate = LocalDateTime.now();
         this.isBillPaid = isBillPaid;
         this.orderList = orderList;
-        this.tableId = tableId;
+        this.tableNumber = tableNumber;
         this.receivedPayment = 0;
     }
 
@@ -41,7 +41,7 @@ public class Order {
         this.setOrderDate(detailsToUpdate.getOrderDate());
         this.setOrderNumber(detailsToUpdate.getOrderNumber());
         this.setBillPaid(detailsToUpdate.isBillPaid());
-        this.setTableId(detailsToUpdate.getTableId());
+        this.setTableNumber(detailsToUpdate.getTableNumber());
 
         return this;
     }

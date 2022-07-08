@@ -3,6 +3,7 @@ package hit.projects.resturantmanager.service;
 import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
+import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.pojo.dto.TableDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -28,9 +29,13 @@ public interface TableService {
 
     CollectionModel<EntityModel<Table>> getTableByStatus(TableStatus status);
 
+    void changeTableStatus(int tableNumber, TableStatus tableStatus);
+
     CollectionModel<EntityModel<TableDTO>> getAllTablesInfo();
 
-    boolean isTableAvailable(String tableId);
+    boolean isTableAvailable(int tableNumber);
+
+    void addWaiterToTables(Waiter waiter);
 
 }
 

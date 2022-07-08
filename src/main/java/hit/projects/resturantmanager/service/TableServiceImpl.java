@@ -8,11 +8,14 @@ import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
+import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.pojo.dto.MenuItemDTO;
 import hit.projects.resturantmanager.pojo.dto.TableDTO;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.repository.TableRepository;
 import hit.projects.resturantmanager.utils.Constant;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -28,17 +31,23 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class TableServiceImpl implements TableService {
 
+    @Autowired
     TableRepository tableRepository;
+    @Autowired
     OrderRepository orderRepository;
+    @Autowired
     TableAssembler tableAssembler;
+    @Autowired
     TableDTOAssembler tableDTOAssembler;
+//    @Autowired
+//    WaiterService waiterService;
 
-    TableServiceImpl(TableRepository tableRepository, OrderRepository orderRepository, TableAssembler tableAssembler,TableDTOAssembler tableDTOAssembler) {
-        this.tableRepository = tableRepository;
-        this.orderRepository = orderRepository;
-        this.tableAssembler = tableAssembler;
-        this.tableDTOAssembler = tableDTOAssembler;
-    }
+//    TableServiceImpl(TableRepository tableRepository, OrderRepository orderRepository, TableAssembler tableAssembler,TableDTOAssembler tableDTOAssembler) {
+//        this.tableRepository = tableRepository;
+//        this.orderRepository = orderRepository;
+//        this.tableAssembler = tableAssembler;
+//        this.tableDTOAssembler = tableDTOAssembler;
+//    }
 
     @Override
     public EntityModel<Table> getTable(int tableNumber) {
@@ -61,7 +70,7 @@ public class TableServiceImpl implements TableService {
                 .orElseThrow(() -> new RestaurantNotFoundException(
                         (String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber))));
 
-        order.setTableId(table.getId());
+        order.setTableNumber(table.getTableNumber());
         Order newOrder = orderRepository.save(order);
         table.getOrderList().add(newOrder);
         table.setTableStatus(TableStatus.BUSY);
@@ -90,14 +99,13 @@ public class TableServiceImpl implements TableService {
     @Override
     public EntityModel<Table> createTable(Table newTable) {
         if (!tableRepository.existsByTableNumber(newTable.getTableNumber())) {
+            //waiterService.addTableToWaiters(newTable);
             return tableAssembler.toModel(tableRepository.save(newTable));
         }
 
         throw new RestaurantConflictException(
                 (String.format(Constant.ALREADY_EXISTS_MESSAGE, "table number", newTable.getTableNumber())));
     }
-
-
 
     @Override
     public void deleteTable(int tableNumber) {
@@ -125,6 +133,14 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
+    public void changeTableStatus(int tableNumber, TableStatus tableStatus) {
+        Table table = tableRepository.getTableByTableNumber(tableNumber).orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "tableNumber", tableNumber)));
+
+        table.setTableStatus(tableStatus);
+        tableRepository.save(table);
+    }
+
+    @Override
     public CollectionModel<EntityModel<TableDTO>> getAllTablesInfo() {
         return CollectionModel.of(tableDTOAssembler
                 .toCollectionModel(StreamSupport
@@ -134,10 +150,19 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
-    public boolean isTableAvailable(String tableId) {
-        Table table = tableRepository.findById(tableId).orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "table id", tableId)));
-
+    public boolean isTableAvailable(int tableNumber) {
+        Table table = tableRepository.getTableByTableNumber(tableNumber).orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber)));
         return table.getTableStatus() == TableStatus.AVAILABLE;
+    }
+
+    @Override
+    public void addWaiterToTables(Waiter waiter) {
+        List<Table> tables = tableRepository.findAll();
+
+        for (Table table:tables) {
+            table.getWaitersList().add(waiter);
+            tableRepository.save(table);
+        }
     }
 
     @Override

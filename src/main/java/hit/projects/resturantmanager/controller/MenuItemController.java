@@ -8,7 +8,10 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
 
 
 @RequestMapping("/menu")
@@ -67,7 +70,7 @@ public class MenuItemController {
      * @return
      */
     @GetMapping("/name/{name}")
-    public ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(@PathVariable String name) {
+    public ResponseEntity<EntityModel<MenuItem>> getSingleMenuItem(@NotBlank @Validated @PathVariable String name) {
         return ResponseEntity.ok().body(menuItemService.getSingleMenuItem(name));
     }
 
@@ -107,7 +110,7 @@ public class MenuItemController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<EntityModel<MenuItem>> newMenuItem(@RequestBody MenuItem menuItem) {
+    public ResponseEntity<EntityModel<MenuItem>> newMenuItem(@NotBlank @Validated @RequestBody MenuItem menuItem) {
         return new ResponseEntity<>(menuItemService.newMenuItem(menuItem), HttpStatus.CREATED);
     }
 

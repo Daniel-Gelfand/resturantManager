@@ -1,12 +1,17 @@
 package hit.projects.resturantmanager.controller;
 
+import hit.projects.resturantmanager.pojo.Payment;
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.service.WaiterService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @RestController
@@ -65,9 +70,10 @@ public class WaiterController {
         return ResponseEntity.ok(waiterService.getAllWaitersInfo());
     }
 
-    @PutMapping("/payBill/{orderNumber}")
-    public ResponseEntity<?> payOrderBill(@RequestBody int payment, @PathVariable int orderNumber) {
+    @PutMapping("/payBill")
+    public ResponseEntity<?> payOrderBill( @RequestBody @NotNull @Validated Payment payment) {
 
-        return ResponseEntity.ok(waiterService.payOrderBill(orderNumber, payment));
+        System.out.println(payment);
+        return ResponseEntity.ok(waiterService.payOrderBill(payment));
     }
 }

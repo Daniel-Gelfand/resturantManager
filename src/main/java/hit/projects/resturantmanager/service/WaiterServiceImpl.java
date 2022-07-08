@@ -6,11 +6,14 @@ import hit.projects.resturantmanager.controller.WaiterController;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Order;
+import hit.projects.resturantmanager.pojo.Payment;
+import hit.projects.resturantmanager.pojo.Table;
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.pojo.dto.WaiterDTO;
 import hit.projects.resturantmanager.repository.WaiterRepository;
 import hit.projects.resturantmanager.utils.Constant;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -24,16 +27,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-@AllArgsConstructor
 public class WaiterServiceImpl implements WaiterService {
-
+    @Autowired
     private WaiterRepository waiterRepository;
-
+    @Autowired
     private WaiterAssembler waiterAssembler;
-
+    @Autowired
     private WaiterDTOAssembler waiterDTOAssembler;
-
+    @Autowired
     private OrderService orderService;
+    @Autowired
+    private TableService tableService;
 
 //    public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler, WaiterDTOAssembler waiterDTOAssembler) {
 //        this.waiterRepository = waiterRepository;
@@ -113,6 +117,10 @@ public class WaiterServiceImpl implements WaiterService {
         //TODO: CHECK THIS SHIT IF THAT WORKING
 
         if (!waiterRepository.existsByPersonalId(waiterToAdd.getPersonalId())) {
+            List<Table> tables = tableService.getAllTables().getContent().stream().toList().stream().map(EntityModel::getContent).toList();
+
+            tableService.addWaiterToTables(waiterToAdd);
+            waiterToAdd.setTableList(tables);
             return waiterAssembler.toModel(waiterRepository.save(waiterToAdd));
         }
 
@@ -175,7 +183,17 @@ public class WaiterServiceImpl implements WaiterService {
     }
 
     @Override
-    public EntityModel<Order> payOrderBill(int payment, int orderNumber) {
-        return orderService.payOrderBill(orderNumber, payment);
+    public EntityModel<Order> payOrderBill(Payment payment) {
+        return orderService.payOrderBill(payment.getOrderNumber(), payment.getPayment());
+    }
+
+    @Override
+    public void addTableToWaiters(Table table) {
+        List<Waiter> waiters = waiterRepository.findAll();
+
+        for (Waiter waiter : waiters) {
+            waiter.getTableList().add(table);
+            waiterRepository.save(waiter);
+        }
     }
 }
