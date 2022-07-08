@@ -33,6 +33,7 @@ public class Order {
         this.isBillPaid = isBillPaid;
         this.orderList = orderList;
         this.tableId = tableId;
+        this.receivedPayment = 0;
     }
 
     public Order update(Order detailsToUpdate) {

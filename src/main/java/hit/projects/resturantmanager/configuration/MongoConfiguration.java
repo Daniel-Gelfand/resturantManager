@@ -67,11 +67,12 @@ public class MongoConfiguration {
     }
 
     private void setManagers(ManagerRepository managerRepository) {
+        managerRepository.deleteAll();
+
         Manager manager1 = new Manager(209381773, "Gilad", "Shalit", 8000.0, true);
         Manager manager2 = new Manager(209222772, "Benjamin", "Netanyahu", 8000.0, false);
         Manager manager3 = new Manager(318324258, "Naftali", "Benet", 8000.0, false);
         Manager manager4 = new Manager(209444775, "Yakov", "Ha-Hayat", 8000.0, true);
-        managerRepository.deleteAll();
         managerRepository.insert(List.of(manager1, manager2, manager3, manager4));
     }
 
@@ -80,6 +81,7 @@ public class MongoConfiguration {
         try {
             //CompletableFuture<List<MenuItem>> pizzas = getPizzas(restTemplate, responseEntityConvertor);
             //CompletableFuture<List<MenuItem>> desserts = getDesserts(restTemplate, responseEntityConvertor);
+            myMenu.deleteAll();
 
             MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE, 69);
             MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT, 25);
@@ -88,7 +90,6 @@ public class MongoConfiguration {
             MenuItem menuItem5 = new MenuItem("Sprite", MenuCategories.DRINKS, 12);
 
 
-            myMenu.deleteAll();
 
             myMenu.insert(List.of(menuItem1, menuItem2, menuItem3, menuItem4, menuItem5));
             //myMenu.insert(pizzas.get());
@@ -99,6 +100,8 @@ public class MongoConfiguration {
     }
 
     private void setWaiterItemBean(WaiterRepository waiterRepository, TableRepository tableRepository) {
+        waiterRepository.deleteAll();
+
         List<Table> tables = tableRepository.findAll();
 
         Waiter waiter1 = new Waiter(318324258, "Matan", "Bar", 3000.0, 0.0, true);
@@ -110,12 +113,13 @@ public class MongoConfiguration {
         Waiter waiter4 = new Waiter(208324258, "Matan", "Kor", 3000.0, 0.0, true);
         waiter4.setTableList(tables);
 
-        waiterRepository.deleteAll();
         waiterRepository.insert(List.of(waiter1, waiter2, waiter3, waiter4));
     }
 
     private void setOrder(OrderRepository orderRepository, TableRepository tableRepository, MenuItemRepository menuItemRepository) {
         try {
+            orderRepository.deleteAll();
+
             int tableNumber = 1;
             Table table = tableRepository.getTableByTableNumber(tableNumber).orElseThrow();
             List<MenuItem> orderList = menuItemRepository.findAll();
@@ -140,7 +144,6 @@ public class MongoConfiguration {
 
             });
 
-            orderRepository.deleteAll();
             orderRepository.insert(List.of(order1, order2, order3));
             table.setTableStatus(TableStatus.BUSY);
             ArrayList<Order> orders = new ArrayList<>(Arrays.asList(order1, order2, order3));
@@ -152,6 +155,8 @@ public class MongoConfiguration {
     }
 
     private void setTables(TableRepository tableRepository, WaiterRepository waiterRepository) {
+        tableRepository.deleteAll();
+
         List<Waiter> waiters = waiterRepository.findAllByOnDuty(true);
 
         Table table1 = Table.builder().tableNumber(1).tableStatus(TableStatus.AVAILABLE).build();
@@ -163,7 +168,6 @@ public class MongoConfiguration {
         Table table4 = Table.builder().tableNumber(4).tableStatus(TableStatus.AVAILABLE).build();
         table4.setWaitersList(waiters);
 
-        tableRepository.deleteAll();
         tableRepository.insert(List.of(table1, table2, table3, table4));
     }
 
