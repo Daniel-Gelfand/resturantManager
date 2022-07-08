@@ -121,19 +121,19 @@ public class MongoConfiguration {
             List<MenuItem> orderList = menuItemRepository.findAll();
 
 
-            Order order1 = Order.builder().orderNumber(1).orderStatus(true).orderList(orderList).tableId(table.getId()).build();
+            Order order1 = Order.builder().orderNumber(1).isBillPaid(false).orderList(orderList).tableId(table.getId()).build();
             order1.setOrderList(orderList);
             orderList.forEach(menuItem -> {
                 order1.setBill(order1.getBill() + menuItem.getPrice());
             });
 
-            Order order2 = Order.builder().orderNumber(2).orderStatus(true).orderList(orderList).tableId(table.getId()).build();
+            Order order2 = Order.builder().orderNumber(2).isBillPaid(false).orderList(orderList).tableId(table.getId()).build();
             order2.setOrderList(orderList);
             orderList.forEach(menuItem -> {
                 order2.setBill(order1.getBill() + menuItem.getPrice());
             });
 
-            Order order3 = Order.builder().orderNumber(3).orderStatus(true).orderList(orderList).tableId(table.getId()).build();
+            Order order3 = Order.builder().orderNumber(3).isBillPaid(false).orderList(orderList).tableId(table.getId()).build();
             order3.setOrderList(orderList);
             orderList.forEach(menuItem -> {
                 order3.setBill(order3.getBill() + menuItem.getPrice());

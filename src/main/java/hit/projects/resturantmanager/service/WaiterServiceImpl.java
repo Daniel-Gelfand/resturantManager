@@ -5,10 +5,12 @@ import hit.projects.resturantmanager.assembler.dto.WaiterDTOAssembler;
 import hit.projects.resturantmanager.controller.WaiterController;
 import hit.projects.resturantmanager.exception.RestaurantConflictException;
 import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
+import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.pojo.dto.WaiterDTO;
 import hit.projects.resturantmanager.repository.WaiterRepository;
 import hit.projects.resturantmanager.utils.Constant;
+import lombok.AllArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
+@AllArgsConstructor
 public class WaiterServiceImpl implements WaiterService {
 
     private WaiterRepository waiterRepository;
@@ -30,11 +33,13 @@ public class WaiterServiceImpl implements WaiterService {
 
     private WaiterDTOAssembler waiterDTOAssembler;
 
-    public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler, WaiterDTOAssembler waiterDTOAssembler) {
-        this.waiterRepository = waiterRepository;
-        this.waiterAssembler = waiterAssembler;
-        this.waiterDTOAssembler = waiterDTOAssembler;
-    }
+    private OrderService orderService;
+
+//    public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler, WaiterDTOAssembler waiterDTOAssembler) {
+//        this.waiterRepository = waiterRepository;
+//        this.waiterAssembler = waiterAssembler;
+//        this.waiterDTOAssembler = waiterDTOAssembler;
+//    }
 
     /**
      * This method Return all Waiters with links (to him self and to all waiters).
@@ -167,5 +172,10 @@ public class WaiterServiceImpl implements WaiterService {
         }
 
         return waiters;
+    }
+
+    @Override
+    public EntityModel<Order> payOrderBill(int payment, int orderNumber) {
+        return orderService.payOrderBill(orderNumber, payment);
     }
 }

@@ -64,4 +64,10 @@ public class WaiterController {
     public ResponseEntity<?> allWaitersInfo() {
         return ResponseEntity.ok(waiterService.getAllWaitersInfo());
     }
+
+    @PutMapping("/payBill/{orderNumber}")
+    public ResponseEntity<?> payOrderBill(@RequestBody int payment, @PathVariable int orderNumber) {
+
+        return ResponseEntity.ok(waiterService.payOrderBill(orderNumber, payment));
+    }
 }

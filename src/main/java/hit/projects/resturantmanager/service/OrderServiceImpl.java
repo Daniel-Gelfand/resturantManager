@@ -11,11 +11,10 @@ import hit.projects.resturantmanager.pojo.response.BitcoinResponseEntity;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.utils.Constant;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -29,24 +28,26 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
+@AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private OrderRepository orderRepository;
     private MenuItemRepository menuItemRepository;
+    private TableService tableService;
     private OrderAssembler orderAssembler;
     private OrderDTOAssembler orderDTOAssembler;
 
     @Autowired
     private RestTemplate restTemplate;
 
-
-    public OrderServiceImpl(OrderRepository orderRepository, MenuItemRepository menuItemRepository,
-                            OrderAssembler orderAssembler, OrderDTOAssembler orderDTOAssembler) {
-        this.orderRepository = orderRepository;
-        this.menuItemRepository = menuItemRepository;
-        this.orderAssembler = orderAssembler;
-        this.orderDTOAssembler = orderDTOAssembler;
-    }
+//    public OrderServiceImpl(OrderRepository orderRepository, MenuItemRepository menuItemRepository,
+//                            OrderAssembler orderAssembler, OrderDTOAssembler orderDTOAssembler, TableRepository tableRepository) {
+//        this.orderRepository = orderRepository;
+//        this.menuItemRepository = menuItemRepository;
+//        this.orderAssembler = orderAssembler;
+//        this.orderDTOAssembler = orderDTOAssembler;
+//        this.tableRepository = tableRepository;
+//    }
 
     @Override
     public CollectionModel<EntityModel<Order>> getAllOrders() {
@@ -63,12 +64,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public EntityModel<Order> addOrder(Order newOrder) {
-        if (!orderRepository.existsByOrderNumber(newOrder.getOrderNumber())) {
-            return orderAssembler.toModel(orderRepository.save(newOrder));
+
+        //TODO : change table id to table number in the order.
+
+        if (!tableService.isTableAvailable(newOrder.getTableId())) {
+            throw new RestaurantConflictException("Table isn't available");
         }
 
-        throw new RestaurantConflictException(
-                (String.format(Constant.ALREADY_EXISTS_MESSAGE, "order number", newOrder.getOrderNumber())));
+        if (orderRepository.existsByOrderNumber(newOrder.getOrderNumber())) {
+            throw new RestaurantConflictException(
+                    (String.format(Constant.ALREADY_EXISTS_MESSAGE, "order number", newOrder.getOrderNumber())));
+        }
+
+        return orderAssembler.toModel(orderRepository.save(newOrder));
     }
 
     @Override
@@ -149,6 +157,21 @@ public class OrderServiceImpl implements OrderService {
                         .stream(orderRepository.findAll().spliterator(), false)
                         .map(OrderDTO::new)
                         .collect(Collectors.toList())));
+    }
+
+    @Override
+    public EntityModel<Order> payOrderBill(int orderNumber, int payment) {
+        //TODO : add option to pay in parts
+
+        Order order = orderRepository.getOrderByOrderNumber(orderNumber).orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderNumber)));
+
+        order.setReceivedPayment(payment);
+
+        if (order.getBill() <= payment) {
+            order.setBillPaid(true);
+        }
+
+        return orderAssembler.toModel(order);
     }
 
     @Async

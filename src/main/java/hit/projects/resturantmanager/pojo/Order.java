@@ -17,19 +17,20 @@ public class Order {
     private String id;
     @Indexed(unique = true)
     private int orderNumber;
-    private double bill;
+    private int bill;
     private double bill_btc;
     private LocalDateTime orderDate;
-    private boolean orderStatus;
+    private boolean isBillPaid;
     private List<MenuItem> orderList;
     private String tableId;
+    private int receivedPayment;
 
     @Builder
-    public Order(int orderNumber, double bill, boolean orderStatus, List<MenuItem> orderList, String tableId) {
+    public Order(int orderNumber, int bill, boolean isBillPaid, List<MenuItem> orderList, String tableId) {
         this.orderNumber = orderNumber;
         this.bill = bill;
         this.orderDate = LocalDateTime.now();
-        this.orderStatus = orderStatus;
+        this.isBillPaid = isBillPaid;
         this.orderList = orderList;
         this.tableId = tableId;
     }
@@ -38,7 +39,7 @@ public class Order {
         this.setBill(detailsToUpdate.getBill());
         this.setOrderDate(detailsToUpdate.getOrderDate());
         this.setOrderNumber(detailsToUpdate.getOrderNumber());
-        this.setOrderStatus(detailsToUpdate.isOrderStatus());
+        this.setBillPaid(detailsToUpdate.isBillPaid());
         this.setTableId(detailsToUpdate.getTableId());
 
         return this;

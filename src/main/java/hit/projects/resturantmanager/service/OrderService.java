@@ -31,4 +31,6 @@ public interface OrderService {
     EntityModel<OrderDTO> getOrderDTO(int name);
 
     CollectionModel<EntityModel<OrderDTO>> getAllOrdersDTO();
+
+    EntityModel<Order> payOrderBill(int orderNumber, int payment);
 }

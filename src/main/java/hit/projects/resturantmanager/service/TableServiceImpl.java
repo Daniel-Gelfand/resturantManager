@@ -134,6 +134,13 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
+    public boolean isTableAvailable(String tableId) {
+        Table table = tableRepository.findById(tableId).orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "table id", tableId)));
+
+        return table.getTableStatus() == TableStatus.AVAILABLE;
+    }
+
+    @Override
     public EntityModel<TableDTO> getTableInfo(int tableNumber) {
         return tableRepository
                 .getTableByTableNumber(tableNumber)

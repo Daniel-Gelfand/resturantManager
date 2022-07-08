@@ -30,6 +30,7 @@ public interface TableService {
 
     CollectionModel<EntityModel<TableDTO>> getAllTablesInfo();
 
+    boolean isTableAvailable(String tableId);
 
 }
 

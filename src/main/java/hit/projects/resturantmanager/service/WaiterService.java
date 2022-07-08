@@ -1,5 +1,6 @@
 package hit.projects.resturantmanager.service;
 
+import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.pojo.dto.WaiterDTO;
 import org.springframework.hateoas.CollectionModel;
@@ -24,4 +25,6 @@ public interface WaiterService {
     EntityModel<WaiterDTO> getWaiterInfo(int personalId);
 
     CollectionModel<EntityModel<WaiterDTO>> getAllWaitersInfo();
+
+    EntityModel<Order> payOrderBill(int number, int orderNumber);
 }
