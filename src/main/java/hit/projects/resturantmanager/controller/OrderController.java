@@ -5,11 +5,13 @@ import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.dto.OrderDTO;
 import hit.projects.resturantmanager.service.OrderService;
 import hit.projects.resturantmanager.utils.Constant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 public class OrderController {
 
     private final OrderService orderService;
+
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
@@ -108,15 +111,7 @@ public class OrderController {
       */
     @PutMapping("/{orderId}/add/menuItem")
     public ResponseEntity<?> addMenuItemToOrderList(@PathVariable int orderId, @RequestParam String name, @RequestParam int count) {
-        Double bitcoinRate = Constant.BTC_START_RATE;
-        //TODO: שינינו את המתודה של רסט טמפלט לסטטיק. צריך אולי לפנות אליה בדרך יותר יצירתית
-        try {
-             bitcoinRate = orderService.bitcoinDetails(MongoConfiguration.restTemplate()).get();
-        }catch (Exception err) {
-            System.out.println(err.getMessage());
-        }
-
-        return ResponseEntity.ok().body(orderService.addMenuItem(orderId, name, count, bitcoinRate));
+        return ResponseEntity.ok().body(orderService.addMenuItem(orderId, name, count));
     }
 
     /**

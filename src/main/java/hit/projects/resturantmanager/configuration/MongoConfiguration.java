@@ -4,7 +4,6 @@ import hit.projects.resturantmanager.enums.MenuCategories;
 import hit.projects.resturantmanager.enums.TableStatus;
 import hit.projects.resturantmanager.exception.RestaurantGeneralException;
 import hit.projects.resturantmanager.pojo.*;
-import hit.projects.resturantmanager.pojo.response.BitcoinResponseEntity;
 import hit.projects.resturantmanager.pojo.response.DessertsResponseEntity;
 import hit.projects.resturantmanager.pojo.response.PizzaResponseEntity;
 import hit.projects.resturantmanager.repository.*;
@@ -36,7 +35,7 @@ public class MongoConfiguration {
 
     //TODO: what about this static method ?
     @Bean
-    public static RestTemplate restTemplate() {
+    public RestTemplate restTemplate() {
         final RestTemplate restTemplate = new RestTemplate();
 
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
@@ -47,8 +46,6 @@ public class MongoConfiguration {
 
         return restTemplate;
     }
-
-
 
 
     @Bean
@@ -221,8 +218,8 @@ public class MongoConfiguration {
     private HttpEntity<String> getHeaders() {
         final HttpHeaders headers = new HttpHeaders();
 
-        	headers.set("X-RapidAPI-Key", "3acb74cfe6mshe9000fa87a80359p1d86b8jsnb4a1daf4a027");
-            headers.set("X-RapidAPI-Host", "pizza-and-desserts.p.rapidapi.com");
+        headers.set("X-RapidAPI-Key", "3acb74cfe6mshe9000fa87a80359p1d86b8jsnb4a1daf4a027");
+        headers.set("X-RapidAPI-Host", "pizza-and-desserts.p.rapidapi.com");
 
         final HttpEntity<String> entity = new HttpEntity<>(headers);
         return entity;

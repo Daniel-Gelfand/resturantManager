@@ -26,11 +26,9 @@ public interface OrderService {
 
     void deleteOrder(int orderId);
 
-    EntityModel<Order> addMenuItem(int orderNumber, String menuItemName, int count, Double bitcoinRate);
+    EntityModel<Order> addMenuItem(int orderNumber, String menuItemName, int count);
 
     EntityModel<OrderDTO> getOrderDTO(int name);
 
     CollectionModel<EntityModel<OrderDTO>> getAllOrdersDTO();
-
-    CompletableFuture<Double> bitcoinDetails(RestTemplate restTemplate);
 }

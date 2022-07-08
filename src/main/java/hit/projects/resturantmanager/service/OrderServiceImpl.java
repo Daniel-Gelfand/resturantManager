@@ -11,6 +11,7 @@ import hit.projects.resturantmanager.pojo.response.BitcoinResponseEntity;
 import hit.projects.resturantmanager.repository.MenuItemRepository;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.utils.Constant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -34,6 +35,9 @@ public class OrderServiceImpl implements OrderService {
     private MenuItemRepository menuItemRepository;
     private OrderAssembler orderAssembler;
     private OrderDTOAssembler orderDTOAssembler;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
 
     public OrderServiceImpl(OrderRepository orderRepository, MenuItemRepository menuItemRepository,
@@ -86,7 +90,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public EntityModel<Order> addMenuItem(int orderNumber, String menuItemName, int count, Double bitcoinRate) {
+    public EntityModel<Order> addMenuItem(int orderNumber, String menuItemName, int count) {
+        Double bitcoinRate = 0.0;
+        try {
+            bitcoinRate = bitcoinDetails(restTemplate).get();
+        } catch (Exception err) {
+            System.out.println(err.getMessage());
+        }
+
         Order order = orderRepository
                 .getOrderByOrderNumber(orderNumber)
                 .orElseThrow(() -> new RestaurantNotFoundException(
@@ -140,15 +151,12 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.toList())));
     }
 
-    @Override
     @Async
-    public CompletableFuture<Double> bitcoinDetails(RestTemplate restTemplate){
+    CompletableFuture<Double> bitcoinDetails(RestTemplate restTemplate){
         String urlTemplate = "https://api.coindesk.com/v1/bpi/currentprice.json";
 
-        ResponseEntity<BitcoinResponseEntity> result = restTemplate.getForEntity(urlTemplate,BitcoinResponseEntity.class);
-        System.out.println("EUR" + result.getBody().getBpi().get("EUR").getRate_float());
-        System.out.println("GBD" + result.getBody().getBpi().get("GBP").getRate_float());
-        System.out.println("USD" +result.getBody().getBpi().get("USD").getRate_float());
+        ResponseEntity<BitcoinResponseEntity> result =
+                restTemplate.getForEntity(urlTemplate,BitcoinResponseEntity.class);
 
         return CompletableFuture.completedFuture(result.getBody().getBpi().get("USD").getRate_float());
     }
