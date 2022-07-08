@@ -18,7 +18,7 @@ public class ResponseEntityConvertorImpl implements ResponseEntityConvertor {
         return pizzaResponseEntity.stream()
                 .map(currentPizzaResponseEntity ->
                         MenuItem.builder()
-                                .menuCategories(MenuCategories.MAINCOURSE)
+                                .menuCategories(MenuCategories.MAIN_COURSE)
                                 .price(currentPizzaResponseEntity.getPrice())
                                 .name(currentPizzaResponseEntity.getName())
                                 .build()).collect(Collectors.toList());

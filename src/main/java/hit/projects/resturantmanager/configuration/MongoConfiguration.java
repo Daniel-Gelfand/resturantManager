@@ -18,12 +18,14 @@ import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @Configuration
 @Slf4j
@@ -47,6 +49,18 @@ public class MongoConfiguration {
         return restTemplate;
     }
 
+    @Bean
+    public Executor taskExecutor(){
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(3);
+        taskExecutor.setMaxPoolSize(5);
+        taskExecutor.setKeepAliveSeconds(1);
+        taskExecutor.setQueueCapacity(100);
+
+        taskExecutor.setThreadNamePrefix("TaskExecutor");
+        taskExecutor.initialize();
+        return taskExecutor;
+    }
 
     @Bean
     CommandLineRunner runner(MenuItemRepository myMenu, WaiterRepository waiterRepository,

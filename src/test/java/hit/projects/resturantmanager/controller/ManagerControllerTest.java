@@ -62,7 +62,7 @@ class ManagerControllerTest {
                 .andDo(print()).andExpect(status().isCreated()).andReturn();
     }
 
-    @DisplayName("add manager test success")
+    @DisplayName("add manager test conflict")
     @Test
     public void addManagerTestBadRequest() throws Exception{
         Manager manager = new Manager(209381773,"Gilad","Shalit",8000.0,true);
