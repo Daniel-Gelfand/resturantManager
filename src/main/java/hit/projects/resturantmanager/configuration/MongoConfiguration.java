@@ -73,7 +73,7 @@ public class MongoConfiguration {
             waiterRepository.deleteAll();
             tableRepository.deleteAll();
             orderRepository.deleteAll();
-
+            myMenu.deleteAll();
 
 
 
@@ -103,7 +103,7 @@ public class MongoConfiguration {
             //CompletableFuture<List<MenuItem>> pizzas = getPizzas(restTemplate, responseEntityConvertor);
             //CompletableFuture<List<MenuItem>> desserts = getDesserts(restTemplate, responseEntityConvertor);
 
-            MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAINCOURSE, 69);
+            MenuItem menuItem1 = new MenuItem("Steak Pargit", MenuCategories.MAIN_COURSE, 69);
             MenuItem menuItem2 = new MenuItem("IceCream", MenuCategories.DESSERT, 25);
             MenuItem menuItem3 = new MenuItem("Coca-Cola", MenuCategories.DRINKS, 12);
             MenuItem menuItem4 = new MenuItem("Carpaccio", MenuCategories.APPETIZER, 33);

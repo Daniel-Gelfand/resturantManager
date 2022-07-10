@@ -2,7 +2,7 @@ package hit.projects.resturantmanager.enums;
 
 public enum MenuCategories {
     APPETIZER,
-    MAINCOURSE,
+    MAIN_COURSE,
     DESSERT,
     DRINKS
 }

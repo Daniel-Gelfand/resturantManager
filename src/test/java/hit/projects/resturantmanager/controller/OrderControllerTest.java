@@ -82,8 +82,8 @@ class OrderControllerTest {
     @DisplayName("add order test success")
     @Test
     public void addOrderTestSuccess() throws Exception{
-        Order order = Order.builder().orderNumber(15).orderStatus(true)
-                .orderList(null).tableId("5").build();
+        Order order = Order.builder().orderNumber(15).isBillPaid(true)
+                .orderList(null).tableNumber(5).build();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,8 +94,8 @@ class OrderControllerTest {
     @DisplayName("add order test conflict")
     @Test
     public void addOderTestConflict() throws Exception{
-        Order order = Order.builder().orderNumber(1).orderStatus(true)
-                .orderList(null).tableId("5").build();
+        Order order = Order.builder().orderNumber(1).isBillPaid(true)
+                .orderList(null).tableNumber(5).build();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -106,8 +106,8 @@ class OrderControllerTest {
     @DisplayName("update order test success")
     @Test
     public void updateManagerTestSuccess() throws Exception{
-        Order order = Order.builder().orderNumber(30).orderStatus(true)
-                .orderList(new ArrayList<>()).tableId("5").build();
+        Order order = Order.builder().orderNumber(30).isBillPaid(true)
+                .orderList(new ArrayList<>()).tableNumber(5).build();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/order/123")
                         .contentType(MediaType.APPLICATION_JSON)

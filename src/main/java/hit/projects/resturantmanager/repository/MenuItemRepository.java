@@ -17,6 +17,8 @@ public interface MenuItemRepository extends MongoRepository<MenuItem, String> {
 
     List<MenuItem> findAllByMenuCategories(MenuCategories menuCategories);
 
+    boolean existsByMenuCategories(MenuCategories menuCategories);
+
     void deleteByName(String name);
 
     Optional<MenuItem> findByName(String name);

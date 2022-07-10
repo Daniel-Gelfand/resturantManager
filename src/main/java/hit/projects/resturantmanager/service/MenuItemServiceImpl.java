@@ -74,17 +74,21 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public CollectionModel<EntityModel<MenuItem>> getAllCategory(String category) {
-        List<EntityModel<MenuItem>> categories = menuItemRepository.findAllByMenuCategories
-                        (MenuCategories.valueOf(category.toUpperCase()))
-                .stream().map(menuItemAssembler::toModel).collect(Collectors.toList());
 
-        if (CollectionUtils.isEmpty(categories)) {
+        try {
+            MenuCategories menuCategories = MenuCategories.valueOf(category.toUpperCase());
+            List<EntityModel<MenuItem>> categories = menuItemRepository.
+                    findAllByMenuCategories(menuCategories)
+                    .stream().map(menuItemAssembler::toModel)
+                    .collect(Collectors.toList());
+
+            return CollectionModel.of(categories, linkTo(methodOn(MenuItemController.class)
+                    .getAllCategory(category)).withSelfRel());
+        }
+        catch (IllegalArgumentException illegalArgumentException) {
             throw new RestaurantNotFoundException(
                     (String.format(Constant.NOT_FOUND_MESSAGE, "category", category)));
         }
-
-        return CollectionModel.of(categories, linkTo(methodOn(MenuItemController.class)
-                .getAllCategory(category)).withSelfRel());
     }
 
     /**
