@@ -40,6 +40,11 @@ public class TableServiceImpl implements TableService {
     @Autowired
     TableDTOAssembler tableDTOAssembler;
 
+    /**
+     * In this method we return specific table by table number.
+     * @param tableNumber Except to get valid table number.
+     * @return EntityModel of Table.
+     */
     @Override
     public EntityModel<Table> getTable(int tableNumber) {
         return tableAssembler.toModel(tableRepository.getTableByTableNumber(tableNumber)
@@ -54,6 +59,12 @@ public class TableServiceImpl implements TableService {
         return averageBill;
     }
 
+
+    /**
+     * In this method we add new order to specific table
+     * @param tableNumber Except to get valid table number.
+     * @param order Except to get valid Order Object.
+     */
     @Override
     public void addOrder(int tableNumber, Order order) {
 
@@ -68,6 +79,10 @@ public class TableServiceImpl implements TableService {
         tableRepository.save(table);
     }
 
+    /**
+     * In this method we return all tables
+     * @return CollectionModel of EntityModel of Table.
+     */
     @Override
     public CollectionModel<EntityModel<Table>> getAllTables() {
         List<EntityModel<Table>> tables = tableRepository.findAll()
@@ -78,6 +93,12 @@ public class TableServiceImpl implements TableService {
 
     }
 
+    /**
+     * In this method we update specific table by table number .
+     * @param tableNumber = Except to get valid table number.
+     * @param tableSent = Except to get valid Table Object.
+     * @return EntityModel of Table that made change.
+     */
     @Override
     public EntityModel<Table> updateTable(String tableNumber, Table tableSent) {
         return tableRepository.findById(tableNumber)
@@ -87,6 +108,11 @@ public class TableServiceImpl implements TableService {
                 .orElseGet(() -> tableAssembler.toModel(tableRepository.save(tableSent)));
     }
 
+    /**
+     * In this method we create new table and adding him to DB.
+     * @param newTable = Except to get valid Table Object .
+     * @return EntityModel of the new Table
+     */
     @Override
     public EntityModel<Table> createTable(Table newTable) {
         if (!tableRepository.existsByTableNumber(newTable.getTableNumber())) {
@@ -98,6 +124,10 @@ public class TableServiceImpl implements TableService {
                 (String.format(Constant.ALREADY_EXISTS_MESSAGE, "table number", newTable.getTableNumber())));
     }
 
+    /**
+     * In this method we delete specific table by table number.
+     * @param tableNumber Except to get valid table number
+     */
     @Override
     public void deleteTable(int tableNumber) {
         if (tableRepository.existsByTableNumber(tableNumber)) {
@@ -108,6 +138,11 @@ public class TableServiceImpl implements TableService {
                 (String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber)));
     }
 
+    /**
+     * In this method we get all tables by specific TableStatus.
+     * @param status = Except to get valid TableStatus Enum.
+     * @return CollectionModel of EntityModel of Table
+     */
     @Override
     public CollectionModel<EntityModel<Table>> getTableByStatus(TableStatus status) {
         List<Table> tables = tableRepository.getTableByTableStatus(status);
@@ -123,6 +158,11 @@ public class TableServiceImpl implements TableService {
                 .getAllTables()).withSelfRel());
     }
 
+    /**
+     * In this method we change table status.
+     * @param tableNumber - Except to get valid table number;
+     * @param tableStatus -  Except to get valid table status;
+     */
     @Override
     public void changeTableStatus(int tableNumber, TableStatus tableStatus) {
         Table table = tableRepository.getTableByTableNumber(tableNumber).orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "tableNumber", tableNumber)));
@@ -131,6 +171,10 @@ public class TableServiceImpl implements TableService {
         tableRepository.save(table);
     }
 
+    /**
+     * In this method we return all tables in DTO version
+     * @return CollectionModel of EntityModel of TableDTO
+     */
     @Override
     public CollectionModel<EntityModel<TableDTO>> getAllTablesInfo() {
         return CollectionModel.of(tableDTOAssembler

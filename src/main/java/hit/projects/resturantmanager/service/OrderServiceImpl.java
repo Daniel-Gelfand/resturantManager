@@ -53,19 +53,34 @@ public class OrderServiceImpl implements OrderService {
 //        this.tableRepository = tableRepository;
 //    }
 
+    /**
+     * In this method we return all orders from DB
+     * @return Collection fo EntityModel of Order
+     */
     @Override
     public CollectionModel<EntityModel<Order>> getAllOrders() {
         return orderAssembler.toCollectionModel(orderRepository.findAll());
     }
 
+    /**
+     * In this method we return specific order by order number
+     * @param orderNumber = valid order number
+     * @return
+     */
     @Override
-    public EntityModel<Order> getOrder(int orderId) {
+    public EntityModel<Order> getOrder(int orderNumber) {
         return orderAssembler.toModel(
-                orderRepository.getOrderByOrderNumber(orderId)
+                orderRepository.getOrderByOrderNumber(orderNumber)
                         .orElseThrow(() -> new RestaurantNotFoundException(
-                                (String.format(Constant.NOT_FOUND_MESSAGE, "order id", orderId)))));
+                                (String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderNumber)))));
     }
 
+    /**
+     * In this method we return order after add new order.
+     * before returning we check that new order isn't available
+     * @param newOrder
+     * @return EntityModel of Order.
+     */
     @Override
     public EntityModel<Order> addOrder(Order newOrder) {
 
@@ -83,24 +98,42 @@ public class OrderServiceImpl implements OrderService {
         return orderAssembler.toModel(orderRepository.save(newOrder));
     }
 
+    /**
+     * In this method we update order by order number.
+     *
+     * @param orderNumber except to get valid order number.
+     * @param updateOrder - except to get valid order body.
+     * @return EntityModel of Order.
+     */
     @Override
-    public EntityModel<Order> updateOrder(int orderId, Order updateOrder) {
-        return orderRepository.findByOrderNumber(orderId)
+    public EntityModel<Order> updateOrder(int orderNumber, Order updateOrder) {
+        return orderRepository.findByOrderNumber(orderNumber)
                 .map(orderToUpdate -> orderAssembler
                         .toModel(orderRepository
                                 .save(orderToUpdate.update(updateOrder))))
                 .orElseGet(() -> orderAssembler.toModel(orderRepository.save(updateOrder)));
     }
 
+    /**
+     * In this method we delete order by order number.
+     * @param orderNumber except to get valid order number.
+     */
     @Override
-    public void deleteOrder(int orderId) {
-        if (!orderRepository.existsByOrderNumber(orderId)) {
+    public void deleteOrder(int orderNumber) {
+        if (!orderRepository.existsByOrderNumber(orderNumber)) {
             throw new RestaurantNotFoundException(
-                    (String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderId)));
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderNumber)));
         }
-        orderRepository.deleteByOrderNumber(orderId);
+        orderRepository.deleteByOrderNumber(orderNumber);
     }
 
+    /**
+     * In this method we add menuItem by count to order list in Order Object.
+     * @param orderNumber - Except to get valid order number.
+     * @param menuItemName -  Except to get valid menuItem name.
+     * @param count -  Except to get valid count of menu items.
+     * @return EntityModel or updated order.
+     */
     @Override
     public EntityModel<Order> addMenuItem(int orderNumber, String menuItemName, int count) {
         Double bitcoinRate = 0.0;
@@ -131,6 +164,13 @@ public class OrderServiceImpl implements OrderService {
         return orderAssembler.toModel(order);
     }
 
+
+    /**
+     * In this method we return orders by dates
+     * @param startDate - Except to get valid start date.
+     * @param endDate - Except to get valid end date.
+     * @return CollectionModel of EntityModel of Order.
+     */
     @Override
     public CollectionModel<EntityModel<Order>> getOrderReportByDates(LocalDateTime startDate, LocalDateTime endDate) {
         List<Order> orderDateGreaterThan = orderRepository.getAllByOrderDateGreaterThan(startDate);
@@ -145,6 +185,11 @@ public class OrderServiceImpl implements OrderService {
                 (String.format("There are not exist orders between %s - %s.", startDate, endDate));
     }
 
+    /**
+     * In this method we return data transfer object of Order.
+     * @param orderNumber Except to get valid order number.
+     * @return EntityModel of OrderDTO;
+     */
     @Override
     public EntityModel<OrderDTO> getOrderDTO(int orderNumber) {
         return orderRepository
@@ -154,6 +199,11 @@ public class OrderServiceImpl implements OrderService {
                         (String.format(Constant.NOT_FOUND_MESSAGE, "order number", orderNumber))));
     }
 
+
+    /**
+     * In this method we return all order in DTO shape.
+     * @return
+     */
     @Override
     public CollectionModel<EntityModel<OrderDTO>> getAllOrdersDTO() {
         return CollectionModel.of(orderDTOAssembler
@@ -163,9 +213,15 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.toList())));
     }
 
+    /**
+     * In this method we allow to users to pay a part from the bill
+     * If the bill is get full payment we change the order isBillPayed to true and change the table status to available.
+     * @param orderNumber - Except to get valid order number.
+     * @param payment - amount of money that received.
+     * @return The EntityModel of Order that made changes.
+     */
     @Override
     public EntityModel<Order> payOrderBill(int orderNumber, int payment) {
-        //TODO : add option to pay in parts
 
         Order order = orderRepository
                 .getOrderByOrderNumber(orderNumber)
@@ -182,6 +238,11 @@ public class OrderServiceImpl implements OrderService {
         return orderAssembler.toModel(order);
     }
 
+    /**
+     * In this async method we return the current value of BTC in american dollar.
+     * @param restTemplate - Except to get valid rest template that help us to fetch BTC data.
+     * @return CompletableFuture of Double that represent the BTC current value
+     */
     @Async
     CompletableFuture<Double> bitcoinDetails(RestTemplate restTemplate){
         String urlTemplate = "https://api.coindesk.com/v1/bpi/currentprice.json";
