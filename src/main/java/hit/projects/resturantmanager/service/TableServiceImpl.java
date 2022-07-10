@@ -39,15 +39,6 @@ public class TableServiceImpl implements TableService {
     TableAssembler tableAssembler;
     @Autowired
     TableDTOAssembler tableDTOAssembler;
-//    @Autowired
-//    WaiterService waiterService;
-
-//    TableServiceImpl(TableRepository tableRepository, OrderRepository orderRepository, TableAssembler tableAssembler,TableDTOAssembler tableDTOAssembler) {
-//        this.tableRepository = tableRepository;
-//        this.orderRepository = orderRepository;
-//        this.tableAssembler = tableAssembler;
-//        this.tableDTOAssembler = tableDTOAssembler;
-//    }
 
     @Override
     public EntityModel<Table> getTable(int tableNumber) {
@@ -149,12 +140,21 @@ public class TableServiceImpl implements TableService {
                         .collect(Collectors.toList())));
     }
 
+    /**
+     * In this method we chekc if the table is available.
+     * @param tableNumber -> Expect to get table number.
+     * @return true or false.
+     */
     @Override
     public boolean isTableAvailable(int tableNumber) {
         Table table = tableRepository.getTableByTableNumber(tableNumber).orElseThrow(() -> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber)));
         return table.getTableStatus() == TableStatus.AVAILABLE;
     }
 
+    /**
+     * In thi method we add waiter that service tables.
+     * @param waiter -> Expect to get json with waiter details.
+     */
     @Override
     public void addWaiterToTables(Waiter waiter) {
         List<Table> tables = tableRepository.findAll();
@@ -165,6 +165,11 @@ public class TableServiceImpl implements TableService {
         }
     }
 
+    /**
+     * In this method we return DTO of table by table number.
+     * @param tableNumber Except to get valid table number.
+     * @return model of table dto info.
+     */
     @Override
     public EntityModel<TableDTO> getTableInfo(int tableNumber) {
         return tableRepository
