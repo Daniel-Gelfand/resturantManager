@@ -12,7 +12,6 @@ import hit.projects.resturantmanager.pojo.Waiter;
 import hit.projects.resturantmanager.pojo.dto.WaiterDTO;
 import hit.projects.resturantmanager.repository.WaiterRepository;
 import hit.projects.resturantmanager.utils.Constant;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -39,16 +38,10 @@ public class WaiterServiceImpl implements WaiterService {
     @Autowired
     private TableService tableService;
 
-//    public WaiterServiceImpl(WaiterRepository waiterRepository, WaiterAssembler waiterAssembler, WaiterDTOAssembler waiterDTOAssembler) {
-//        this.waiterRepository = waiterRepository;
-//        this.waiterAssembler = waiterAssembler;
-//        this.waiterDTOAssembler = waiterDTOAssembler;
-//    }
 
     /**
      * This method Return all Waiters with links (to him self and to all waiters).
-     *
-     * @return
+     * @return collection model of all waiters.
      */
     @Override
     public CollectionModel<EntityModel<Waiter>> getAllWaiters() {
@@ -61,9 +54,9 @@ public class WaiterServiceImpl implements WaiterService {
     }
 
     /**
-     * This method Return Waiter with self link.
-     *
-     * @return
+     * In this method we return specific waiter by personal id.
+     * @param personalId Except to get valid and exist personal id
+     * @return model of specific waiter.
      */
     @Override
     public EntityModel<Waiter> getWaiter(int personalId) {
@@ -74,6 +67,11 @@ public class WaiterServiceImpl implements WaiterService {
         return waiterAssembler.toModel(waiter);
     }
 
+    /**
+     * In this method we return all waiters that are in duty.
+     * @param onDuty = Except to get valid Duty status.
+     * @return collection model of waiters that on duty.
+     */
     @Override
     public CollectionModel<EntityModel<Waiter>> getDutyStatus(boolean onDuty) {
         List<Waiter> waiters = waiterRepository.getAllByOnDuty(onDuty);
@@ -89,12 +87,10 @@ public class WaiterServiceImpl implements WaiterService {
     }
 
     /**
-     * This method update specific waiter.
-     * If the waiter personalId doesn't exist we save new waiter in DB.
-     *
-     * @param personalId
-     * @param waiter
-     * @return ResponseEntity<EntityModel < Waiter>>
+     * In this method we update waiter by his personal id
+     * @param personalId -> Expect to get personal id of the waiter.
+     * @param waiter -> Expect t o get JSON with details to update to specific waiter.
+     * @return model of waiter that updated.
      */
     @Override
     public EntityModel<Waiter> updateWaiter(int personalId, Waiter waiter) {
@@ -107,14 +103,12 @@ public class WaiterServiceImpl implements WaiterService {
     }
 
     /**
-     * This method insert new waiter to the DB
-     *
-     * @param waiterToAdd
-     * @return
+     * In this method we add new waiter to the database.
+     * @param waiterToAdd -> Expect to get JSON details about waiter.
+     * @return model of waiter to add.
      */
     @Override
     public EntityModel<Waiter> addNewWaiter(Waiter waiterToAdd) {
-        //TODO: CHECK THIS SHIT IF THAT WORKING
 
         if (!waiterRepository.existsByPersonalId(waiterToAdd.getPersonalId())) {
             List<Table> tables = tableService.getAllTables().getContent().stream().toList().stream().map(EntityModel::getContent).toList();
@@ -130,9 +124,8 @@ public class WaiterServiceImpl implements WaiterService {
     }
 
     /**
-     * This method delete waiter from DB
-     *
-     * @param personalId
+     * In this method we delete specific waiter by his personal id.
+     * @param personalId -> Expect to get personal id of waiter.
      */
     @Override
     public void deleteWaiter(int personalId) {
@@ -143,7 +136,11 @@ public class WaiterServiceImpl implements WaiterService {
                     (String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
         }
     }
-
+    /**
+     * In this method, we get info about all waiters the in duty. (DTO)
+     * @param isOnDuty -> Expect to get true/false.
+     * @return collection model of waiters that on duty dto info.
+     */
     @Override
     public CollectionModel<EntityModel<WaiterDTO>> getAllWaitersOnDutyInfo(boolean isOnDuty) {
         CollectionModel<EntityModel<WaiterDTO>> waiters = CollectionModel
@@ -160,12 +157,21 @@ public class WaiterServiceImpl implements WaiterService {
         return waiters;
     }
 
+    /**
+     * In this method we get specific info about one waiter.
+     * @param personalId -> Expect to get personal id of waiter.
+     * @return model of specific waiter dto info.
+     */
     @Override
     public EntityModel<WaiterDTO> getWaiterInfo(int personalId) {
 
         return waiterRepository.findByPersonalId(personalId).map(WaiterDTO::new).map(waiterDTOAssembler::toModel).orElseThrow(()-> new RestaurantNotFoundException(String.format(Constant.NOT_FOUND_MESSAGE, "personal id", personalId)));
     }
 
+    /**
+     * In this method we get specific info about all waiter's. (DTO)
+     * @return collection model of waiters dto info.
+     */
     @Override
     public CollectionModel<EntityModel<WaiterDTO>> getAllWaitersInfo() {
         CollectionModel<EntityModel<WaiterDTO>> waiters = CollectionModel
@@ -182,10 +188,16 @@ public class WaiterServiceImpl implements WaiterService {
         return waiters;
     }
 
+    /**
+     * In this method we pay money for bill.
+     * @param payment -> Expect to get JSON with payment info. (table number and money)
+     * @return model of payment,
+     */
     @Override
     public EntityModel<Order> payOrderBill(Payment payment) {
         return orderService.payOrderBill(payment.getOrderNumber(), payment.getPayment());
     }
+
 
     @Override
     public void addTableToWaiters(Table table) {

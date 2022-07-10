@@ -35,7 +35,6 @@ public class MongoConfiguration {
     private String foodUrl;
 
 
-    //TODO: what about this static method ?
     @Bean
     public RestTemplate restTemplate() {
         final RestTemplate restTemplate = new RestTemplate();

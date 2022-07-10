@@ -36,8 +36,8 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     /**
-     *
-     * @return
+     * In this method we get all managers in our database.
+     * @return collection model of managers.
      */
     @Override
     public CollectionModel<EntityModel<Manager>> getAllManagers() {
@@ -48,10 +48,10 @@ public class ManagerServiceImpl implements ManagerService {
                 .getAllManagers()).withSelfRel());
     }
 
-    /**
-     *
-     * @param personalId
-     * @return
+     /**
+     * In his method we get manager details by his id.
+     * @param personalId -> Expect to get personal id of manager.
+     * @return model of specific manager.
      */
     @Override
     public EntityModel<Manager> getManager(int personalId) {
@@ -65,10 +65,10 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     /**
-     *
-     * @param personalId
-     * @param manager
-     * @return
+     * In this method we update specific manager.
+     * @param personalId -> Expect to get personal id of manager.
+     * @param manager -> Expect to GET json with details to update the manager.
+     * @return model of manager to update
      */
     @Override
     public EntityModel<Manager> updateManager(int personalId, Manager manager) {
@@ -80,9 +80,9 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     /**
-     *
-     * @param managerToAdd
-     * @return
+     * In this method we add new manager to our database.
+     * @param managerToAdd -> Expect to GET json with details to update the manager.
+     * @return model of manager to add.
      */
     @Override
     public EntityModel<Manager> addNewManager(Manager managerToAdd) {
@@ -95,8 +95,8 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     /**
-     *
-     * @param personalId
+     * In this method we delete manager by id in our database.
+     * @param personalId -> Expect to get personal id of manager.
      */
     @Override
     public void deleteManager(int personalId) {
@@ -108,9 +108,9 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     /**
-     *
-     * @param isOnDuty
-     * @return
+     * In this method we get managers status if they  on duty or not.
+     * @param isOnDuty -> Expect to get true or false.
+     * @return collection model of managers on duty.
      */
     @Override
     public CollectionModel<EntityModel<Manager>> getDutyStatus(boolean isOnDuty) {
@@ -127,6 +127,11 @@ public class ManagerServiceImpl implements ManagerService {
                 .getAllManagers()).withSelfRel());
     }
 
+
+    /**
+     * In this method we get all manager's info with specific details (fullname,isOnDuty).
+     * @return collection model of managers dto info.
+     */
     @Override
     public CollectionModel<EntityModel<ManagerDTO>> getAllManagerInfo() {
         return CollectionModel.of(managerDTOAssembler
@@ -136,6 +141,11 @@ public class ManagerServiceImpl implements ManagerService {
                         .collect(Collectors.toList())));
     }
 
+    /**
+     * In this method we get manager info with specific details (fullname,isOnDuty).
+     * @param personalId -> Expect to get personal id of manager.
+     * @return model of manager dto info.
+     */
     @Override
     public EntityModel<ManagerDTO> getManagerInfo(int personalId) {
         return managerRepository
