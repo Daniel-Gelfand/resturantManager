@@ -88,6 +88,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         catch (IllegalArgumentException illegalArgumentException) {
             throw new RestaurantNotFoundException(
                     (String.format(Constant.NOT_FOUND_MESSAGE, "category", category)));
+
         }
     }
 
@@ -130,6 +131,8 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public EntityModel<MenuItem> updateMenuItem(String name, MenuItem mItem) {
+
+
         //TODO: mItem.getMenuCategories().toString().toUpperCase())  ? ? ?
         return menuItemRepository.findByName(name)
                 .map(menuItemToUpdate ->
@@ -144,6 +147,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public EntityModel<MenuItem> newMenuItem(MenuItem menuItem) {
+        System.out.println(menuItem);
         if (!menuItemRepository.existsByName(menuItem.getName())) {
             return menuItemAssembler.toModel(menuItemRepository.save(menuItem));
         }

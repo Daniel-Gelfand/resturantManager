@@ -23,19 +23,32 @@ public class WaiterController {
         this.waiterService = waiterService;
     }
 
+    /**
+     *  In this method we return all waiters in DB.
+     * @return status ok if everything going well .
+     */
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getAllWaiters() {
         return ResponseEntity.ok(waiterService.getAllWaiters());
     }
 
+    /**
+     * In this method we reutrn specific waiter by personal id.
+     * @param personalId Except to get valid and exist personal id
+     * @return status 200 if everything going well.
+     */
     @GetMapping("/{personalId}")
     public ResponseEntity<EntityModel<Waiter>> getWaiter(@PathVariable int personalId) {
         return ResponseEntity.ok(waiterService.getWaiter(personalId));
     }
 
+    /**
+     * In this method we return all waiters that are in duty.
+     * @param isOnDuty = Except to get valid Duty status.
+     * @return status 200.
+     */
     @GetMapping("/duty/{isOnDuty}")
     public ResponseEntity<CollectionModel<EntityModel<Waiter>>> getDutyStatus(@PathVariable boolean isOnDuty) {
-        System.out.println(isOnDuty);
         return ResponseEntity.ok(waiterService.getDutyStatus(isOnDuty));
     }
 
