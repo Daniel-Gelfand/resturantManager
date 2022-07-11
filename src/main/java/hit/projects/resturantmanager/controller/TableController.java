@@ -31,13 +31,13 @@ public class TableController {
     }
 
     /**
-     * In this method we return specific number by table number if number doesn't exist we throw new Restaurant not found exception.
-     * @param number Expect to get valid table number.
-     * @return specific number.
+     * In this method we return specific tableNumber by table tableNumber if tableNumber doesn't exist we throw new Restaurant not found exception.
+     * @param tableNumber Expect to get valid table tableNumber.
+     * @return specific tableNumber.
      */
-    @GetMapping("/{number}")
-    public ResponseEntity<EntityModel<Table>> getTable(@PathVariable int number) {
-        return ResponseEntity.ok().body(tableService.getTable(number));
+    @GetMapping("/{tableNumber}")
+    public ResponseEntity<EntityModel<Table>> getTable(@PathVariable int tableNumber) {
+        return ResponseEntity.ok().body(tableService.getTable(tableNumber));
     }
 
     /**
@@ -46,19 +46,19 @@ public class TableController {
      * @return status ok and all tables by specific status.
      */
     @GetMapping("/status/{status}")
-    public ResponseEntity<CollectionModel<EntityModel<Table>>> getTable(@PathVariable TableStatus status) {
+    public ResponseEntity<CollectionModel<EntityModel<Table>>> getTableByStatus(@PathVariable TableStatus status) {
         return ResponseEntity.ok().body(tableService.getTableByStatus(status));
     }
 
     /**
-     * In this method we update specific table by table number .
-     * @param number Except to get  valid table number.
+     * In this method we update specific table by table tableNumber .
+     * @param tableNumber Except to get  valid table tableNumber.
      * @param order Except to get valid order variable .
      * @return status ok if everything going well.
      */
-    @PutMapping("/{number}")
-    public ResponseEntity<?> updateOrderList(@PathVariable int number, @RequestBody Order order) {
-        tableService.addOrder(number, order);
+    @PutMapping("/{tableNumber}")
+    public ResponseEntity<?> updateOrderList(@PathVariable int tableNumber, @RequestBody Order order) {
+        tableService.addOrder(tableNumber, order);
         return ResponseEntity.ok().build();
     }
 
@@ -73,13 +73,13 @@ public class TableController {
     }
 
     /**
-     * In this method we delete specific table by table number.
-     * @param number Except to get valid table number.
+     * In this method we delete specific table by table tableNumber.
+     * @param tableNumber Except to get valid table tableNumber.
      * @return status 202 deleted.
      */
-    @DeleteMapping("/{number}")
-    public ResponseEntity<?> deleteTable(@PathVariable int number) {
-        tableService.deleteTable(number);
+    @DeleteMapping("/{tableNumber}")
+    public ResponseEntity<?> deleteTable(@PathVariable int tableNumber) {
+        tableService.deleteTable(tableNumber);
         return ResponseEntity.status(202).build();
     }
 
@@ -88,7 +88,7 @@ public class TableController {
      * @param tableNumber Except to get valid table number.
      * @return status ok(200).
      */
-    @GetMapping("/{tableId}/info")
+    @GetMapping("/{tableNumber}/info")
     public ResponseEntity<EntityModel<TableDTO>> getTableInfo(@PathVariable int tableNumber) {
         return ResponseEntity.ok().body(tableService.getTableInfo(tableNumber));
     }

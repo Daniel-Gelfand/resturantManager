@@ -27,15 +27,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class MenuItemServiceImpl implements MenuItemService {
 
-    private final MenuItemRepository menuItemRepository;
-    private final MenuItemAssembler menuItemAssembler;
-    private final MenuItemDTOAssembler menuItemDTOAssembler;
-
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, MenuItemAssembler menuItemAssembler, MenuItemDTOAssembler menuItemDTOAssembler) {
-        this.menuItemRepository = menuItemRepository;
-        this.menuItemAssembler = menuItemAssembler;
-        this.menuItemDTOAssembler = menuItemDTOAssembler;
-    }
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+    @Autowired
+    private MenuItemAssembler menuItemAssembler;
+    @Autowired
+    private MenuItemDTOAssembler menuItemDTOAssembler;
 
     /**
      *  In this method we return all items in Menu restaurant.

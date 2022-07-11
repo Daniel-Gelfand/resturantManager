@@ -18,7 +18,7 @@ import javax.validation.constraints.NotBlank;
 @RestController
 public class MenuItemController {
 
-    private MenuItemService menuItemService;
+    private final MenuItemService menuItemService;
 
     public MenuItemController(MenuItemService menuItemService) {
         this.menuItemService = menuItemService;

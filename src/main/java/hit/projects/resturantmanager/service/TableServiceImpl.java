@@ -9,12 +9,10 @@ import hit.projects.resturantmanager.exception.RestaurantNotFoundException;
 import hit.projects.resturantmanager.pojo.Order;
 import hit.projects.resturantmanager.pojo.Table;
 import hit.projects.resturantmanager.pojo.Waiter;
-import hit.projects.resturantmanager.pojo.dto.MenuItemDTO;
 import hit.projects.resturantmanager.pojo.dto.TableDTO;
 import hit.projects.resturantmanager.repository.OrderRepository;
 import hit.projects.resturantmanager.repository.TableRepository;
 import hit.projects.resturantmanager.utils.Constant;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -32,13 +30,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class TableServiceImpl implements TableService {
 
     @Autowired
-    TableRepository tableRepository;
+    private TableRepository tableRepository;
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
     @Autowired
-    TableAssembler tableAssembler;
+    private TableAssembler tableAssembler;
     @Autowired
-    TableDTOAssembler tableDTOAssembler;
+    private TableDTOAssembler tableDTOAssembler;
 
     /**
      * In this method we return specific table by table number.
@@ -130,12 +128,13 @@ public class TableServiceImpl implements TableService {
      */
     @Override
     public void deleteTable(int tableNumber) {
-        if (tableRepository.existsByTableNumber(tableNumber)) {
-            tableRepository.deleteByTableNumber(tableNumber);
+        if (!tableRepository.existsByTableNumber(tableNumber)) {
+            throw new RestaurantNotFoundException(
+                    (String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber)));
         }
 
-        throw new RestaurantNotFoundException(
-                (String.format(Constant.NOT_FOUND_MESSAGE, "table number", tableNumber)));
+        tableRepository.deleteByTableNumber(tableNumber);
+
     }
 
     /**

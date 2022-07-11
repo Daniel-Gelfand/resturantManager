@@ -10,6 +10,7 @@ import hit.projects.resturantmanager.pojo.dto.ManagerDTO;
 import hit.projects.resturantmanager.pojo.dto.MenuItemDTO;
 import hit.projects.resturantmanager.repository.ManagerRepository;
 import hit.projects.resturantmanager.utils.Constant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class ManagerServiceImpl implements ManagerService {
 
-    private final ManagerRepository managerRepository;
-    private final ManagerAssembler managerAssembler;
-    private final ManagerDTOAssembler managerDTOAssembler;
+    @Autowired
+    private ManagerRepository managerRepository;
+    @Autowired
+    private ManagerAssembler managerAssembler;
+    @Autowired
+    private ManagerDTOAssembler managerDTOAssembler;
 
-    public ManagerServiceImpl(ManagerRepository managerRepository, ManagerAssembler managerAssembler,ManagerDTOAssembler managerDTOAssembler) {
-        this.managerRepository = managerRepository;
-        this.managerAssembler = managerAssembler;
-        this.managerDTOAssembler = managerDTOAssembler;
-    }
 
     /**
      * In this method we get all managers in our database.
